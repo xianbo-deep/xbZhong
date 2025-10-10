@@ -10,7 +10,8 @@ export default sidebar({
       // 必填，分组链接列表
       children: [
         "DL.md" ,
-        "GenerativeModels.md"
+        "GenerativeModels.md",
+        "ML.md"
       ],
     },
     {

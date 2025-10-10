@@ -1,4 +1,5 @@
 import { defineUserConfig } from "vuepress";
+import { docsearchPlugin } from '@vuepress/plugin-docsearch'
 import { baiduAnalyticsPlugin } from '@vuepress/plugin-baidu-analytics';
 import theme from "./theme.js";
 
@@ -11,9 +12,15 @@ export default defineUserConfig({
   
   theme,
   plugins: [
-    // baiduAnalyticsPlugin({
-    //   // 配置项
-    // }),
+    baiduAnalyticsPlugin({
+      id: "034eb278592c89e6b93ebddedac1d7e4"
+    }),
+    docsearchPlugin({
+      appId: 'V6D69KWM6B',
+      apiKey: 'ee72c5f2d49ddc0fe1780cbe43b1db89',
+      indexName: 'xbzhong',
+    })
+    
   ],
   // 和 PWA 一起启用
   // shouldPrefetch: false,
@@ -36,3 +43,15 @@ export default defineUserConfig({
   ],
   
 });
+
+
+// import docsearch from '@docsearch/js';
+// import '@docsearch/css';
+
+// docsearch({
+//   container: '#docsearch',
+//   appId: 'V6D69KWM6B',
+//   indexName: 'xbzhong',
+//   apiKey: 'ee72c5f2d49ddc0fe1780cbe43b1db89',
+//   askAi: 'YOUR_ALGOLIA_ASSISTANT_ID', // TODO: Replace with your Algolia Assistant ID
+// });

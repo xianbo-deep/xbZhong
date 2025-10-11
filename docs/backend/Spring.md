@@ -4,7 +4,7 @@ description: SpringBoot框架
 author: xbZhong
 isOriginal: true
 article: true
-category: java
+category: backend
 timeline: true
 icon: simple-icons:springboot
 date: 2025-09-26

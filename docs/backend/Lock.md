@@ -4,7 +4,7 @@ description: 并发编程前置知识吧，就是对一些常见锁做了概念�
 author: xbZhong
 isOriginal: true
 article: false
-category: java
+category: backend
 timeline: true
 icon: material-symbols:lock-outline
 date: 2025-09-02

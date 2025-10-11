@@ -140,14 +140,19 @@ export default hopeTheme({
   // 在这里配置主题提供的插件
   plugins: {
     blog: true,
-     comment: {
-      // 选择一个评论服务
-      provider: "Giscus",
-      repo: "xianbo-deep/MyBlogComments",
-      repoId: "R_kgDOP_zJRg",
-      category: "Announcements",
-      categoryId:"DIC_kwDOP_zJRs4Cwd4j",
+    docsearch:{
+      appId: 'V6D69KWM6B',
+      apiKey: 'ee72c5f2d49ddc0fe1780cbe43b1db89',
+      indexName: 'xbzhong',
     },
+    comment: {
+    // 选择一个评论服务
+    provider: "Giscus",
+    repo: "xianbo-deep/MyBlogComments",
+    repoId: "R_kgDOP_zJRg",
+    category: "Announcements",
+    categoryId:"DIC_kwDOP_zJRs4Cwd4j",
+  },
     // 启用之前需安装 @waline/client
     // 警告: 这是一个仅供演示的测试服务，在生产环境中请自行部署并使用自己的服务！
     // comment: {

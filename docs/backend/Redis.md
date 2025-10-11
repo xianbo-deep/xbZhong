@@ -4,7 +4,7 @@ description: 非关系数据库的典型
 author: xbZhong
 isOriginal: true
 article: false
-category: java
+category: backend
 timeline: true
 icon: devicon-plain:redis
 date: 2025-09-25

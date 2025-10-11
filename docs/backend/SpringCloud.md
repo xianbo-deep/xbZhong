@@ -4,7 +4,7 @@ description: 微服务
 author: xbZhong
 isOriginal: true
 article: true
-category: java
+category: backend
 timeline: true
 date: 2025-10-08
 ---

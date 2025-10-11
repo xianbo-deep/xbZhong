@@ -4,7 +4,7 @@ description: JAVA虚拟机的一些笔记
 author: xbZhong
 isOriginal: true
 article: true
-category: java
+category: backend
 timeline: true
 icon: eos-icons:virtual-guest
 date: 2025-09-08

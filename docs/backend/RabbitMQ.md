@@ -4,7 +4,7 @@ description: 消息队列
 author: xbZhong
 isOriginal: true
 article: false
-category: java
+category: backend
 timeline: true
 icon: devicon:rabbitmq
 date: 2025-10-6

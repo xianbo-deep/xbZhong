@@ -4,7 +4,7 @@ description: 入坑JAVA必学
 author: xbZhong
 isOriginal: true
 article: true
-category: java
+category: backend
 timeline: true
 icon: ri:java-fill 
 date: 2023-12-18

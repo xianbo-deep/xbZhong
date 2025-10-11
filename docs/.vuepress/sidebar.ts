@@ -92,6 +92,14 @@ export default sidebar({
       
     },
     {
+      text: "Go",
+      icon: "logos:go",
+      link: "Go.md",
+      expanded: true,
+      
+      
+    },
+    {
       text: "JVM",
       icon: "eos-icons:virtual-guest",
       link: "JVM.md",
@@ -137,6 +145,13 @@ export default sidebar({
       text: "SpringCloud",
       icon: "devicon:spring",
       link: "SpringCloud.md",
+      expanded: true,
+      
+    },
+    {
+      text: "Dubbo",
+      icon: "devicon:apache",
+      link: "Dubbo.md",
       expanded: true,
       
     },

@@ -4,7 +4,7 @@ description: docker容器化技术
 author: xbZhong
 isOriginal: true
 article: true
-category: java
+category: backend
 timeline: true
 icon: devicon:docker
 date: 2025-10-01

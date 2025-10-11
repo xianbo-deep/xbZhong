@@ -9,7 +9,7 @@ timeline: true
 大一暑假开始我开始接触这方面知识，不过那时候并未系统学习机器学习，属于有点**囫囵吞枣**。
 - 我先是从吴恩达的老师的机器学习入门课程开始，b站上就有，然后写下了[第一篇笔记](/dl/primer/ML.md)
 - 然后学习小土堆的pytorch视频，写下了[第一篇pytorch笔记](/dl/pytorch/pytorch.md)
-- 接着学习李沐老师的动手学深度学习，有了[这篇笔记](/dl/pytorch/李沐.md)
+- 接着学习李沐老师的动手学深度学习
 - 接着作罢，没再学习下去，因为开学了，卷绩点了
 
 断断续续接触了[LLM](/dl/llm/README.md)、[CV](/dl/cv/README.md)，开始有了初步认识，从我叔那里得知生成式模型，不知天高地厚开啃[VAE](/dl/cv/VAE.md)和[扩散模型](/dl/cv/DiffusionModel.md)，太特么难了，没啃完

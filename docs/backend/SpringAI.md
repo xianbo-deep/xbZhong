@@ -4,7 +4,7 @@ description: 大模型应用开发必备的框架
 author: xbZhong
 isOriginal: true
 article: false
-category: java
+category: backend
 timeline: true
 icon: tabler:ai
 date: 2025-09-24

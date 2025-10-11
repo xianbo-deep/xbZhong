@@ -350,6 +350,26 @@ export default sidebar({
       expanded: true,
       
     },
+  ],
+  "/resource/":[
+    {
+      text: "大一",
+      link: "1.md",
+      expanded: true
+    },
+    {
+      text: "大二",
+      link: "2.md",
+      expanded: true
+    },{
+      text: "大三",
+      link: "3.md",
+      expanded: true
+    },{
+      text: "大四",
+      link: "4.md",
+      expanded: true
+    }
   ]
   
 });

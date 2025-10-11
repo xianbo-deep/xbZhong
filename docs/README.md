@@ -3,14 +3,13 @@ home: true
 layout: Blog
 icon: house
 title: 主页
-heroText: 熵
+heroText: 朝花夕拾
 bgImage: /bg.jpg
 heroFullScreen: true
 
 heroImageStyle:
   width: 150px
   height: 150px
-tagline: 知畏
 projects:
   # - icon: folder-open link、book、newspaper、user-group
   #   name: 项目名称

@@ -35,11 +35,11 @@ MVC全称为**Model View Controller**，是一种**设计创建web应用程序�
 
 ### 自定义配置
 
-**方式一：**继承`WebMvcConfigurationSupport`实现自定义配置类
+**方式一：​​​​**继承`WebMvcConfigurationSupport`实现自定义配置类
 
 - **继承它并重写方法可以完全接管Spring MVC的默认配置**，但需要手动配置所有相关组件
 
-**方式二：**实现`WebMvcConfigurer`接口来实现自定义配置类
+**方式二：​​​​**实现`WebMvcConfigurer`接口来实现自定义配置类
 
 - 提供了一系列默认方法，允许在不破坏Spring Boot自动配置的情况下**扩展或修改MVC配置**
 - **实现 `WebMvcConfigurer`不会影响 `WebMvcAutoConfiguration`**，Spring Boot仍然会提供默认配置，我们只需覆盖需要自定义的部分
@@ -1094,7 +1094,7 @@ select * from user,department;
 
 **子查询**
 
-**含义：**在SQL语句中嵌套`select`语句，子查询的外部语句可以是**任意类型的操作**
+**含义：​​​​**在SQL语句中嵌套`select`语句，子查询的外部语句可以是**任意类型的操作**
 
 - 标量子查询：返回一个值
 
@@ -1265,7 +1265,7 @@ logging:
   org.springframework.jdbc.support.JdbcTransactionManager: debug
 ```
 
-**注意：**
+**注意：​​​​**
 
 - **Spring 事务是基于代理的**，只有通过代理对象调用的方法才会被事务拦截器增强
 
@@ -1407,7 +1407,7 @@ select
 
 ## SpringBoot项目配置
 
-**支持的配置文件格式：**`properties`,`yml`,`yaml`
+**支持的配置文件格式：​​​​**`properties`,`yml`,`yaml`
 
 - `properties`：是key value格式，多级之间使用`.`分隔
 
@@ -1562,7 +1562,7 @@ public class UserService {
   - 日志等级：`trace`、`debug`、`info`、`warn`、`error`
 - 控制台输出：`STDOUT`、文件输出：`FILE`
 - 在`logger`标签设置要输出的日志级别，在`appender`标签**配置输出的日志格式**
-- **示例：**
+- **示例：​​​​**
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1681,28 +1681,28 @@ public class SessionController {
 
 **一般使用JWT技术进行令牌生成**
 
-**流程：**
+**流程：​​​​**
 
 - 客户端请求，服务器端生成令牌并返回给客户端，客户端后续请求携带令牌，服务端进行校验
 - 跨平台可用，以json格式进行传输
 
-**令牌组成部分：**
+**令牌组成部分：​​​​**
 
 - 第一部分：Header，用于记录令牌类型，签名算法
 - 第二部分：Payload，携带一些自定义信息
 - 第三部分：Signature，**签名**，防止token被篡改，保证安全
 
-**计算方法：**
+**计算方法：​​​​**
 
 - Header和Payload：直接用`Base64URL`编码
 - Signature：将**Header、Payload和密钥融合在一起**，通过签名算法进行计算
 
-**验证：**
+**验证：​​​​**
 
 - 先对Header和Payload进行**解码**
 - 服务端**接受客户端提供的签名**，用密钥、解码后的Header和Payload重新计算签名，然后和**传入的令牌的签名进行比对**
 
-**使用：**
+**使用：​​​​**
 
 - 引入`jjwt`依赖
 - 采用链式编程构建令牌
@@ -1748,7 +1748,7 @@ public class JwtUtils{
 
 **JavaWeb**中的组件，能拦截**所有资源请求**
 
-**实现：**
+**实现：​​​​**
 
 - 需要定义一个类**实现**`Filter`接口，并实现其所有方法，`init`、`doFilter`、`destory`
   - 需要对请求的参数进行**强转**，强转为`HttpServletRequest`和`HttpServletResponse`
@@ -1817,7 +1817,7 @@ public class LoginFilter implements Filter{
 }
 ```
 
-**工作流程：**
+**工作流程：​​​​**
 
 - 启动项目时运行`init`方法
 - 客户端请求进行拦截处理的时候运行`doFilter`方法
@@ -1831,7 +1831,7 @@ public class LoginFilter implements Filter{
 
 ![image-20250825140013326](/screenshot/backend/image-20250825140013326.png)
 
-**使用：**
+**使用：​​​​**
 
 - 定义一个类，需要加`@Component`注解，存为Bean对象
 - 实现` HandlerInterceptor`接口，实现其所有方法
@@ -1893,7 +1893,7 @@ public class Webconfig implements WebMvcConfigurer{
 
 ## SpringAOP
 
-**AOP**：**面向切面编程**，也就是面向特定的方法编程
+**AOP**：​​​​**面向切面编程**，也就是面向特定的方法编程
 
 将重复性的代码统一到AOP程序当中
 
@@ -1936,11 +1936,11 @@ public class TestAop {
 
 ### 核心概念
 
-- **连接点：** **可以**被AOP控制的方法
-- **通知：**指那些重复的逻辑，**共性功能**
-- **切入点：**匹配连接点的条件，通知仅会在**切入点条件满足时**被应用，也就是**实际**被AOP控制的方法
-- **切面：**描述通知与切入点的对应关系
-- **目标对象：**通知所**应用**的对象，也就是要实现**重复逻辑的类的对象**
+- **连接点：​​​​** **可以**被AOP控制的方法
+- **通知：​​​​**指那些重复的逻辑，**共性功能**
+- **切入点：​​​​**匹配连接点的条件，通知仅会在**切入点条件满足时**被应用，也就是**实际**被AOP控制的方法
+- **切面：​​​​**描述通知与切入点的对应关系
+- **目标对象：​​​​**通知所**应用**的对象，也就是要实现**重复逻辑的类的对象**
 
 **切入点一定是连接点，连接点不一定是切入点**
 
@@ -2106,7 +2106,7 @@ public class TestAop {
 
 
 
-**示例：**
+**示例：​​​​**
 
 - 只匹配`com.zxb.project`包**直接下属**的类：`* com.zxb.project.*(..)`
 - 匹配 `com.zxb.project`包**及其所有子包**下的类：`* com.zxb.project..*.*(..)`
@@ -2183,7 +2183,7 @@ public class AopTest{
 
 ## Bean
 
-**含义：**IOC容器管理的对象叫做`Bean`
+**含义：​​​​**IOC容器管理的对象叫做`Bean`
 
 类被注入到IOC容器之后，**Bean对象名称是类名首字母小写**
 
@@ -2307,7 +2307,7 @@ public class MainProcess{
 - 比如前面的`ApplicationContext `，是第三方的类，但是我们可以直接注入**，得益于自动配置**
 - **SpringBoot的自动配置功能是跨模块的！！！**
 
-**方式一：**在Springboot的启动类上加上`@ComponentScan`注解，在里面的`basePackages`字段填写要扫描的包
+**方式一：​​​​**在Springboot的启动类上加上`@ComponentScan`注解，在里面的`basePackages`字段填写要扫描的包
 
 - 因为引入的第三方工具不和启动类所在包在同一个模块下**，默认启动**的话第三方的类不会被扫描注入到IOC容器
 
@@ -2319,11 +2319,11 @@ public class Begin{
 }
 ```
 
-**方式二：**启动类上加`@Import`注解，里面填写**普通类！！！**的字节码文件
+**方式二：​​​​**启动类上加`@Import`注解，里面填写**普通类！！！**的字节码文件
 
-**方式三：**上面说过的第三方配置
+**方式三：​​​​**上面说过的第三方配置
 
-**方式四：**定义一个类实现`ImportSelector`接口，然后把这个类的字节码文件放入`@Import`注解中，可以实现批量导入
+**方式四：​​​​**定义一个类实现`ImportSelector`接口，然后把这个类的字节码文件放入`@Import`注解中，可以实现批量导入
 
 ```java
 public class ImportConfig implements ImportSelector{
@@ -2340,7 +2340,7 @@ public class Begin{
 }
 ```
 
-**方式五：**使用第三方工具开发者提供的注解`@EnableXXX`（他们已经在这个注解配置好要导入什么依赖），**在启动类上加上这个注解**
+**方式五：​​​​**使用第三方工具开发者提供的注解`@EnableXXX`（他们已经在这个注解配置好要导入什么依赖），**在启动类上加上这个注解**
 
 
 
@@ -2537,7 +2537,7 @@ protected void addResourceHandlers(ResourceHandlerRegistry registry) {
 
 是Spring框架提供的**任务调度工具**，可以按照约定的时间自动执行某个代码逻辑
 
-**使用步骤：**
+**使用步骤：​​​​**
 
 1. 导入maven坐标
 2. 启动类添加注解`@EnableScheduling`开启任务调度
@@ -2549,7 +2549,7 @@ protected void addResourceHandlers(ResourceHandlerRegistry registry) {
 
 就是一个**字符串**，通过cron表达式可以定义任务触发的时间
 
-**构成规则：**分为**6或7个域**，由**空格分隔开**，每个域代表一个含义
+**构成规则：​​​​**分为**6或7个域**，由**空格分隔开**，每个域代表一个含义
 
 - 每个域的含义分别为：秒、分钟、小时、日、月、周、年（年可以不选）
 
@@ -2577,7 +2577,7 @@ protected void addResourceHandlers(ResourceHandlerRegistry registry) {
 
 ![image-20250913103324320](/screenshot/backend/image-20250913103324320.png)
 
-**使用步骤：**
+**使用步骤：​​​​**
 
 1. **创建`WebSocketServer`类**，编写连接调用的方法
 2. **创建`WebSocketConfiguration`类**，自定义配置类，**注册**`WebSocketServer`类
@@ -2601,7 +2601,7 @@ protected void addResourceHandlers(ResourceHandlerRegistry registry) {
 
 可以使用Java程序对Miscrosoft Office各种文件进行**读写操作**
 
-**使用步骤：**
+**使用步骤：​​​​**
 
 - 导入maven坐标
 
@@ -2644,7 +2644,7 @@ protected void addResourceHandlers(ResourceHandlerRegistry registry) {
 
 需要自定义MVC配置类，具体如何配置在上文有
 
-**步骤：**
+**步骤：​​​​**
 
 - 重写`addCorsMappings`方法，参数里面传`CorsRegistry registry`
 - 使用`registry`进行跨域配置

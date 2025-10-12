@@ -384,6 +384,12 @@ export default sidebar({
       link: "4.md",
       expanded: true
     }
+  ],
+  "/jottings/":[
+    {
+      text: "信息",
+      link: "team.md",
+      expanded: true
+    }
   ]
-  
 });

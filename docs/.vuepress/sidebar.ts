@@ -135,6 +135,20 @@ export default sidebar({
       
     },
     {
+      text: "Kafka",
+      icon: "skill-icons:kafka",
+      link: "Kafka.md",
+      expanded: true,
+      
+    },
+    {
+      text: "Nginx",
+      icon: "material-icon-theme:nginx",
+      link: "Nginx.md",
+      expanded: true,
+      
+    },
+    {
       text: "Springboot",
       icon: "simple-icons:springboot",
       link: "Spring.md",

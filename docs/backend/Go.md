@@ -302,3 +302,300 @@ func main(){
 }
 ```
 
+### 条件判断
+
+- `if`后面必须**要有大括号**，且不能把`if`语句写到同一行
+- `if-else`判断语句**没有小括号**
+- 允许在判断条件之前执行一个简单的语句，用`;`隔开，一般用于声明临时变量
+
+```go
+// 不合法
+if v > 10 work()
+if v > 10{ work() }
+
+// 合法
+if v > 10{
+    work()
+}
+
+if st:=0 ;v > 10{
+    st = 1
+    work()
+}
+```
+
+### switch语句
+
+- `switch`语句后面不需要括号
+- `switch`的`case`可以判断多个值
+- `switch`里面的每个分支结尾自带`break`
+- 可以用`fallthrough`关键字**强制进入**下一个`case`
+
+```go
+switch{
+case t < 12:
+    fmt.Println("")
+default:
+    fmt.Println("")
+}
+```
+
+
+
+### 循环
+
+- `go`只有`for`循环
+- `continue`和`break`和其它语言的功能一样
+
+```go
+for{
+    这是一个死循环
+}
+
+for j:=7;j < 9;j++{
+    continue 
+    break
+}
+
+i:=1
+for i<=3{
+    ++i
+}
+```
+
+
+
+
+
+### defer语句
+
+- defer后面必须是**函数调用语句**
+- defer后面跟的函数会在外层函数返回之前触发
+- 有多个defer的时候会**按顺序入栈**，外层函数返回之后会**依次出栈**
+- **defer是在return之后执行的**
+
+```go
+import "fmt"
+func main(){
+    defer fmt.Println("world")
+    
+    fmt.Println("hello")
+}// 输出 hello world
+```
+
+### Slice
+
+切片，也就是**动态数组**（内存空间动态开辟）
+
+**静态数组**
+
+- `var 数组名 数组长度 数据类型 {数据}` ：定义数组，可以把数据的声明**省略**
+  - 也可以用`:=`定义
+
+```go
+var myArray1 [10]int
+myArray2 := [10]int
+```
+
+- `len(数组名)`：获取数组长度
+
+```go
+var myArray1 [10]int
+
+for i:=1; i len(myArray1);i++{
+    fmt.Println(i)
+}
+```
+
+- `range`：可以使用这个关键字迭代数组，获取`index`（索引）和`value`（值）
+  - `_`：如果不需要索引或者值，可以使用匿名变量`_`进行忽略
+
+```go
+// 表示固定长度数组
+var myArray1 [10]int
+
+// 使用range迭代数组
+for index,value := range myArray1{
+    fmt.Println("index = ",index,"value=",value)
+}
+
+// 使用匿名变量
+for _,value := range myArray1{
+    fmt.Println("value=",value)
+}
+```
+
+- 对数组进行传参的时候，需要注意：
+
+  - 数组是值传递，在函数内部修改数组的时候**只修改副本**，原数组不变，且**声明的形参的数组长度要和传入的数组长度一致**
+
+  ```go
+  // 正确
+  func method(arr [5]int){
+      
+  }
+  
+  // 错误
+  func method(arr [4]int){
+      
+  }
+  
+  func main(){
+      arr := [5] int
+      method(arr)
+  }
+  ```
+
+
+
+**动态数组**
+
+- **声明切片**：定义数组时不指定元素长度
+  - 声明切片并初始化
+  - 声明`nil`切片，使用`make`关键字进行空间分配
+    - 第一个参数为数组类型，第二个为元素个数
+  - 直接使用`make`关键字声明
+  - 使用`:=`和`make`声明
+
+```go
+// 声明切片并初始化
+slice1 := [int]{1,2,3}
+
+// 声明slice是一个切片，但是并没有给slice分配空间
+var slice1 []int
+slice1 = make([]int,3)
+
+// 直接使用`make`关键字声明
+var slice1 []int = make([]int,3)
+
+// 使用:=和make声明
+var slice1 := make([]int,3)
+```
+
+- 传参时传递切片可以**避免拷贝**，因为切片是**引用类型**
+
+```go
+// 避免拷贝
+func modifySlice(s []int) {
+    s[0] = 100  // 修改会影响原数组
+}
+
+func main() {
+    a := []int{1, 2, 3, 4, 5}  // 切片（非数组）
+    modifySlice(a)
+    fmt.Println(a[0])  // 输出 100
+}
+```
+
+- `nil`切片：一个声明但未初始化的切片变量会自动设置为`nil`，**长度和容量都为0**
+
+```go
+func main() {
+    var phone []int // nil类型切片
+}
+```
+
+- **切片的追加**
+  - 使用`make`关键字传参，定义**合法元素数量和切片总空间**
+  - 可以使用`append`关键字进行切片扩容，增加**合法元素数量**，`a = append(a,value)`
+    - 也可以使用`append`进行**切片对切片的追加**
+    - 当切片总空间不足，底层会进行扩容，**扩容一倍**
+
+```go
+// 声明切片
+var numbers = make([]int,3,5)
+
+// 扩容
+numbers = append(numbers,1)
+```
+
+- **切片的截取**
+  - `s[i:]`：从i切到末尾
+  - `s[:j]`： 从开头切到j(不含j)
+  - 子切片的底层是**定义了一个新指针**指向**父切片的某个 位置作为子切片的起点**，而不是拷贝
+  - 可以使用`copy()`函数进行**切片的拷贝**
+    - `copy(s1,s2)`：把`s2`中的值拷贝给`s1`
+
+```go
+s := []int{1,2,3}
+
+// s1的值为1，2
+s1 = s[0:2]
+```
+
+### Map
+
+**声明Map类型**
+
+- `[]`里面存的是`key`的类型，外卖放`value`的类型
+  - 使用`make`方法开辟内存空间
+  - 使用`:=`直接声明
+  - 声明的时候进行初始化
+    - 使用**中括号**插入键值对
+- 可以使用`key`和`value`直接赋值
+
+```go
+// 声明map
+var myMap1 map[string]string
+// 开辟内存空间
+myMap1 = make(map[string][string],10)
+// 直接赋值
+myMap1["one"] = "php"
+myMap2["tow"] = 'js'
+myMap3["three"] = "go"
+
+// 直接声明
+var myMap2 := make(map[int]string,10)
+
+// 声明的时候初始化
+myMap3 := map[string][string]{
+    "one":"php",
+    "two":"js",
+    "three":"go"
+}
+```
+
+**Map的操作**
+
+- **遍历：**使用`range`关键字进行遍历
+
+```go
+myMap3 := map[string][string]{
+    "one":"php",
+    "two":"js",
+    "three":"go"
+}
+
+for key,value := range myMap3{
+    fmt.Println("key = ",key)
+    fmt.Println("value = ",value)
+}
+```
+
+- **删除：**使用`delete`关键字进行删除
+  - 第一个参数为map的变量名
+  - 第二个参数为要删除的键值对的`key`
+
+```go
+myMap3 := map[string][string]{
+    "one":"php",
+    "two":"js",
+    "three":"go"
+}
+
+delete(myMap3,"one")
+```
+
+- **修改：**直接根据`key`进行修改
+
+```go
+myMap3 := map[string][string]{
+    "one":"php",
+    "two":"js",
+    "three":"go"
+}
+
+myMap3["one"] = "python"
+```
+
+- 直接进行传参的话，`map`类型是**引用传递**

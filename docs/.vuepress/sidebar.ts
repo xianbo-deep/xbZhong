@@ -107,6 +107,13 @@ export default sidebar({
       
     },
     {
+      text: "CN",
+      icon: "streamline:network-solid",
+      link: "CN.md",
+      expanded: true,
+      
+    },
+    {
       text: "常见锁",
       icon: "material-symbols:lock-outline",
       link: "Lock.md",

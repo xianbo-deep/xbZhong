@@ -7,7 +7,7 @@ article: false
 category: backend
 timeline: true
 icon: devicon:rabbitmq
-date: 2025-10-6
+date: 2025-10-06
 ---
 ## RabbitMQ
 

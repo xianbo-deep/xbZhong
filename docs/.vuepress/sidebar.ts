@@ -390,6 +390,10 @@ export default sidebar({
       text: "大四",
       link: "4.md",
       expanded: true
+    },{
+      text: "专业选修",
+      link: "minor.md",
+      expanded: true
     }
   ],
   "/jottings/":[

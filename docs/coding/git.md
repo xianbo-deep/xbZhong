@@ -6,7 +6,7 @@ article: true
 category: code
 timeline: true
 icon: material-icon-theme:git
-date: 2024-8-29
+date: 2024-08-29
 ---
 ## Git
 

@@ -135,6 +135,12 @@ export default sidebar({
       
     },
     {
+      text: "Kubernetes",
+      icon: "devicon:kubernetes",
+      link: "Kubernetes.md",
+      expanded: true,
+    },
+    {
       text: "RabbitMQ",
       icon: "devicon:rabbitmq",
       link: "RabbitMQ.md",
@@ -148,6 +154,7 @@ export default sidebar({
       expanded: true,
       
     },
+
     {
       text: "Nginx",
       icon: "material-icon-theme:nginx",

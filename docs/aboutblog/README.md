@@ -10,7 +10,7 @@ date: 2025-10-10
 ## 前言
 我也是醉了，到大三才想着搭博客，本来学习压力蛮大的，但还是抽个两三天搭一个试试看
 
-我采用的是vuepress框架的theme-hope主题，使用 ~~vercel~~ Netlify进行部署，vercel会有墙的问题
+我采用的是vuepress框架的theme-hope主题，使用 ~~vercel~~ ~~Netlify~~ Cloudflare进行部署，vercel会有墙的问题，Netlify免费额度太少，且Cloudflare可以用他们的DNS服务器对我的域名进行管理，还有免费的统计功能、CDN、一天100k次请求，香！
 
 博客会存储一些我的个人笔记，放一些随笔啥的，后面也会断断续续更新智*鸡*的课程资料（没空整理aaaaa）
 

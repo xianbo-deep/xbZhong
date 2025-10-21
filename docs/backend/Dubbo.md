@@ -34,6 +34,7 @@ date: 2025-10-18
 - 适合分布式系统服务间的**内部通信**
 - 像调用本地方法一样，调用**远程服务**
 - 使用**TCP**进行数据传输
+- 基于**Netty**使用**TCP长连接**进行连接复用
 
 **RPC的请求流程**
 
@@ -145,7 +146,7 @@ Dubbo支持几乎所有主流的**通信协议**
 
 - 标签是主要针对**服务实例的分组**，分为**静态规则打标**和**动态规则打标**
 - **静态规则打标**：直接在**服务配置文件**或者**注册中心**注册时指定标签，修改后需要**重启实例**才能生效
-- **动态规则打标**：运行时通过规则**动态生成标签**，根据指定的匹配条件将服务实例**动态划分**到不同的流量分组中
+- **动态规则打标**：运行时通过规则**动态生成标签**，根据指定的匹配条件将服务实例**动态划分**到不同的流量分组中，是**热更新**
 
 **静态打标**
 
@@ -164,6 +165,12 @@ or
 
 - `Consumer`：服务调用者
   - 每次请求前通过`tag`设置**流量标签**，确保流量被调度到带**有同样标签**的服务提供方
+
+```java
+@DubboReference(tag = "gray")
+```
+
+
 
 **动态打标**
 
@@ -207,6 +214,30 @@ tags:
 
 - 属性包括用户ID、区域、版本、环境等
 
+在**服务端/注册中心**进行配置
+
+```yaml
+# 动态条件路由
+configVersion: v3.0
+scope: service
+force: true
+runtime: true
+enabled: true
+key: org.apache.dubbo.samples.CommentService
+conditions:
+  - method=getUser & arguments[0]=1001 => tag=gray
+```
+
+- `key`：服务名
+- `scope`：规则作用范围，可以是 `service` 或 `application`
+- `force`：是否强制路由
+  - `true`：必须匹配到实例，否则失败
+  - `false`：未匹配到实例会随机路由其他可用实例
+- `enabled`：规则是否生效
+- `priority`：规则优先级
+- `conditions`：条件路由表达式列表
+  - 例子中的意思是只匹配**服务端**接口方法名是 `getUser` 的调用，且**第0个参数**是1001，则路由到带 `tag=gray` 的 Provider
+
 #### 脚本路由规则
 
 可以为某个微服务定义一条**脚本规则**，则后续所有请求都会执行一遍这个脚本，脚本**过滤出来的地址**即为请求允许发送到的、有效的地址集合
@@ -232,9 +263,13 @@ script: |
 
 
 
-#### 动态配置规则
+#### 动态配置
+
+> 是“动态化”的总称，包含标签路由、条件路由和服务参数动态修改
 
 无需重启应用的情况下，实现**热部署**，**动态调整**RPC调用行为
+
+**动态配置路由 = 动态打标 + 动态条件路由 + 动态服务参数修改**
 
 有以下关键信息值得注意：
 
@@ -244,7 +279,66 @@ script: |
 
 ### Dubbo的SPI
 
+> **SPI是什么**
+>
+> 是一种**服务发现机制**，它可以用来实现**接口与实现解耦**，让系统在运行时可以动态加载某个接口的实现类，而不用硬编码接口的实现类
 
+Dubbo的SPI的相关逻辑被封装在了`ExtensionLoader`类中，通过 `ExtensionLoader`，我们可以加载指定的实现类
+
+- 在接口上加上`@SPI`注解，标记接口为可扩展点
+
+- 所需的配置文件需放置在`META-INF/dubbo`路径下
+- `Dubbo SPI`是通过键值对的方式进行配置，这样就可以按需加载指定的实现类
+
+```text
+dog=com.sunnick.animal.impl.Dog
+cat=com.sunnick.animal.impl.Cat
+```
+
+```java
+public void testDubboSPI(){
+   System.out.println("======dubbo SPI======");
+   ExtensionLoader<Animal> extensionLoader =
+         ExtensionLoader.getExtensionLoader(Animal.class);
+   Animal cat = extensionLoader.getExtension("cat");
+   cat.run();
+   Animal dog = extensionLoader.getExtension("dog");
+   dog.run();
+}
+```
+
+java原生SPI有以下几个缺点：
+
+- 需要遍历所有的实现并实例化，无法只加载某个指定的实现类，加载机制不够灵活
+- 配置文件中没有给实现类命名，无法在程序中准确的引用它们
+
+Dubbo的SPI解决了以上痛点，具有以下**几个重要机制**
+
+- `@SPI`注解：在接口上注解，标识接口是一个`Dubbo`扩展点，可以指定一个默认实现名
+
+- `@Adaptive`注解：在实现类上注解，用于生成一个**自适应扩展类**，会根据运行时参数**自动加载所需的实现类**
+
+- `Wrapper`机制：`Dubbo`在创建某个扩展点的实例时，**自动用包装类套一层**，从而增强功能
+
+  - 需要创建一个包装类和实现类，并对这两个类进行SPI的配置
+
+  ```java
+  public class LogWrapper implements Log {
+      private final Log log; // 注意：构造函数参数是接口类型
+  
+      public LogWrapper(Log log) { // 这一点非常关键！！
+          this.log = log;
+      }
+  
+      @Override
+      public void info(String msg) {
+          System.out.println("[Before]"); // AOP增强
+          log.info(msg);
+          System.out.println("[After]"); // AOP增强
+      }
+  }
+  
+  ```
 
 ## 使用
 
@@ -485,7 +579,7 @@ configs:
 
 #### 参数路由
 
-使用**动态、条件、标签路由**
+对**条件、标签路由进行动态配置**
 
 ```yaml
 configVersion: v3.0
@@ -564,6 +658,168 @@ configs:
 ![image-20251018133818557](/screenshot/backend/image-20251018133818557.png)
 
 **序列化和反序列化**操作都在Dubbo线程上工作，而IO线程并没有承载这些工作
+
+#### 异步调用
+
+**Dubbo线程池：**处理RPC网络通信相关的任务，包括请求接收、响应发送、序列化/反序列化等
+
+
+
+可分为`Provider`异步调用和`Consumer`异步调用两种模式，二者**相互独立，可进行任意正交组合**
+
+- `Consumer`异步调用指的是发起RPC调用后**立即返回**，调用线程执行其他任务，当响应结果返回后通过**回调函数**通知消费端结果
+  - 让IO线程进行请求参数的序列化，请求的发送等工作，使网络IO和业务线程解耦
+
+**消费端异步调用工作示例**
+
+![image-20251021113319445](/screenshot/backend/image-20251021113319445.png)
+
+- `Provider`端异步执行**将阻塞的业务从 Dubbo 内部线程池切换到业务自定义线程**，避免Dubbo线程池的过度占用
+
+**Provider异步**
+
+- 接口定义使用`CompletableFuture`
+- 服务实现需要使用`CompletableFuture`设置回调函数
+  - 使用这个类可以将线程从Dubbo线程切换到业务线程，防止对Dubbo线程池的阻塞
+  - 当结果未响应时，返回`null`
+
+**接口定义**
+
+```java
+public interface AsyncService {
+    /**
+     * 同步调用方法
+     */
+    String invoke(String param);
+    /**
+     * 异步调用方法
+     */
+    CompletableFuture<String> asyncInvoke(String param);
+}
+```
+
+**接口实现**
+
+```java
+@DubboService
+public class AsyncServiceImpl implements AsyncService {
+
+    @Override
+    public CompletableFuture<String> asyncInvoke(String param) {
+        // 建议为supplyAsync提供自定义线程池
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                // Do something
+                long time = ThreadLocalRandom.current().nextLong(1000);
+                Thread.sleep(time);
+                StringBuilder s = new StringBuilder();
+                s.append("AsyncService asyncInvoke param:").append(param).append(",sleep:").append(time);
+                return s.toString();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            return null;
+        });
+    }
+}
+```
+
+**Consumer异步**
+
+- 方法一：使用`CompleteableFuture`声明服务方法返回值
+  - 使用`whenComplete`方法写业务逻辑
+
+```java
+@Override
+public void run(String... args) throws Exception {
+    //调用异步接口
+    CompletableFuture<String> future1 = asyncService.asyncInvoke("async call request1");
+    future1.whenComplete((v, t) -> {
+        if (t != null) {
+            t.printStackTrace();
+        } else {
+            System.out.println("AsyncTask Response-1: " + v);
+        }
+    });
+}
+```
+
+- 方法二：在注解中配置`async`参数
+
+```java
+@DubboReference(async="true")
+private AsyncService asyncService;
+```
+
+- 其它配置
+
+  - 可以设置客户端**是否等待消息成功发出**
+    - `sent`为true客户端则会等待消息成功发出，否则抛出异常
+    - `sent`为false客户端则不等待消息发出
+
+  ```java
+  @DubboReference(methods = {@Method(name = "sayHello", timeout = 5000， sent = true)})
+  private AsyncService asyncService;
+  ```
+
+  - 可以选择是否忽略返回值
+    - `return`为false则表示忽略返回值，不创建`future`对象，减少资源开销
+
+  ```java
+  @DubboReference(methods = {@Method(name = "sayHello", timeout = 5000， return = false)})
+  private AsyncService asyncService
+  ```
+
+#### 泛化调用
+
+>核心：**调用端不依赖具体接口类型**，不需要在编译期知道服务提供方的接口定义
+
+可以通过一个**通用的`GenericService`接口**对所有服务发起请求，使用场景如下：
+
+- 网关服务
+- 测试平台
+
+泛化调用中**调用端需要知道**
+
+- 服务接口名
+- 方法名
+- 参数值和参数类型
+
+**Spring调用方式**（以XML为例）
+
+1. 生产者端无需改动
+2. 消费者端原有的`dubbo:reference` 标签加上 `generic=true` 的属性
+3. 获取到 Bean 容器，通过 Bean 容器拿到 `GenericService` 实例。
+4. 调用 `$invoke` 方法获取结果
+   - 方法名
+   - 参数类型数组
+   - 参数值数组
+
+```java
+private static GenericService genericService;
+
+    public static void main(String[] args) throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/generic-impl-consumer.xml");
+        context.start();
+        //服务对应bean的名字由xml标签的id决定
+        genericService = context.getBean("helloService");
+        //获得结果
+        Object result = genericService.$invoke("sayHello", new String[]{"java.lang.String"}, new Object[]{"world"});
+    }
+```
+
+**当然也可以通过注解的方式进行服务接口名的声明**
+
+```java
+@DubboReference(
+    interfaceName = "com.example.UserService", // 必须指定接口名字符串
+    generic = true                             // 启用泛化调用
+)
+private GenericService genericService;
+
+```
+
+
 
 #### Filter拦截器
 
@@ -655,6 +911,14 @@ private DemoService demoService;
 
 当集群调用失败时，Dubbo提供多种容错方案，默认为`failover`重试
 
+**调用链路**
+
+-  **集群容错机制（Cluster）**
+-  **目录服务（Directory）**
+-  **路由（Router）**
+-  **负载均衡（LoadBalance）**
+-  **最终调用者（Invoker）**
+
 ![image-20251018142537953](/screenshot/backend/image-20251018142537953.png)
 
 各节点关系：
@@ -662,7 +926,7 @@ private DemoService demoService;
 - `Invoker`是`Provider`的一个可调用的`Service`的抽象，`Invoker`封装了`Provider`地址以及`Service`的接口信息
 
 - `Directory`代表多个`Invoker`
-- `Cluster`将`Directory`中的多个`Invoker`伪装成一个`Invoker`，对上层透明，伪装过程包含了容错逻辑，调用失败后，重试另一个
+- `Cluster`将`Directory`中的多个`Invoker`伪装成一个`Invoker`，对上层透明，伪装过程包含了**容错逻辑**，调用失败后，重试另一个
 - `Router` 负责从多个 `Invoker` 中按路由规则选出子集
 - `LoadBalance` 负责从多个 `Invoker` 中选出具体的一个用于本次调用
 

@@ -154,7 +154,13 @@ export default sidebar({
       expanded: true,
       
     },
-
+    {
+      text: "GithubAction",
+      icon: "mdi:github",
+      link: "GithubActions.md",
+      expanded: true,
+      
+    },
     {
       text: "Nginx",
       icon: "material-icon-theme:nginx",
@@ -407,6 +413,12 @@ export default sidebar({
     {
       text: "信息",
       link: "team.md",
+      expanded: true
+    },
+    {
+      text: "音乐",
+      link: "music.md",
+      icon: "mdi:music",
       expanded: true
     }
   ]

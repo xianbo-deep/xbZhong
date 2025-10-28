@@ -157,7 +157,7 @@ export default sidebar({
     {
       text: "GithubAction",
       icon: "mdi:github",
-      link: "GithubActions.md",
+      link: "GitHubActions.md",
       expanded: true,
       
     },

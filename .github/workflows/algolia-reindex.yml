@@ -1,0 +1,22 @@
+name: 重建索引
+
+on:
+  push:
+   branches:
+    - main
+   paths:
+    - '**.md'
+  workflow_dispatch: true
+
+jobs:
+  algolia:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Trigger Algolia Crawler
+      uses: algolia/algoliasearch-crawler-github-actions@v1.0.10
+      with:
+        crawler-user-id: ${{ secrets.CRAWLER_USER_ID }}
+        crawler-api-key: ${{ secrets.CRAWLER_API_KEY }}
+        algolia-app-id: ${{ secrets.ALGOLIA_APP_ID }}
+        algolia-api-key: ${{ secrets.ALGOLIA_API_KEY }}
+        site-url: 'https://xbzhong.cn'

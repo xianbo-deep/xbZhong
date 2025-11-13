@@ -165,7 +165,7 @@ export default hopeTheme({
       componentOptions: {
           pdf: {
             pdfjs: "/pdfjs/web/viewer.html"  
-            // 意思是："请使用我硬盘里的pdfjs软件，不要用网上的"
+            
           }
         }
     },

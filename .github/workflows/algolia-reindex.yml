@@ -12,6 +12,10 @@ jobs:
   algolia:
   runs-on: ubuntu-latest
   steps:
+    - name: 等待5分钟
+      run: sleep 300 
+
+      
     - name: Trigger Algolia Crawler
       uses: algolia/algoliasearch-crawler-github-actions@v1.0.10
       with:

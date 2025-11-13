@@ -407,7 +407,22 @@ export default sidebar({
       text: "专业选修",
       link: "minor.md",
       expanded: true
-    }
+    },
+    {
+      text: "课程笔记",
+      prefix: "coursenote/",
+      expanded: true,
+      children: [
+        {
+          text: "前言",
+          link: "README.md"
+        },
+        {
+          text: "模式识别与统计学习",
+          link: "ml.md"
+        },
+      ]
+    },
   ],
   "/jottings/":[
     {

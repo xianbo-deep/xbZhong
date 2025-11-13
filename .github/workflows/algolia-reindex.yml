@@ -2,25 +2,25 @@ name: 重建索引
 
 on:
   push:
-   branches:
-    - main
-   paths:
-    - '**.md'
-  workflow_dispatch: true
+    branches:
+      - main
+    paths:
+      - '**.md'
+  workflow_dispatch:
 
 jobs:
   algolia:
-  runs-on: ubuntu-latest
-  steps:
-    - name: 等待5分钟
-      run: sleep 300 
+    runs-on: ubuntu-latest
 
-      
-    - name: Trigger Algolia Crawler
-      uses: algolia/algoliasearch-crawler-github-actions@v1.0.10
-      with:
-        crawler-user-id: ${{ secrets.CRAWLER_USER_ID }}
-        crawler-api-key: ${{ secrets.CRAWLER_API_KEY }}
-        algolia-app-id: ${{ secrets.ALGOLIA_APP_ID }}
-        algolia-api-key: ${{ secrets.ALGOLIA_API_KEY }}
-        site-url: 'https://xbzhong.cn'
+    steps:
+      - name: 等待 5 分钟
+        run: sleep 300
+
+      - name: 触发 Algolia 爬虫
+        uses: algolia/algoliasearch-crawler-github-actions@v1.0.10
+        with:
+          crawler-user-id: ${{ secrets.CRAWLER_USER_ID }}
+          crawler-api-key: ${{ secrets.CRAWLER_API_KEY }}
+          algolia-app-id: ${{ secrets.ALGOLIA_APP_ID }}
+          algolia-api-key: ${{ secrets.ALGOLIA_API_KEY }}
+          site-url: 'https://xbzhong.cn'

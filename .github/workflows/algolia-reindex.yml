@@ -13,7 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
 
+        
       - name: 触发 Algolia 爬虫
         uses: algolia/algoliasearch-crawler-github-actions@v1.0.10
         with:

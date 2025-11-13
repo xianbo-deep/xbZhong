@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 等待 5 分钟
-        run: sleep 300
+      - name: 等待 2 分钟
+        run: sleep 120
 
       - name: 触发 Algolia 爬虫
         uses: algolia/algoliasearch-crawler-github-actions@v1.0.10

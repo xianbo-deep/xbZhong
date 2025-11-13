@@ -19,10 +19,6 @@ projects:
     name: 常见卷积神经网络的实现
     desc: 源代码都在这
     link: https://github.com/xianbo-deep/Model
-
-  - icon: /jhwang.png
-    name: 哈基豪
-    link: https://junhaowang.cn
 ---
 
 

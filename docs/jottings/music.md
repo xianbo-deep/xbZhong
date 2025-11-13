@@ -1,13 +1,13 @@
 ---
 title: Music
 index: false
-icon: mdi:music
 article: false
 timeline: false
 date: 2025-10-25
 ---
 
 ## 我是小雨，我爱你，你爱我吗
+<BiliBili bvid="BV1g33TzEE3k" title="不能说的秘密"/>
 <VidStack src="/music/不能说的秘密.mp3" title="不能说的秘密"  :autopause="true"/>
 
 ## 前言

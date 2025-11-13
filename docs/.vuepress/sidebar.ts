@@ -433,7 +433,6 @@ export default sidebar({
     {
       text: "音乐",
       link: "music.md",
-      icon: "mdi:music",
       expanded: true
     }
   ]

@@ -11,16 +11,16 @@ article: false
 
 ### 22届
 
-<PDF url="https://xbzhong.cn/myMajor/degreeProgram/22-AI.pdf" viewer />
+<PDF url="/myMajor/degreeProgram/22-AI.pdf" viewer />
 
 ### 23届
 
-<PDF url="https://xbzhong.cn/myMajor/degreeProgram/23-AI.pdf" viewer/>
+<PDF url="/myMajor/degreeProgram/23-AI.pdf" viewer/>
 
 ### 24届
 
-<PDF url="https://xbzhong.cn/myMajor/degreeProgram/24-AI.pdf" viewer/>
+<PDF url="/myMajor/degreeProgram/24-AI.pdf" viewer/>
 
 ### 25届
 
-<PDF url="https://xbzhong.cn/myMajor/degreeProgram/25-AI.pdf" viewer/>
+<PDF url="/myMajor/degreeProgram/25-AI.pdf" viewer/>

@@ -7,7 +7,7 @@ article: false
 
 ### 21届
 
-<PDF url="/myMajor/degreeProgram/21-AI.pdf" viewer=true/>
+<PDF url="/myMajor/degreeProgram/21-AI.pdf" viewer/>
 
 ### 22届
 

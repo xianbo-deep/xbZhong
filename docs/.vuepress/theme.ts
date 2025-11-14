@@ -164,7 +164,7 @@ export default hopeTheme({
       components: ["Badge", "VPCard","PDF","VidStack","SiteInfo","BiliBili",],
       componentOptions: {
           pdf: {
-            pdfjs: "/pdfjs/web/viewer.html"  
+            pdfjs: "/pdfjs/"  
             
           }
         }

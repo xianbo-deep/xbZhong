@@ -129,3 +129,90 @@ $$
 \log{P(Y,Z|\theta^{i + 1})} \ge \mathcal{{L}}(q,\theta^{(i + 1)})\ge\mathcal{{L}}(q,\theta^{(i)})=\log{P(Y,Z|\theta^{i})}
 $$
 保证了**EM算法的单调性**
+
+
+## 高斯混合模型
+高斯分布
+$$
+\phi(y|\theta_{k}) = \frac{1}{\sqrt{2\pi}\sigma_{k}}exp(-\frac{(x-\mu_k)^2}{2\sigma_{k}^2})
+$$
+
+
+用多个高斯分布的加权组合描述复杂数据的分布
+$$
+\begin{aligned}
+&P(y|\theta) = \sum_{k=1}^K \alpha_k \phi(y|\theta_k) \\
+&\text{s.t.} \quad \alpha_k \geq 0 \ (k=1,\dots,K), \quad \sum_{k=1}^K \alpha_k = 1 
+\end{aligned}
+$$
+
+**Q函数的定义**
+$$
+Q(\theta,\theta^{(i)}) = \mathbb{E}_{\gamma}[\log{P(y,\gamma|\theta)}|y,\theta^{(i)}]
+$$
+
+观测数据是由高斯混合模型产生的，模型参数为
+$$
+\theta = (\alpha_{k},\mu_{k},\sigma_{k}^2)
+$$
+
+隐变量定义为
+$$
+y_{jk} = 
+\begin{cases}
+1 &\text{第j个观测样本来自第k个高斯模型} \\
+0
+\end{cases}
+$$
+
+现在来推导完全数据的似然函数，因为后续会使用这个代入Q函数
+$$
+\begin{aligned}
+P(y,\gamma|\theta) &= \prod_{j = 1}^{N}{p(y_j,\gamma_{j1},\gamma_{j2},\dots,\gamma_{jk}|\theta)} \\
+&=\prod_{j = 1}^{N}{\prod_{k=1}^{K}{[\alpha_{k}\phi(y_j|\theta_k)]^{\gamma_{jk}}}} 
+\end{aligned} 
+$$
+
+令
+$$
+n_k = \sum_{j=1}^{N}\gamma_{jk}
+$$
+
+有
+$$
+\begin{aligned} 
+\prod_{j = 1}^{N}{\prod_{k=1}^{K}{[\alpha_{k}\phi(y_i|\theta_k)]^{\gamma_{jk}}}}  &= \prod_{k = 1}^K{\alpha_k^{n_k}}\prod_{j=1}^N[\phi(y_j|\theta_k)]^{\gamma_{jk}}
+\end{aligned} 
+$$
+
+代入到Q函数中
+$$
+\begin{aligned}
+Q(\theta,\theta^{(i)}) = \mathbb{E}_{\gamma}\{\sum_{k=1}^N\{n_k\log{\alpha_{k} + \sum_{j=1}^N{\gamma_{jk}[\log{\phi(y_j|\theta_{k})}]}}\}|y,\theta^{(i)}\}
+\end{aligned}
+$$
+
+我们可以很轻松地发现，真正需要计算的只有$\mathbb{E}(\gamma_{jk}|y,\theta^{(i)})$，因为其它的都可以通过期望的线性性质直接拆开得到结果
+$$
+\begin{aligned}
+\mathbb{E}(\gamma_{jk}|y,\theta^{(i)}) &= P(\gamma_{jk} = 1|y,\theta^{(i)}) \\
+&= \frac{P(\gamma_{jk} = 1|\theta^{(i)})P(y_j|\gamma_{jk} = 1,\theta^{(i)})}{P(y|\theta^{(i)})}\\
+&= \frac{\alpha_{k}\phi(y_j|\theta_k)}{\sum_{k=1}^K{\alpha_{k}\phi(y_j|\theta_k)}} \\
+&= \hat{\gamma}_{jk}
+\end{aligned}
+$$
+
+并且我们有
+$$
+\begin{aligned}
+n_k &= \sum_{j=1}^{N}{\gamma_{jk}} \\
+\mathbb{E}[n_k|y,\theta^{(i)}] &= \sum_{j=1}^N{\mathbb{E}[\gamma_{jk}|y,\theta^{(i)}]} = \hat{\gamma}_{jk}
+\end{aligned}
+$$
+
+> 解释一下上方公式难以理解的点
+> 
+> - $\mathbb{E}(\gamma_{jk}|y,\theta^{(i)})$的值其实就是$P(\gamma_{jk} = 1|y,\theta^{(i)})$，因为前面定义过隐变量的值不是1就是0，这里可以很容易看出
+> - $\hat{\gamma}_{jk}$其实就是样本点$y_j$对高斯分布$k$的隶属度
+> - $P(y|\theta^{(i)})$不是条件概率，而是在参数为$\theta^{(i)}$的情况下的似然函数，而$y$可以来自不同的高斯分布，因此写成求和的形式
+> - $P(\gamma_{jk} = 1|\theta^{(i)})$就是在参数为$\theta^{(i)}$的情况下数据点来自第k个分量的概率，也就是权重$\alpha_k$

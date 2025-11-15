@@ -158,7 +158,7 @@ $$
 
 隐变量定义为
 $$
-y_{jk} = 
+\gamma_{jk} = 
 \begin{cases}
 1 &\text{第j个观测样本来自第k个高斯模型} \\
 0
@@ -188,7 +188,9 @@ $$
 代入到Q函数中
 $$
 \begin{aligned}
-Q(\theta,\theta^{(i)}) = \mathbb{E}_{\gamma}\{\sum_{k=1}^N\{n_k\log{\alpha_{k} + \sum_{j=1}^N{\gamma_{jk}[\log{\phi(y_j|\theta_{k})}]}}\}|y,\theta^{(i)}\}
+Q(\theta,\theta^{(i)}) &= \mathbb{E}_{\gamma}\{\sum_{k=1}^N\{n_k\log{\alpha_{k} + \sum_{j=1}^N{\gamma_{jk}[\log{\phi(y_j|\theta_{k})}]}}\}|y,\theta^{(i)}\} \\
+&= \mathbb{E}_{\gamma}\{\sum_{k=1}^N\{n_k\log{\alpha_{k} + \sum_{j=1}^N{\gamma_{jk}[(\log{\frac{1}{\sqrt{2\pi}}}- \log{\sigma_{k}} - \frac{(y_j - \mu_k)^2}{2\sigma_k^2})]}}\}|y,\theta^{(i)}\} \\
+
 \end{aligned}
 $$
 
@@ -206,9 +208,19 @@ $$
 $$
 \begin{aligned}
 n_k &= \sum_{j=1}^{N}{\gamma_{jk}} \\
-\mathbb{E}[n_k|y,\theta^{(i)}] &= \sum_{j=1}^N{\mathbb{E}[\gamma_{jk}|y,\theta^{(i)}]} = \hat{\gamma}_{jk}
+\mathbb{E}[n_k|y,\theta^{(i)}] &= \sum_{j=1}^N{\mathbb{E}[\gamma_{jk}|y,\theta^{(i)}]} = \sum_{j=1}^{N}{\hat{\gamma}_{jk}}
 \end{aligned}
 $$
+
+
+最后得到**Q函数的最终形式**
+$$
+\begin{aligned}
+Q(\theta,\theta^{(i)}) &= \sum_{k = 1}^{N}\{\sum_{j=1}^{N}{(\mathbb{E}{\gamma_{jk}})}\log{\alpha_k}+ \sum_{j=1}^N{(\mathbb{E}{\gamma_{jk}})}[(\log{\frac{1}{\sqrt{2\pi}}}- \log{\sigma_{k}} - \frac{(y_j - \mu_k)^2}{2\sigma_k^2})]|y,\theta^{(i)}\}\\
+&= \sum_{k = 1}^{N}\{\sum_{j=1}^{N}{\hat{\gamma}_{jk}}\log{\alpha_k}+ \sum_{j=1}^N{\hat{\gamma}_{jk}}[(\log{\frac{1}{\sqrt{2\pi}}}- \log{\sigma_{k}} - \frac{(y_j - \mu_k)^2}{2\sigma_k^2})]|y,\theta^{(i)}\}
+\end{aligned}
+$$
+
 
 > 解释一下上方公式难以理解的点
 > 
@@ -216,3 +228,13 @@ $$
 > - $\hat{\gamma}_{jk}$其实就是样本点$y_j$对高斯分布$k$的隶属度
 > - $P(y|\theta^{(i)})$不是条件概率，而是在参数为$\theta^{(i)}$的情况下的似然函数，而$y$可以来自不同的高斯分布，因此写成求和的形式
 > - $P(\gamma_{jk} = 1|\theta^{(i)})$就是在参数为$\theta^{(i)}$的情况下数据点来自第k个分量的概率，也就是权重$\alpha_k$
+
+
+最后对模型参数$\alpha,\mu,\sigma$进行更新
+$$
+\begin{aligned}
+\hat{\alpha}_k &= \frac{n_k}{N} = \frac{\sum_{j=1}^{N}{\hat{\gamma}_{jk}}}{N}\\
+\hat{\mu}_k &= \frac{\sum_{j = 1}^N{\hat{\gamma}_{jk}y_j}}{\sum_{j = 1}^N{\hat{\gamma}_{jk}}}\\
+\hat{\sigma}_k &= \frac{\sum_{j = 1}^N{\hat{\gamma}_{jk}(y_j-\mu_k)^2}}{\sum_{j = 1}^N{\hat{\gamma}_{jk}}}
+\end{aligned}
+$$

@@ -4,8 +4,34 @@ index: false
 article: false
 timeline: false
 ---
+## 朴素贝叶斯
 
-## EM算法的推导
+### 推导朴素贝叶斯中的概率估计公式
+
+#### 极大似然估计
+
+#### 贝叶斯估计
+
+
+### 后验概率最大化的含义
+这里来证明一下朴素贝叶斯是如何从损失函数最小化推出后验概率最大化的
+
+首先我们写出期望风险的公式
+$$
+\begin{aligned}
+R_{exp} &= \int{\int{L(y,f(\vec{x}))P(\vec{x},y)d\vec{x}}dy}\\
+&= \int_x{\int_y{L(y,f(\vec{x}))P(y|\vec{x})dy}P(\vec{x})d\vec{x}}\\
+&= \mathbb{E}_x{[\int_y{L(y,f(\vec{x}))P(y|\vec{x})dy}]} \\
+&= \mathbb{E}_x{[\sum_{k=1}^{K}{L(c_k,f(\vec{x}))P(c_k|\vec{x})}]} 
+
+\end{aligned}
+$$
+也就是对于每个$x$，我们对$L(y,f(\vec{x}))P(y|\vec{x})$进行最小化
+
+
+## EM算法
+
+### EM算法的推导
 它的推导和VAE（变分自编码器）以及Diffusion Model（扩散模型）很像，都是由于原函数难以求解，去找到它的下界函数，对下界函数求得最优解，达到优化原函数的目的。感兴趣的可以看一下[VAE](/dl/cv/VAE.md)和[Diffusion Model](/dl/cv/DiffusionModel.md)的推导
 
 首先要了解EM算法的核心：**EM算法是计算每个潜在变量$Z$的后验概率，然后通过加权平均，也就是求期望的方式得到一个近似的估计，最后我们要找到一个能让这个近似估计最大的参数$\theta$**
@@ -59,7 +85,7 @@ $$
 \begin{aligned}
 \mathcal{{L}}(q,\theta) &= \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)} \\
 &= \sum_{Z}q(Z)\log{P(Z|Y,\theta)P(Y|\theta)} - \sum_{Z}q(Z)\log{q(Z)} \\
-&= \sum_{Z}q(Z)(\log{P(Z|Y,\theta)}+\log{P(Y|\theta)} - \log{q(Z)})\\
+&= \sum_{Z}q(Z)(\log{P(Z|Y,\theta)}+\log{P(Y|\theta)}) - \log{q(Z)})\\
 &= \log{P(Y|\theta)}\sum_{Z}q(Z) + \sum_{Z}q(Z)\log{\frac{P(Z|Y,\theta)}{q(Z)}} \\
 &= \log{P(Y|\theta)} - KL(q(Z)||P(Z|Y,\theta))
 \end{aligned}
@@ -131,7 +157,7 @@ $$
 保证了**EM算法的单调性**
 
 
-## 高斯混合模型
+### 高斯混合模型
 高斯分布
 $$
 \phi(y|\theta_{k}) = \frac{1}{\sqrt{2\pi}\sigma_{k}}exp(-\frac{(x-\mu_k)^2}{2\sigma_{k}^2})

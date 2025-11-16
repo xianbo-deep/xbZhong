@@ -9,7 +9,11 @@ date: 2025-10-25
 ## 我是小雨，我爱你，你爱我吗
 <BiliBili bvid="BV1g33TzEE3k" title="不能说的秘密"/>
 <VidStack src="/music/不能说的秘密.mp3" title="不能说的秘密"  :autopause="true"/>
-
+<VidStack src="/music/路小雨.flac" title="路小雨"  :autopause="true"/>
+<VidStack src="/music/淡水海边.mp3" title="淡水海边"  :autopause="true"/>
+<VidStack src="/music/脚踏车.mp3" title="脚踏车"  :autopause="true"/>
+<VidStack src="/music/FirstKiss.mp3" title="Fisrt Kiss"  :autopause="true"/>
+<VidStack src="/music/小雨写立可白I.mp3" title="小雨写立可白I"  :autopause="true"/>
 ## 前言
 我常听周杰伦、陶喆的歌，现在也不咋挑了，英文歌，华语都听
 

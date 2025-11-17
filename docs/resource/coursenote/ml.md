@@ -8,9 +8,44 @@ timeline: false
 
 ### 推导朴素贝叶斯中的概率估计公式
 
-#### 极大似然估计
-
 #### 贝叶斯估计
+**对于先验概率**
+假设进行N次实验，先验概率
+$$
+P(Y=c_k) = \frac{1}{K} \\
+PK - 1 = 0
+$$
+由频率是概率的极大似然估计
+$$
+P(Y=c_k) = \frac{\sum_{i=1}^{N}{I(y_i = c_k)}}{N}
+$$
+可得
+$$
+P(Y=c_k)N - \sum_{i=1}^{N}{I(y_i = c_k)} = 0
+$$
+即
+$$
+\lambda(P(Y=c_k)K - 1) + P(Y=c_k)N - \sum_{i=1}^{N}{I(y_i = c_k)} = 0
+$$
+可得
+$$
+P(Y=c_k) = \frac{ \sum_{i=1}^{N}{I(y_i = c_k)} + \lambda}{K\lambda + N}
+$$
+**对于似然概率**
+- $S_j$是第j个特征可能取值的个数，这里假设每个特征的值是等概率分布，因此概率为$\frac{1}{S_j}$
+$$
+P(X^{(j)} = a_{jl} | Y =c_k) = \frac{1}{S_j}  \\
+P(X^{(j)} = a_{jl} | Y =c_k) = \frac{\sum_{i=1}^{N}{I(X^{(j)} = a_{jl} , Y =c_k)}}{\sum_{i=1}^{N}{I(Y=c_k)}}
+$$
+同上
+$$
+\lambda{PS_j - 1} + P\sum_{i=1}^{N}{I(Y=c_k)} - \sum_{i=1}^{N}{I(X^{(j)} = a_{jl} , Y =c_k)} = 0
+$$
+可得
+$$
+P(X^{(j)} = a_{jl} | Y =c_k)= \frac{\lambda +\sum_{i=1}^{N}{I(X^{(j)} = a_{jl} , Y =c_k)}}{\sum_{i=1}^{N}{I(Y=c_k)} + S_j\cdot \lambda}
+$$
+
 
 
 ### 后验概率最大化的含义
@@ -27,6 +62,14 @@ R_{exp} &= \int{\int{L(y,f(\vec{x}))P(\vec{x},y)d\vec{x}}dy}\\
 \end{aligned}
 $$
 也就是对于每个$x$，我们对$L(y,f(\vec{x}))P(y|\vec{x})$进行最小化
+$$
+\begin{aligned}
+f(x) &= \argmin_{y\in Y}{\sum_{k=1}^KL(c_k,y)P(c_k|X=x)}\\
+&= \argmin_{y\in Y}{\sum_{k=1}^KP(y\not ={c_k}|X= x)} \\
+&= \argmin_{y\in Y}({1 - P(y={c_k}|X= x)}) \quad \text{所有概率和为1，等价为1减去预测正确的概率}\\
+&= \argmax_{y\in Y}{P(y ={c_k}|X= x)} \\
+\end{aligned}
+$$
 
 
 ## EM算法

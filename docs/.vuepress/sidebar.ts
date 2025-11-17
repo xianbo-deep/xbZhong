@@ -434,6 +434,11 @@ export default sidebar({
       text: "音乐",
       link: "music.md",
       expanded: true
+    },
+    {
+      text: "游戏",
+      link: "game.md",
+      expanded: true
     }
   ]
 });

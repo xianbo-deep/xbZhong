@@ -71,6 +71,47 @@ f(x) &= \argmin_{y\in Y}{\sum_{k=1}^KL(c_k,y)P(c_k|X=x)}\\
 \end{aligned}
 $$
 
+## 支持向量机
+
+### 合页损失函数的推导
+
+在软间隔支持向量机里面，引入松弛变量$\xi_i$
+
+目标函数为
+$$
+L = \frac{1}{2}||w||^2 + C\sum_{i = 1}^N{\xi_i}
+$$
+约束条件
+$$
+\begin{aligned}
+y_i(w^Tx_i + b) &\ge 1 - \xi_i \\ 
+\xi_i \ge 0
+\end{aligned}
+$$
+- $y_i(w^Tx_i + b) \ge 1$时，说明样本被正确分类且间隔足够大
+  - 此时$1 - y_i(w^Tx_i + b)\le 0$，而约束条件为$\xi_i \ge 1 - y_i(w^Tx_i + b)$，$\xi_i$需要大于一个负数且大于0
+  - 为了让目标函数最小，令$\xi_i = 0$
+- $y_i(w^Tx_i + b) < 1$时，说明样本**间隔不足**或者**被误分类**
+  - 此时 $1 - y_i(w^Tx_i + b)> 0$，同上面的推导，约束条件为$\xi_i \ge 1 - y_i(w^Tx_i + b)$，$\xi_i$需要大于一个正数且大于0
+  - 为满足约束且使目标函数最小，$\xi_i = 1 - y_i(w^Tx_i + b)$
+
+综上所述
+$$
+\xi_i = \max{(0,1 - y_i(w^Tx_i + b))}
+$$
+
+代入目标函数并令$\lambda = \frac{1}{2C}$可得合页损失函数
+$$
+\sum_{i=1}^N[1 - y_i(w^Tx_i + b)]_+ + \lambda||w||^2
+$$
+其中
+$$
+[z]_+ = 
+\begin{cases}
+z , \quad z \ge 0 \\
+0, \quad z < 0
+\end{cases}
+$$
 
 ## EM算法
 

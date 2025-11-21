@@ -2,43 +2,66 @@ name: 死链检测
 
 on:
   schedule:
-    - cron: '0 16 * * 0'
-
+    - cron: '0 16 * * 0' # 每周日 16:00
   workflow_dispatch:
-
-
 
 jobs:
   dead-link-detection:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
+      # 1. 拉取仓库
       - name: Checkout repository
         uses: actions/checkout@v3
-      
+
+      # 2. 安装 Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # 3. 安装 markdown-link-check
       - name: Install markdown-link-check
         run: npm install -g markdown-link-check
 
-      - name: check dead link
+      # 4. 检测死链
+      - name: Check dead links
         id: deadlinks
         run: |
-          find docs -name "*.md" > md_files.txt  
-          while read file; do 
-            markdown-link-check "$file" -q >> deadlinks.txt || true 
-          done 
-          echo "死链检测完成，结果：" 
-          cat deadlinks.txt
-          echo "list=$(cat deadlinks.txt | sed ':a;N;$!ba;s/\n/\\n/g')" >> $GITHUB_OUTPUT
+          # 查找 docs 下所有 Markdown 文件
+          find docs -name "*.md" > md_files.txt
 
+          # 初始化 deadlinks.txt
+          touch deadlinks.txt
 
-      
+          # 循环检测
+          while read file; do
+            markdown-link-check "$file" -q >> deadlinks.txt || true
+          done < md_files.txt
 
-      - name: send email
-        if: always()
+          # 判断是否有死链
+          if grep -q "http" deadlinks.txt; then
+            COLOR="#d9534f"  # 红色
+          else
+            COLOR="#28a745"  # 绿色
+            echo "恭喜！没有检测到死链。" > deadlinks.txt
+          fi
+
+          # 生成 HTML 列表
+          HTML_LIST=$(sed 's/^/<li>/; s/$/<\/li>/' deadlinks.txt)
+
+          # 输出变量给后续 step
+          echo "list_html=$HTML_LIST" >> $GITHUB_OUTPUT
+          echo "color=$COLOR" >> $GITHUB_OUTPUT
+
+      # 5. 生成 HTML 邮件
+      - name: Prepare email HTML
+        run: |
+          cp .github/deadlink_template.html email.html
+          sed -i "s|{{DEADLINK_LIST}}|${{ steps.deadlinks.outputs.list_html }}|g" email.html
+          sed -i "s|{{COLOR}}|${{ steps.deadlinks.outputs.color }}|g" email.html
+
+      # 6. 发送邮件
+      - name: Send email
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.qq.com
@@ -47,7 +70,5 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "博客死链检测结果"
           to: "2396768163@qq.com"
-          from: "Giscus <${{ secrets.MAIL_USERNAME }}>"
-          body: |
-            以下是检测到的死链列表：
-            ${{ steps.deadlinks.outputs.list }}
+          from: "Github <${{ secrets.MAIL_USERNAME }}>"
+          html_body: file://email.html

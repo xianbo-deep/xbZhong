@@ -9,7 +9,7 @@ on:
 
 
 jobs:
-  Dead Link Detection:
+  dead-link-detection:
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout repository

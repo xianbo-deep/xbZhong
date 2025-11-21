@@ -2,7 +2,7 @@ name: 死链检测
 
 on:
   schedule:
-    - cron: '0 16 * * 0' # 每周日 16:00
+    - cron: '0 16 * * *'
   workflow_dispatch:
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
           # 替换占位符为真实的工作路径
           sed -i "s|__WORK_DIR__|$GITHUB_WORKSPACE|g" .markdown-link-check.json
 
-          
+
           echo "开始扫描文件..."
 
           # 循环检测
@@ -79,6 +79,10 @@ jobs:
           
           # 自动替换年份
           sed -i "s|{{YEAR}}|$(date +'%Y')|g" email.html
+
+          # 替换时间
+          BJ_TIME=$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M')
+          sed -i "s|{{BJ_TIME}}|$BJ_TIME|g" email.html
 
       # 6. 发送邮件
       - name: Send email

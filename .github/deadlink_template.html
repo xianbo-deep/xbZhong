@@ -30,11 +30,11 @@
 
     /* --- 头部区域 --- */
     .header-content { padding: 32px 32px 20px 32px; text-align: center; }
-    .status-icon { font-size: 42px; margin-bottom: 10px; display: block; line-height: 1; }
     .title { margin: 0; font-size: 20px; font-weight: 700; color: #1a1f36; letter-spacing: -0.5px; }
-    .subtitle { margin: 8px 0 0 0; font-size: 14px; color: #697386; }
+    /* 副标题样式微调，适应时间显示 */
+    .subtitle { margin: 10px 0 0 0; font-size: 13px; color: #697386; font-weight: 500; }
 
-    /* --- 列表区域 (模拟代码/日志风格) --- */
+    /* --- 列表区域 --- */
     .list-section { padding: 0 32px 32px 32px; }
     .log-container {
       background-color: #f8f9fa;
@@ -45,7 +45,6 @@
       font-size: 13px;
     }
     
-    /* 列表项样式 */
     ul { margin: 0; padding: 0; list-style: none; }
     li {
       margin-bottom: 12px;
@@ -53,13 +52,12 @@
       border-bottom: 1px dashed #d1d5da;
       color: #444;
       line-height: 1.5;
-      word-break: break-all; /* 关键：防止链接撑破 */
+      word-break: break-all;
       display: flex;
       flex-direction: column;
     }
     li:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
     
-    /* 给链接加一点样式 */
     li::before {
       content: "→";
       color: {{COLOR}};
@@ -95,7 +93,7 @@
 
       <div class="header-content">
         <div class="title">博客死链检查报告</div>
-        <p class="subtitle">自动死链检查 - 每日运行</p>
+        <p class="subtitle">检测时间: {{BJ_TIME}} </p>
       </div>
 
       <div class="list-section">

@@ -4,4 +4,5 @@ docs/.vuepress/.cache/
 docs/.vuepress/.temp/
 docs/.vuepress/dist/
 .github/workflows/send-email.yml
-.github/template.html
+.github/comment_template.html
+.github/reaction_template.html

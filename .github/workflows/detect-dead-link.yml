@@ -23,39 +23,43 @@ jobs:
       - name: Install markdown-link-check
         run: npm install -g markdown-link-check
 
-      # 4. 检测死链
+      # 4. 检测死链 (已修复捕获逻辑)
       - name: Check dead links
         id: deadlinks
         run: |
-          # 查找 docs 下所有 Markdown 文件 (根据实际情况调整目录)
+          # 查找 docs 下所有 Markdown 文件
           find docs -name "*.md" > md_files.txt
 
-          # 初始化 deadlinks.txt
-          touch deadlinks.txt
-
-          # 循环检测，忽略 500 错误 (可选，防止网络波动误报)
-          # -q 仅输出错误链接
-          while read file; do
-            echo "Checking $file..."
-            markdown-link-check "$file" -q >> deadlinks.txt || true
-          done < md_files.txt
-
-          # 准备一个用于插入 HTML 的文件
+          # 初始化文件
+          touch raw_log.txt
+          touch final_errors.txt
           touch formatted_list.txt
 
-          # 判断是否有死链
-          if grep -q "http" deadlinks.txt; then
+          echo "开始扫描文件..."
+
+          # 循环检测
+          while read file; do
+            # 【修复点 1】使用 2>&1 同时捕获标准输出和错误输出
+            markdown-link-check "$file" -q >> raw_log.txt 2>&1 || true
+          done < md_files.txt
+
+          # 【修复点 2】过滤日志，只提取真正的错误行
+          # 匹配包含 [✖] 符号或 ERROR 字眼的行
+          grep -E "\[✖\]|ERROR" raw_log.txt > final_errors.txt || true
+
+          # 【修复点 3】根据过滤后的文件是否有内容来判断
+          if [ -s final_errors.txt ]; then
             COLOR="#d9534f"  # 红色
-            echo "检测到死链，正在生成列表..."
-            # 给每一行死链包裹 li 标签，并存入 formatted_list.txt
-            # 使用 sed 特殊处理，防止 URL 中的字符导致问题
-            sed 's/^/<li>/; s/$/<\/li>/' deadlinks.txt > formatted_list.txt
+            echo "Found dead links!"
+            # 格式化为 HTML 列表
+            sed 's/^/<li>/; s/$/<\/li>/' final_errors.txt > formatted_list.txt
           else
             COLOR="#28a745"  # 绿色
+            echo "No dead links found."
             echo "<li>恭喜！没有检测到死链。</li>" > formatted_list.txt
           fi
 
-          # 输出颜色变量 (列表内容直接走文件，不走变量)
+          # 输出颜色变量
           echo "color=$COLOR" >> $GITHUB_OUTPUT
 
       # 5. 生成 HTML 邮件
@@ -63,11 +67,8 @@ jobs:
         run: |
           cp .github/deadlink_template.html email.html
           
-          # 【关键修改】使用 sed 的 'r' 命令读取文件内容并插入，而不是用 's' 替换
-          # 1. 在 {{DEADLINK_LIST}} 这一行后面插入 formatted_list.txt 的内容
+          # 插入列表 (使用 'r' 命令读取文件插入，最稳健的方法)
           sed -i "/{{DEADLINK_LIST}}/r formatted_list.txt" email.html
-          
-          # 2. 删除原本的 {{DEADLINK_LIST}} 占位符行
           sed -i "/{{DEADLINK_LIST}}/d" email.html
           
           # 替换颜色

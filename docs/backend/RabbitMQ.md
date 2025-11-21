@@ -133,7 +133,7 @@ spring:
 
 **使用步骤：​​​​**
 
-- [同上](#Java客户端)，但是使用**三个参数**的`convertAndSend`方法**指定交换机名称、队列名和信息**进行消息发送
+- [同上](#java客户端)，但是使用**三个参数**的`convertAndSend`方法**指定交换机名称、队列名和信息**进行消息发送
 
 ```java
 rabbitTemplate.convertAndSend(exchangeName,null,message);

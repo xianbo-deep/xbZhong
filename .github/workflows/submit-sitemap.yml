@@ -1,0 +1,27 @@
+name: 提交搜索引擎收录
+
+on:
+ push:
+  branches:
+   - main
+  paths:
+   - '**.md'
+ workflow_dispatch:
+
+jobs:
+ submit-sitemap:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3 
+    
+    - name: Submit to IndexNow
+      uses: bojieyang/indexnow-action@v2
+      with:
+        key: ${{ secrets.INDEXNOW_KEY }}     
+        sitemap-location: 'https://xbzhong.cn/sitemap.xml' 
+        endpoint: 'api.indexnow.org'
+        since: 1
+        since-unit: day
+        limit: 100
+

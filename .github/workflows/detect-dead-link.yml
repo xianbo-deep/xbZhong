@@ -35,6 +35,10 @@ jobs:
           touch final_errors.txt
           touch formatted_list.txt
 
+          # 替换占位符为真实的工作路径
+          sed -i "s|__WORK_DIR__|$GITHUB_WORKSPACE|g" .markdown-link-check.json
+
+          
           echo "开始扫描文件..."
 
           # 循环检测

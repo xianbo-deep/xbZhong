@@ -1,0 +1,50 @@
+name: Detect Dead Link
+
+on:
+  schedule:
+    - cron: '0 16 * * 0'
+    
+  workflow_dispatch:
+
+
+
+jobs:
+  Dead Link Detection:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install markdown-link-check
+        run: npm install -g markdown-link-check
+
+      - name: check dead link
+        run: |
+          find docs -name "*.md" > md_files.txt 
+          echo "检测死链中..." > deadlinks.txt 
+          while read file; do 
+            markdown-link-check "$file" -q >> deadlinks.txt || true 
+          done 
+          echo "死链检测完成，结果：" 
+          cat deadlinks.txt
+      
+
+      - name: send email
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.qq.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "博客死链检测结果"
+          to: "2396768163@qq.com"
+          from: "Giscus <${{ secrets.MAIL_USERNAME }}>"
+          body: |
+            以下是检测到的死链列表：
+            $(cat deadlinks.txt)

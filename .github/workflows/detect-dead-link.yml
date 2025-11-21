@@ -26,8 +26,7 @@ jobs:
       - name: check dead link
         id: deadlinks
         run: |
-          find docs -name "*.md" > md_files.txt 
-          echo "检测死链中..." > deadlinks.txt 
+          find docs -name "*.md" > md_files.txt  
           while read file; do 
             markdown-link-check "$file" -q >> deadlinks.txt || true 
           done 

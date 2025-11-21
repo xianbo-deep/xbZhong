@@ -25,7 +25,7 @@ date: 2025-10-10
 ### 自动生成评论通知邮件
 Giscus还是有些鸡肋，别人评论的时候自己完全不知道，因此我使用了GithubAction去监听Discussion，当有人评论的时候即可自动发送邮件到我的QQ邮箱
 
-想要实现的话可以去看一下我的[GithubAction](/backend/GitHubActions.md)笔记，了解一下自动化配置文件的基本语法，然后调用[这个Action](https://github.com/dawidd6/action-send-mail)实现邮件的发送
+想要实现的话可以去看一下我的[GithubAction](/backend/GitHubAction.md)笔记，了解一下自动化配置文件的基本语法，然后调用[这个Action](https://github.com/dawidd6/action-send-mail)实现邮件的发送
 
 
 ### Algolia重建索引

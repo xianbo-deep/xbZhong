@@ -46,19 +46,33 @@ jobs:
             echo "恭喜！没有检测到死链。" > deadlinks.txt
           fi
 
-          # 生成 HTML 列表
+          # 生成 HTML 列表 (给每一行裹上 li 标签)
           HTML_LIST=$(sed 's/^/<li>/; s/$/<\/li>/' deadlinks.txt)
 
           # 输出变量给后续 step
-          echo "list_html=$HTML_LIST" >> $GITHUB_OUTPUT
+          # 注意：这里使用了 EOF 写法，防止多行内容导致报错
+          {
+            echo "list_html<<EOF"
+            echo "$HTML_LIST"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+          
           echo "color=$COLOR" >> $GITHUB_OUTPUT
 
       # 5. 生成 HTML 邮件
       - name: Prepare email HTML
         run: |
           cp .github/deadlink_template.html email.html
+          
+          # 替换死链列表
+          #以此种方式读取多行内容，防止斜杠干扰
           sed -i "s|{{DEADLINK_LIST}}|${{ steps.deadlinks.outputs.list_html }}|g" email.html
+          
+          # 替换颜色
           sed -i "s|{{COLOR}}|${{ steps.deadlinks.outputs.color }}|g" email.html
+          
+          # 【新增】自动替换年份
+          sed -i "s|{{YEAR}}|$(date +'%Y')|g" email.html
 
       # 6. 发送邮件
       - name: Send email

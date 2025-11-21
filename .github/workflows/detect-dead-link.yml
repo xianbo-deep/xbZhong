@@ -24,6 +24,7 @@ jobs:
         run: npm install -g markdown-link-check
 
       - name: check dead link
+        id: deadlinks
         run: |
           find docs -name "*.md" > md_files.txt 
           echo "检测死链中..." > deadlinks.txt 
@@ -32,6 +33,9 @@ jobs:
           done 
           echo "死链检测完成，结果：" 
           cat deadlinks.txt
+          echo "list=$(cat deadlinks.txt | sed ':a;N;$!ba;s/\n/\\n/g')" >> $GITHUB_OUTPUT
+
+
       
 
       - name: send email
@@ -47,4 +51,4 @@ jobs:
           from: "Giscus <${{ secrets.MAIL_USERNAME }}>"
           body: |
             以下是检测到的死链列表：
-            $(cat deadlinks.txt)
+            ${{ steps.deadlinks.outputs.list }}

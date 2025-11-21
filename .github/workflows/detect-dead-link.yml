@@ -27,36 +27,35 @@ jobs:
       - name: Check dead links
         id: deadlinks
         run: |
-          # 查找 docs 下所有 Markdown 文件
+          # 查找 docs 下所有 Markdown 文件 (根据实际情况调整目录)
           find docs -name "*.md" > md_files.txt
 
           # 初始化 deadlinks.txt
           touch deadlinks.txt
 
-          # 循环检测
+          # 循环检测，忽略 500 错误 (可选，防止网络波动误报)
+          # -q 仅输出错误链接
           while read file; do
+            echo "Checking $file..."
             markdown-link-check "$file" -q >> deadlinks.txt || true
           done < md_files.txt
+
+          # 准备一个用于插入 HTML 的文件
+          touch formatted_list.txt
 
           # 判断是否有死链
           if grep -q "http" deadlinks.txt; then
             COLOR="#d9534f"  # 红色
+            echo "检测到死链，正在生成列表..."
+            # 给每一行死链包裹 li 标签，并存入 formatted_list.txt
+            # 使用 sed 特殊处理，防止 URL 中的字符导致问题
+            sed 's/^/<li>/; s/$/<\/li>/' deadlinks.txt > formatted_list.txt
           else
             COLOR="#28a745"  # 绿色
-            echo "恭喜！没有检测到死链。" > deadlinks.txt
+            echo "<li>恭喜！没有检测到死链。</li>" > formatted_list.txt
           fi
 
-          # 生成 HTML 列表 (给每一行裹上 li 标签)
-          HTML_LIST=$(sed 's/^/<li>/; s/$/<\/li>/' deadlinks.txt)
-
-          # 输出变量给后续 step
-          # 注意：这里使用了 EOF 写法，防止多行内容导致报错
-          {
-            echo "list_html<<EOF"
-            echo "$HTML_LIST"
-            echo "EOF"
-          } >> $GITHUB_OUTPUT
-          
+          # 输出颜色变量 (列表内容直接走文件，不走变量)
           echo "color=$COLOR" >> $GITHUB_OUTPUT
 
       # 5. 生成 HTML 邮件
@@ -64,14 +63,17 @@ jobs:
         run: |
           cp .github/deadlink_template.html email.html
           
-          # 替换死链列表
-          #以此种方式读取多行内容，防止斜杠干扰
-          sed -i "s|{{DEADLINK_LIST}}|${{ steps.deadlinks.outputs.list_html }}|g" email.html
+          # 【关键修改】使用 sed 的 'r' 命令读取文件内容并插入，而不是用 's' 替换
+          # 1. 在 {{DEADLINK_LIST}} 这一行后面插入 formatted_list.txt 的内容
+          sed -i "/{{DEADLINK_LIST}}/r formatted_list.txt" email.html
+          
+          # 2. 删除原本的 {{DEADLINK_LIST}} 占位符行
+          sed -i "/{{DEADLINK_LIST}}/d" email.html
           
           # 替换颜色
           sed -i "s|{{COLOR}}|${{ steps.deadlinks.outputs.color }}|g" email.html
           
-          # 【新增】自动替换年份
+          # 自动替换年份
           sed -i "s|{{YEAR}}|$(date +'%Y')|g" email.html
 
       # 6. 发送邮件
@@ -84,5 +86,5 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "博客死链检测结果"
           to: "2396768163@qq.com"
-          from: "Github <${{ secrets.MAIL_USERNAME }}>"
+          from: "Github Action <${{ secrets.MAIL_USERNAME }}>"
           html_body: file://email.html

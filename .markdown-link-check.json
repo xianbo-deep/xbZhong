@@ -1,0 +1,19 @@
+{
+  "replacementPatterns": [
+    {
+      "comment": "规则1：处理静态资源（图片/PDF）。VuePress 中 /logo.png 实际对应 docs/.vuepress/public/logo.png",
+      "pattern": "^/(.*\\.(png|jpg|jpeg|gif|svg|webp|ico|pdf|mp4))$",
+      "replacement": "docs/.vuepress/public/$1"
+    },
+    {
+      "comment": "规则2：处理 Markdown 根路径索引。VuePress 中 /guide/readme.md 实际对应 docs/guide/readme.md",
+      "pattern": "^/",
+      "replacement": "docs/"
+    }
+  ],
+  "ignorePatterns": [
+    { "pattern": "^http://localhost" }
+  ],
+  "retryOn429": true,
+  "retryCount": 2
+}

@@ -39,11 +39,10 @@ jobs:
 
           # 循环检测
           while read file; do
-            # 【修复点 1】使用 2>&1 同时捕获标准输出和错误输出
-            markdown-link-check "$file" -q >> raw_log.txt 2>&1 || true
+            markdown-link-check "$file" -c .markdown-link-check.json -q >> raw_log.txt 2>&1 || true
           done < md_files.txt
 
-          # 【修复点 2】过滤日志，只提取真正的错误行
+          
           # 匹配包含 [✖] 符号或 ERROR 字眼的行
           grep -E "\[✖\]|ERROR" raw_log.txt > final_errors.txt || true
 

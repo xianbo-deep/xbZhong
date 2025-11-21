@@ -12,7 +12,7 @@ timeline: true
 - 接着学习李沐老师的动手学深度学习
 - 接着作罢，没再学习下去，因为开学了，卷绩点了
 
-断断续续接触了[LLM](/dl/llm/README.md)、[CV](/dl/cv/README.md)，开始有了初步认识，从我叔那里得知生成式模型，不知天高地厚开啃[VAE](/dl/cv/VAE.md)和[扩散模型](/dl/cv/DiffusionModel.md)，太特么难了，没啃完
+断断续续接触了LLM、CV，开始有了初步认识，从我叔那里得知生成式模型，不知天高地厚开啃[VAE](/dl/cv/VAE.md)和[扩散模型](/dl/cv/DiffusionModel.md)，太特么难了，没啃完
 
 大一暑假开始做大创，老师给的课题方向是LLM和知识图谱，按要求做了APP，和这方向不沾边，后面越走越偏，学不到东西，作罢
 

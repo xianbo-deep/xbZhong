@@ -78,7 +78,7 @@ jobs:
           sed -i "s|{{COLOR}}|${{ steps.deadlinks.outputs.color }}|g" email.html
           
           # 自动替换年份
-          sed -i "s|{{YEAR}}|$(date +'%Y')|g" email.html
+          sed -i "s|{{YEAR}}|$(TZ=Asia/Shanghai date '+%Y')|g" email.html
 
           # 替换时间
           BJ_TIME=$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M')

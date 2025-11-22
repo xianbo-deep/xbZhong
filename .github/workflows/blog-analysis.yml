@@ -1,0 +1,71 @@
+name: Blog Analysis
+
+on: 
+ schedule:
+   - cron: '0 16 * * *'
+ workflow_dispatch:
+
+
+jobs:
+ analyze:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18 
+    
+    - name: Install deps
+      run: npm install
+
+    - name: Build site
+      run: npm run docs:build
+
+    - name: Generate Bundle Stats
+      run: |
+        npx bundle-stats --out-dir ./analysis --html --json
+
+    - name: Upload Bundle Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: bundle-report
+        path: analysis
+
+    - name: Run Lighthouse
+      uses: treosh/lighthouse-ci-action@v11
+      with:
+        urls: |
+          https://xbzhong.cn
+        uploadArtifacts: true
+        runs: 1
+
+    - name: Prepare Email Content
+      id: prepare
+      run: |
+        mv .lighthouseci/*.html ./lighthouse-report.html
+        mv analysis/index.html ./bundle-stats.html
+        
+        cp .github/analysis-template.html email.html
+
+        CURRENT_TIME=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')
+        CURRENT_YEAR=$(TZ=Asia/Shanghai date '+%Y')
+
+        sed -i "s|{{DATE}}|$CURRENT_TIME|g" email.html
+        sed -i "s|{{YEAR}}|$CURRENT_YEAR|g" email.html
+        sed -i "s|{{REPO}}|${{ github.repository }}|g" email.html
+
+    - name: Send email
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.qq.com
+        server_port: 465
+        username: ${{ secrets.MAIL_USERNAME }}
+        password: ${{ secrets.MAIL_PASSWORD }}
+        subject: "博客分析报告"
+        to: "2396768163@qq.com"
+        from: "Github Action <${{ secrets.MAIL_USERNAME }}>"
+        html_body: file://email.html
+        attachments: lighthouse-report.html,bundle-stats.html

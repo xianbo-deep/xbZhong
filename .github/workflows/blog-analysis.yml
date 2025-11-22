@@ -35,7 +35,16 @@ jobs:
     - name: Prepare Email Content
       id: prepare
       run: |
-        mv .lighthouseci/*.html ./lighthouse-report.html
+       TARGET_REPORT=$(ls -S .lighthouseci/*.html | head -n 1)
+          
+        if [ -n "$TARGET_REPORT" ]; then
+            echo "Found largest report: $TARGET_REPORT"
+            mv "$TARGET_REPORT" ./lighthouse-report.html
+        else
+            echo "Error: No HTML report found!"
+            exit 1
+        fi
+        
         if [ -f stats.html ]; then
             mv stats.html ./bundle-stats.html
         else

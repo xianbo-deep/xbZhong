@@ -31,6 +31,7 @@ jobs:
           https://xbzhong.cn
         uploadArtifacts: true
         runs: 1
+        configPath: .github/lighthouserc.json
 
     - name: Prepare Email Content
       id: prepare
@@ -60,6 +61,9 @@ jobs:
         sed -i "s|{{DATE}}|$CURRENT_TIME|g" email.html
         sed -i "s|{{YEAR}}|$CURRENT_YEAR|g" email.html
         sed -i "s|{{REPO}}|${{ github.repository }}|g" email.html
+
+
+    
     - name: Upload Analysis Reports
       uses: actions/upload-artifact@v4
       with:
@@ -68,7 +72,129 @@ jobs:
             lighthouse-report.html
             bundle-stats.html
         retention-days: 365
+    - name: Analyze with DeepSeek AI
+      env:
+        DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      run: |
+        pip install requests
 
+        # 创建并运行 Python 脚本
+        cat <<EOF > analyze_report.py
+        import json
+        import os
+        import glob
+        import requests
+
+        def get_lighthouse_summary():
+            # 查找 .lighthouseci 目录下的 json 报告
+            files = glob.glob('.lighthouseci/*.json')
+            if not files:
+                return "未找到 Lighthouse JSON 报告数据。"
+            
+            # 读取最大的那个 JSON 文件
+            target_file = max(files, key=os.path.getsize)
+            
+            try:
+                with open(target_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                
+                # 提取核心分数
+                categories = data.get('categories', {})
+                scores = []
+                for k, v in categories.items():
+                    score = v.get('score', 0) * 100
+                    scores.append(f"{v.get('title')}: {score:.0f}")
+                
+                # 提取未通过的重要审计项 (只取前 5 个最重要的)
+                audits = data.get('audits', {})
+                failed_audits = []
+                for k, v in audits.items():
+                    # score 1 是满分，null 是不适用，< 0.9 视为有优化空间
+                    if v.get('score') is not None and v.get('score') < 0.9:
+                        # 过滤掉 informational 的
+                        if v.get('scoreDisplayMode') != 'informative':
+                            failed_audits.append(f"- {v.get('title')}: {v.get('displayValue', '')}")
+                
+                # 截取前 8 个错误，防止 Token 溢出
+                failed_audits = failed_audits[:8]
+
+                summary = f"核心分数: {', '.join(scores)}\n\n主要问题:\n" + "\n".join(failed_audits)
+                return summary
+            except Exception as e:
+                return f"解析报告出错: {str(e)}"
+
+        def call_deepseek(report_summary):
+            if not report_summary:
+                return "无法读取报告数据。"
+
+            api_key = os.environ.get('DEEPSEEK_API_KEY')
+            if not api_key:
+                return "API Key 未配置。"
+
+            url = "https://api.deepseek.com/chat/completions"
+            
+            prompt = (
+                "你是一个前端性能优化专家。请根据以下 Lighthouse 报告摘要，"
+                "用简练的中文给出 3-4 条具体的优化建议。不要废话，直接说怎么改。"
+                "如果分数很高，请夸奖一下。\n\n"
+                f"报告数据:\n{report_summary}"
+            )
+
+            payload = {
+                "model": "deepseek-chat",
+                "messages": [
+                    {"role": "system", "content": "你是一个专业的 Web 性能分析助手，回答要简短、硬核、直接，输出格式为 HTML 的 <p> 和 <ul> 标签，不要包含 markdown 代码块标记。"},
+                    {"role": "user", "content": prompt}
+                ],
+                "stream": False
+            }
+
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}"
+            }
+
+            try:
+                response = requests.post(url, json=payload, headers=headers)
+                response.raise_for_status()
+                return response.json()['choices'][0]['message']['content']
+            except Exception as e:
+                print(f"API Call Error: {e}")
+                return "AI 分析暂时不可用。"
+
+        def update_email_html(ai_content):
+            try:
+                with open('email.html', 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                # 替换占位符，如果模板里没写 {{AI_ANALYSIS}}，就追加到 body 结束前
+                if '{{AI_ANALYSIS}}' in content:
+                    new_content = content.replace('{{AI_ANALYSIS}}', ai_content)
+                else:
+                    # 简单的 fallback，插入到 body 结束前
+                    injection = f"<h3>AI 分析报告</h3><div>{ai_content}</div>"
+                    new_content = content.replace('</body>', f"{injection}</body>")
+                
+                with open('email.html', 'w', encoding='utf-8') as f:
+                    f.write(new_content)
+                print("Email template updated with AI analysis.")
+            except Exception as e:
+                print(f"Error updating HTML: {e}")
+
+        if __name__ == "__main__":
+            print("Generating summary from JSON...")
+            summary = get_lighthouse_summary()
+            print(f"Summary extracted. Length: {len(summary)}")
+            
+            print("Calling DeepSeek API...")
+            ai_advice = call_deepseek(summary)
+            
+            print("Updating Email...")
+            update_email_html(ai_advice)
+        EOF
+        
+        # 执行 Python 脚本
+        python3 analyze_report.py
 
     - name: Send email  
       uses: dawidd6/action-send-mail@v3

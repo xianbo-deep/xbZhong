@@ -37,7 +37,7 @@ jobs:
           CURRENT_YEAR=$(TZ=Asia/Shanghai date '+%Y')
 
           # 3. 替换模板变量
-          sed -i "s|{{DATE}}|$CURRENT_TIME (北京时间)|g" email.html
+          sed -i "s|{{DATE}}|$CURRENT_TIME|g" email.html
           sed -i "s|{{YEAR}}|$CURRENT_YEAR|g" email.html
           sed -i "s|{{REPO}}|${{ github.repository }}|g" email.html
 

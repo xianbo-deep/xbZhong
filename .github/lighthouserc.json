@@ -1,0 +1,15 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 1,
+      "settings": {
+        "locale": "zh-CN"
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "./.lighthouseci",
+      "reportFilenamePattern": "lighthouse-report.%%EXTENSION%%"
+    }
+  }
+}

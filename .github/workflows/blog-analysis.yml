@@ -1,4 +1,4 @@
-name: Blog Analysis
+name: 博客性能分析
 
 on: 
  schedule:
@@ -29,7 +29,7 @@ jobs:
         npx bundle-stats --out-dir ./analysis --html --json
 
     - name: Upload Bundle Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: bundle-report
         path: analysis

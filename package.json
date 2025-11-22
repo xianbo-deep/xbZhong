@@ -21,6 +21,7 @@
     "@vuepress/plugin-comment": "^2.0.0-rc.112",
     "@vuepress/plugin-docsearch": "^2.0.0-rc.112",
     "katex": "^0.16.23",
+    "rollup-plugin-visualizer": "^6.0.5",
     "sass-embedded": "^1.89.2",
     "vidstack": "^1.12.13",
     "vue": "^3.5.17",

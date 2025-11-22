@@ -1,5 +1,7 @@
 import { defineUserConfig } from "vuepress";
 import { baiduAnalyticsPlugin } from '@vuepress/plugin-baidu-analytics';
+import { viteBundler } from '@vuepress/bundler-vite'
+import { visualizer } from "rollup-plugin-visualizer";
 import theme from "./theme.js";
 
 export default defineUserConfig({
@@ -34,7 +36,18 @@ export default defineUserConfig({
       },
     ],
   ],
-  
+  bundler: viteBundler({
+    viteOptions: {
+      plugins: [
+        visualizer({
+          open: false,           // 构建完不自动打开
+          filename: 'stats.html', // 生成的文件名
+          gzipSize: true,        // 显示压缩后的大小
+          brotliSize: true       // 显示 brotli 压缩大小
+        })
+      ]
+    },
+  }),
 });
 
 

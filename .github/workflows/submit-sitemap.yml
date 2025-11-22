@@ -1,12 +1,9 @@
 name: 提交搜索引擎收录
 
 on:
- push:
-  branches:
-   - main
-  paths:
-   - '**.md'
- workflow_dispatch:
+  schedule:
+    - cron: '0 16 * * *'
+  workflow_dispatch:
 
 jobs:
  submit-sitemap:

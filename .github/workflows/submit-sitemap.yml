@@ -22,3 +22,35 @@ jobs:
         since-unit: day
         limit: 100
 
+    - name: Prepare Email Content
+      if: success()
+      run: |
+          if [ -f .github/indexnow-template.html ]; then
+            cp .github/indexnow-template.html email.html
+          else
+            echo "Error: Template not found, creating basic one."
+            echo "<html><body><h2>IndexNow Submitted</h2><p>{{DATE}}</p></body></html>" > email.html
+          fi
+
+          # 2. 获取北京时间
+          CURRENT_TIME=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')
+          CURRENT_YEAR=$(TZ=Asia/Shanghai date '+%Y')
+
+          # 3. 替换模板变量
+          sed -i "s|{{DATE}}|$CURRENT_TIME (北京时间)|g" email.html
+          sed -i "s|{{YEAR}}|$CURRENT_YEAR|g" email.html
+          sed -i "s|{{REPO}}|${{ github.repository }}|g" email.html
+
+    - name: Send email
+      if: success()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.qq.com
+        server_port: 465
+        username: ${{ secrets.MAIL_USERNAME }}
+        password: ${{ secrets.MAIL_PASSWORD }}
+        subject: "IndexNow 收录提交报告 - ${{ github.repository }}"
+        to: "2396768163@qq.com"
+        from: "Github Action <${{ secrets.MAIL_USERNAME }}>"
+        html_body: file://email.html
+

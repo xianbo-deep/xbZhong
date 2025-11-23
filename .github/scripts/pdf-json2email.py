@@ -28,7 +28,8 @@ def generate_email():
         data = json.load(f)
 
     summary = data.get('summary', {'total_files': 0, 'total_size': 0})
-    
+    success_cnt = summary.get('success_count', 0)
+    fail_cnt = summary.get('fail_count', 0)
     # 2. 生成文件列表 HTML
     file_items_html = ""
     
@@ -90,6 +91,8 @@ def generate_email():
 
     final_html = template.replace('{{total_files}}', str(summary['total_files'])) \
                          .replace('{{total_size_formatted}}', total_size_fmt) \
+                         .replace('{{success_count}}', str(success_cnt)) \
+                         .replace('{{fail_count}}', str(fail_cnt)) \
                          .replace('{{gen_time}}', report_time) \
                          .replace('{{file_list_html}}', file_items_html) \
                          .replace('{{year}}', str(current_year))

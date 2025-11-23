@@ -1,0 +1,20 @@
+name: Weekly Discussion Summary
+
+on:
+  schedule:
+    # 每周一 UTC 00:00 (北京时间 08:00) 运行
+    - cron: '0 0 * * 1'
+  workflow_dispatch: # 允许手动点按钮触发
+  
+jobs:
+  build-and-send:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'

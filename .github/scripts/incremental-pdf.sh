@@ -97,6 +97,7 @@ cat <<EOF > "$STYLE_FILE"
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
+\usepackage{amsmath}
 EOF
 
 echo ">>> Start scanning (Pandoc + Robust Typora Style)..."
@@ -219,8 +220,16 @@ done 9< <(find "$INPUT_DIR" -type f -name "*.md" | sort)
 
 rm "$STYLE_FILE"
 
-jq --arg total_files "$total_files" --arg total_size "$total_size" \
-   '.summary = {total_files: ($total_files|tonumber), total_size: ($total_size|tonumber)}' \
+jq --arg total_files "$total_files" \
+   --arg total_size "$total_size" \
+   --arg success_count "$success_count" \
+   --arg fail_count "$fail_count" \
+   '.summary = {
+       total_files: ($total_files|tonumber), 
+       total_size: ($total_size|tonumber),
+       success_count: ($success_count|tonumber),
+       fail_count: ($fail_count|tonumber)
+   }' \
    "$TEMP_UPDATE_FILE" > tmp_run.json && mv tmp_run.json "$TEMP_UPDATE_FILE"
 
 echo "---------------------------------------------------"

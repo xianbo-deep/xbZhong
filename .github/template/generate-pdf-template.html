@@ -180,15 +180,22 @@
                 <div class="stat-grid">
                     <div class="stat-box">
                         <span class="stat-value">{{total_files}}</span>
-                        <span class="stat-label">文件变动</span>
+                        <span class="stat-label">变动文件</span>
                     </div>
+                    
+                    <div class="stat-box">
+                        <span class="stat-value" style="color: #34a853;">{{success_count}}</span>
+                        <span class="stat-label">构建成功</span>
+                    </div>
+
+                    <div class="stat-box">
+                        <span class="stat-value" style="color: #ea4335;">{{fail_count}}</span>
+                        <span class="stat-label">构建失败</span>
+                    </div>
+
                     <div class="stat-box">
                         <span class="stat-value">{{total_size_formatted}}</span>
                         <span class="stat-label">总大小</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-value" style="color: #34a853;">Success</span>
-                        <span class="stat-label">构建状态</span>
                     </div>
                 </div>
               </div>

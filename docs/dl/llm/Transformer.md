@@ -537,12 +537,9 @@ $$
 已知：
 $$
 \begin{aligned}
-
 w_i&= 10000^{2i/d_{model}} \\
 \theta_i &= pos/10000^{2i/d_{model}} \\
 &= pos / w_i
-
-
 \end{aligned}
 $$
 
@@ -652,7 +649,6 @@ $$
 - 每组二维向量**独立乘以一个二维旋转矩阵**
 
 $$
-
 \begin{bmatrix}
 x_{i}' \\ 
 x_{i+1}'
@@ -666,7 +662,6 @@ x_{i+1}'
 x_i \\
 x_{i+1}
 \end{bmatrix}
-
 $$
 
 

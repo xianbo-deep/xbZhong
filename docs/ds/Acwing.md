@@ -284,12 +284,12 @@ vector<int> multi(vector<int> &a,int b){
 
 每次push_back()的值都不会超过两位数，证明如下
 $$
-\begin{align}
+\begin{aligned}
 r_k &= r_{k-1} \% b \\
 r_k &\le b -1 \\
 r_k * 10 &\le (b-1) * 10 \\
 r_k * 10 + a &\le 10b - 1 < 10b
-\end{align}
+\end{aligned}
 $$
 也就是说$r / b$最大是$(10 b -1)/b$，最大到9
 

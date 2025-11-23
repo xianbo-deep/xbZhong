@@ -914,5 +914,17 @@
     "hash": "fcb593310dbb762cd46eb465322b7f34f474eea4aa431a8c08bc04319ecddd66",
     "size": "541209",
     "gen_time": "2025-11-23T21:02:50"
+  },
+  "docs/dl/cv/DiffusionModel.md": {
+    "pdf": "docs/.vuepress/public/pdfs/dl/cv/DiffusionModel.pdf",
+    "images": [
+      "/screenshot/dl/image-20250510233616851.png",
+      "/screenshot/dl/image-20250511132150467.png",
+      "/screenshot/dl/image-20250511112847361.png",
+      "/screenshot/dl/image-20250511111842681.png"
+    ],
+    "hash": "185b80742a7a0e458ecfb88b7398371bdb4cae6a415bb4e0883948965bbe099f",
+    "size": "2018374",
+    "gen_time": "2025-11-23T21:36:27"
   }
 }

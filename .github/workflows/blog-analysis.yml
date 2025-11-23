@@ -53,7 +53,7 @@ jobs:
             exit 1
         fi
         
-        cp .github/analysis-template.html email.html
+        cp .github/template/analysis-template.html email.html
 
         CURRENT_TIME=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')
         CURRENT_YEAR=$(TZ=Asia/Shanghai date '+%Y')

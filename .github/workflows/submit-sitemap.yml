@@ -26,7 +26,7 @@ jobs:
       if: success()
       run: |
           if [ -f .github/indexnow-template.html ]; then
-            cp .github/indexnow-template.html email.html
+            cp .github/template/indexnow-template.html email.html
           else
             echo "Error: Template not found, creating basic one."
             echo "<html><body><h2>IndexNow Submitted</h2><p>{{DATE}}</p></body></html>" > email.html

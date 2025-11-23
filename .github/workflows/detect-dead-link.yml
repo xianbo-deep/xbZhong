@@ -68,7 +68,7 @@ jobs:
       # 5. 生成 HTML 邮件
       - name: Prepare email HTML
         run: |
-          cp .github/deadlink_template.html email.html
+          cp .github/template/deadlink-template.html email.html
           
           # 插入列表 (使用 'r' 命令读取文件插入，最稳健的方法)
           sed -i "/{{DEADLINK_LIST}}/r formatted_list.txt" email.html

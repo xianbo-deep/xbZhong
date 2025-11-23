@@ -30,7 +30,7 @@ jobs:
           git config --global user.email '2396768163@qq.com'
           
           git add .github/mapping/mapping.json
-          git add docs/.vuepress/public/pdfs
+          git add docs
 
           # 检查是否有变更，有则提交
           if [[ -n $(git status -s) ]]; then

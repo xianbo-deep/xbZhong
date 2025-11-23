@@ -8,24 +8,20 @@ export LANG=C.UTF-8
 
 # --- 路径定义 ---
 CURRENT_DIR=$(pwd)
-# 图片根目录
 STATIC_BASE_DIR="$CURRENT_DIR/docs/.vuepress/public"
-
 INPUT_DIR="docs"
 OUTPUT_DIR="docs/.vuepress/public/pdfs"
 MAPPING_DIR=".github/mapping"
 MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
+CSS_FILE="$STATIC_BASE_DIR/typora.css" # 样式文件路径
 
 EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
 
 # --- 检查工具 ---
-if ! command -v pandoc &> /dev/null; then
-    echo "!!! CRITICAL: pandoc not found."
-    exit 1
-fi
+if ! command -v pandoc &> /dev/null; then echo "!!! CRITICAL: pandoc not found."; exit 1; fi
+if ! command -v chromium &> /dev/null; then echo "!!! CRITICAL: chromium not found."; exit 1; fi
 
-command -v jq >/dev/null 2>&1 || echo "Please install jq"
 mkdir -p "$MAPPING_DIR"
 if [ ! -f "$MAP_FILE" ]; then echo "{}" > "$MAP_FILE"; fi
 echo "{}" > "$TEMP_UPDATE_FILE"
@@ -35,73 +31,14 @@ success_count=0
 fail_count=0
 total_size=0
 
-# ========================================================
-# 【关键修复】生成无冲突的 LaTeX 样式头文件
-# ========================================================
-STYLE_FILE="typora-style.tex"
-cat <<EOF > "$STYLE_FILE"
-% 1. 基础包
-\usepackage{xcolor}
-\usepackage{framed}
-\usepackage{fvextra}
+# 确保 CSS 存在
+if [ ! -f "$CSS_FILE" ]; then
+    echo "⚠️ Warning: typora.css not found at $CSS_FILE, using default browser styles."
+    # 创建一个空文件防止 pandoc 报错
+    touch "$CSS_FILE"
+fi
 
-% 2. 设置代码块背景色 (浅灰)
-\definecolor{codebg}{RGB}{248,248,248}
-\definecolor{shadecolor}{named}{codebg}
-
-% 3. 安全定义 Shaded 环境 (代码块背景)
-\ifdefined\Shaded
-  \renewenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\else
-  \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\fi
-
-% 4. 设置代码自动换行
-\fvset{
-  breaklines=true,
-  breakanywhere=true,
-  commandchars=\\\\\{\} 
-}
-
-% 5. 列表样式优化 (圆点)
-\usepackage{enumitem}
-\setlist[itemize,1]{label=\textbullet}
-\setlist[itemize,2]{label=\textbullet}
-\setlist[itemize,3]{label=\textbullet}
-
-% 6. 【核心修复】Typora 风格排版 (手动设置，避免 parskip 包冲突)
-% 移除 \usepackage{parskip}，改用底层命令
-\setlength{\parindent}{0pt} % 首行不缩进
-\setlength{\parskip}{6pt plus 2pt minus 1pt} % 段落之间留空行
-\linespread{1.15} % 行间距
-
-% 7. 链接颜色
-\usepackage{hyperref}
-\hypersetup{
-  colorlinks=true,
-  linkcolor=[rgb]{0.0, 0.3, 0.8},
-  urlcolor=[rgb]{0.0, 0.3, 0.8}
-}
-
-% 8. 表格图形支持
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{amsmath}
-EOF
-
-echo ">>> Start scanning (Pandoc + Robust Typora Style)..."
-echo ">>> Static Asset Path: $STATIC_BASE_DIR"
+echo ">>> Start scanning (Pandoc + Chromium Engine)..."
 
 # 遍历文件
 while IFS= read -r -u9 file; do
@@ -109,18 +46,21 @@ while IFS= read -r -u9 file; do
 
     skip=false
     for e in "${EXCLUDE[@]}"; do
-        if [[ "$file" == $e ]]; then skip=true; break; fi
+        # 简单的通配符匹配
+        if [[ "$e" == *"*"* ]]; then
+            prefix="${e%/*}"
+            if [[ "$file" == "$prefix"* ]]; then skip=true; break; fi
+        elif [[ "$file" == "$e" ]]; then 
+            skip=true; break; 
+        fi
     done
-    if [ "$skip" = true ]; then 
-        echo "[Excluded] $file"
-        continue
-    fi
+    if [ "$skip" = true ]; then continue; fi
     
     last_hash=$(jq -r --arg key "$file" '.[$key].hash // ""' "$MAP_FILE")
     current_hash=$(sha256sum "$file" | cut -d' ' -f1)
 
     if [ "$last_hash" = "$current_hash" ]; then
-        echo "[Unchanged] $file"
+        # echo "[Unchanged] $file"
         continue
     fi
 
@@ -136,60 +76,55 @@ while IFS= read -r -u9 file; do
     if [ -z "$img_list" ]; then
         images="[]"
     else
-        images=$(echo "$img_list" | while read -r img; do
-            echo "$img"
-        done | jq -R -s -c 'split("\n")[:-1]')
+        images=$(echo "$img_list" | while read -r img; do echo "$img"; done | jq -R -s -c 'split("\n")[:-1]')
     fi
 
     tmp_file="$(mktemp).md"
+    html_file="$(mktemp).html"
 
     # --- 预处理 ---
-    # 1. 图片路径
+    # 修复图片路径，使其指向本地绝对路径
     sed -E "s|!\[([^]]*)\]\(/|![\1]($STATIC_BASE_DIR/|g" "$file" > "$tmp_file"
 
-
     # ========================================================
-    # 【核心转换】
+    # 【核心转换】Markdown -> HTML -> PDF (Chrome)
     # ========================================================
     set +e
+    
+    # 1. 转 HTML
     pandoc "$tmp_file" \
-        -o "$pdf_path" \
-        --pdf-engine=xelatex \
-        -V mainfont="Noto Sans CJK SC" \
-        -V CJKmainfont="Noto Sans CJK SC" \
-        -V sansfont="Noto Sans CJK SC" \
-        -V monofont="Noto Sans Mono CJK SC" \
-        -V geometry:margin=2cm \
-        --highlight-style=pygments \
+        -o "$html_file" \
+        --standalone \
+        --css="$CSS_FILE" \
         --resource-path="$STATIC_BASE_DIR" \
-        --include-in-header="$STYLE_FILE" \
-        --toc \
-        --toc-depth=2
+        --metadata pagetitle="$(basename "$file" .md)" \
+        -V lang=zh-CN
+    
+    # 2. Chrome 打印
+    # 注意：--no-sandbox 是在 Docker 中运行 Chrome 必须的参数
+    chromium \
+        --headless \
+        --disable-gpu \
+        --no-sandbox \
+        --print-to-pdf="$pdf_path" \
+        --no-pdf-header-footer \
+        --virtual-time-budget=5000 \
+        "file://$html_file"
     
     exit_code=$?
     set -e
-    rm "$tmp_file"
+    rm "$tmp_file" "$html_file"
 
     if [ $exit_code -eq 0 ] && [ -s "$pdf_path" ]; then
         echo "    ✅ [Success] $pdf_path"
 
+        # --- 链接注入逻辑 (保持不变) ---
         link_md="[本页PDF]($web_pdf_path)"
         if ! grep -Fq "$link_md" "$file"; then
-            if grep -q "\[本页PDF\](/pdfs/" "$file"; then
-                 sed -i '/\[本页PDF\](\/pdfs\//d' "$file"
-                 echo "    [Cleaned] Old links"
-            fi
-            echo "    [Injecting] Link..."
+            if grep -q "\[本页PDF\](/pdfs/" "$file"; then sed -i '/\[本页PDF\](\/pdfs\//d' "$file"; fi
             if [[ "$(head -n 1 "$file")" == "---" ]]; then
                 end_fm_line=$(grep -n "^---$" "$file" | sed -n '2p' | cut -d: -f1)
-                if [[ -n "$end_fm_line" ]]; then
-                    sed -i "${end_fm_line}a \\
-\\
-$link_md\\
-" "$file"
-                else
-                    sed -i "1i $link_md\\n" "$file"
-                fi
+                if [[ -n "$end_fm_line" ]]; then sed -i "${end_fm_line}a \\\\n$link_md\\\\n" "$file"; else sed -i "1i $link_md\\n" "$file"; fi
             else
                 sed -i "1i $link_md\\n" "$file"
             fi
@@ -212,13 +147,11 @@ $link_md\\
         total_size=$((total_size + pdf_size))
         success_count=$((success_count + 1))
     else
-        echo "    ❌ [Failed] Pandoc error on $file"
+        echo "    ❌ [Failed] Chrome error on $file"
         fail_count=$((fail_count + 1))
     fi
 
 done 9< <(find "$INPUT_DIR" -type f -name "*.md" | sort)
-
-rm "$STYLE_FILE"
 
 jq --arg total_files "$total_files" \
    --arg total_size "$total_size" \
@@ -233,6 +166,6 @@ jq --arg total_files "$total_files" \
    "$TEMP_UPDATE_FILE" > tmp_run.json && mv tmp_run.json "$TEMP_UPDATE_FILE"
 
 echo "---------------------------------------------------"
-echo "Run completed!"
+echo "Run completed! (Chrome Engine)"
 echo "Success: $success_count"
 echo "Failed:  $fail_count"

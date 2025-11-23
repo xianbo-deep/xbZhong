@@ -44,10 +44,9 @@ jobs:
           git add .github/mapping/mapping.json
           git add docs
 
-          # 检查是否有变更，有则提交
-          if [[ -n $(git status -s) ]]; then
+          # 只看暂存区里面的文件，不看未追踪的文件
+          if ! git diff --cached --quiet; then
             echo "Changes detected, committing..."
-            # [skip ci] 很重要，防止 push 后再次触发 workflow 导致死循环
             git commit -m "chore(pdf): update generated PDFs and mapping [skip ci]"
             git push origin test
           else

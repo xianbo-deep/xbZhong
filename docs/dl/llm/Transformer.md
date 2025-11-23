@@ -526,8 +526,6 @@ cos(\Delta \theta_i) & sin(\Delta \theta_i)\\
 PE_{(pos,2i)}\\
 PE_{(pos,2i+1)}
 \end{bmatrix}
-
-
 \end{aligned}
 $$
 

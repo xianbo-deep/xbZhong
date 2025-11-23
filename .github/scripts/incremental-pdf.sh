@@ -16,6 +16,8 @@ INPUT_ARGS="--launch_options '{\"args\": [\"--no-sandbox\"]}'"
 command -v markdown-to-pdf >/dev/null 2>&1 || npm install -g baileyjm02/markdown-to-pdf
 command -v jq >/dev/null 2>&1 || echo "Please install jq"
 
+export PATH=$PATH:$(npm config get prefix)/bin
+
 # 创建 mapping 目录
 mkdir -p "$MAPPING_DIR"
 

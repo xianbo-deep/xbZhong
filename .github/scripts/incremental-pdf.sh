@@ -1,22 +1,26 @@
 #!/bin/bash
-set -e
-set -o pipefail
+set -e # 任何命令失败就退出
+set -o pipefail # 管道命令中任何一个失败就退出
 
-# 1. 强制使用 UTF-8
+# 1. 强制使用 UTF-8 (解决中文文件名乱码)
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
 
-# --- 【关键修复1】获取硬盘绝对路径 ---
-# 只有用绝对路径，PDF 工具才能 100% 找到图片
-WORK_DIR=$(pwd)
+# --- 【关键路径定义】 ---
+# 获取当前工作目录的绝对路径
+CURRENT_DIR=$(pwd)
+# 定义 VuePress 静态资源所在的绝对物理路径
+# md-to-pdf 将使用这个目录作为解析以 '/' 开头的图片路径的根目录
+STATIC_BASE_DIR="$CURRENT_DIR/docs/.vuepress/public"
+# -----------------------
+
 INPUT_DIR="docs"
 OUTPUT_DIR="docs/.vuepress/public/pdfs"
-# 图片实际存放的物理位置
-PUBLIC_PATH="docs/.vuepress/public"
-
+IMAGE_PREFIX="docs/.vuepress/public"
 MAPPING_DIR=".github/mapping"
 MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
+# 不生成PDF的目录和文件
 EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
 
 # --- 准备工作 ---
@@ -41,8 +45,9 @@ fail_count=0
 total_size=0
 
 echo ">>> Start scanning..."
+echo ">>> Static assets base directory set to: $STATIC_BASE_DIR"
 
-# 循环遍历
+# 使用 FD 9 防止循环被 stdin 干扰，并加上 sort 确保顺序
 while IFS= read -r -u9 file; do
     if [[ "$(basename "$file")" == "README.md" ]]; then continue; fi
 
@@ -70,32 +75,59 @@ while IFS= read -r -u9 file; do
     pdf_path="$OUTPUT_DIR/${rel_path%.md}.pdf"
     mkdir -p "$(dirname "$pdf_path")"
 
-    # 提取图片逻辑 (用于JSON)
+    # 提取图片元数据 (用于 JSON)
     img_list=$(grep -oP '!\[.*?\]\(\K[^\)]+' "$file" || true)
     if [ -z "$img_list" ]; then
         images="[]"
     else
+        # 简单提取，后续由 basedir 自动处理
         images=$(echo "$img_list" | while read -r img; do
-            echo "$IMAGE_PREFIX/$img"
+            echo "$img"
         done | jq -R -s -c 'split("\n")[:-1]')
     fi
 
     tmp_file="$(mktemp).md"
+    cp "$file" "$tmp_file"
 
-    # --- 【关键修复2】图片路径替换为硬盘绝对路径 ---
-    # 将 ![](/images/xx.png) 替换为 ![](/home/runner/.../docs/.vuepress/public/images/xx.png)
-    sed -E "s|!\[([^\]]*)\]\(/|![\1]($WORK_DIR/$PUBLIC_PATH/|g" "$file" > "$tmp_file"
+    # ========================================================
+    # 【核心修复：注入 MathJax 公式渲染引擎】
+    # ========================================================
+    # 向临时 Markdown 文件末尾追加 HTML 代码
+    # 1. 引入 MathJax CDN (使用 SVG 配置，无需本地字体)
+    # 2. 配置 MathJax 识别 $...$ 和 $$...$$
+    cat <<EOF >> "$tmp_file"
 
-    # --- 【关键修复3】加载样式表 + 打印背景 ---
-    # --stylesheet: 使用 GitHub 样式的 CSS (解决代码块丑、无高亮)
-    # --body-class: 激活 markdown-body 样式
-    # --pdf-options: printBackground=true (解决代码块背景丢失), margin (页边距)
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_SVG"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\\\(','\\\\)']],
+        displayMath: [['$$','$$'], ['\\\\[','\\\\]']],
+        processEscapes: true
+    },
+    SVG: { 
+        scale: 100, 
+        linebreaks: { automatic: true } 
+    }
+});
+</script>
+<style>
+/* 稍微调整一下公式的间距 */
+.MathJax_SVG_Display { margin: 1em 0; }
+</style>
+EOF
+    # ========================================================
+
+    # --- 容错转换 + 美化 + 公式支持 ---
+    # 新增 --gray-matter-options 'null': 解锁 JS 执行权限，让 MathJax 跑起来
     set +e 
     cat "$tmp_file" | "$MTP_CMD" \
+        --basedir "$STATIC_BASE_DIR" \
         --stylesheet "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" \
         --body-class "markdown-body" \
+        --gray-matter-options 'null' \
         --pdf-options '{"format": "A4", "margin": "20mm", "printBackground": true}' \
-        --launch-options '{"args": ["--no-sandbox"]}' \
+        --launch-options '{"args": ["--no-sandbox", "--disable-setuid-sandbox"]}' \
         > "$pdf_path" 2>/dev/null
     exit_code=$?
     set -e 
@@ -104,7 +136,7 @@ while IFS= read -r -u9 file; do
     if [ $exit_code -eq 0 ] && [ -s "$pdf_path" ]; then
         echo "    [Success] $pdf_path"
 
-        # 插入链接逻辑
+        # 插入链接逻辑 (同前)
         link_md="[本页PDF]($web_pdf_path)"
         if ! grep -Fq "$link_md" "$file"; then
             if grep -q "\[本页PDF\](/pdfs/" "$file"; then

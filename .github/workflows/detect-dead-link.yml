@@ -23,7 +23,7 @@ jobs:
       - name: Install markdown-link-check
         run: npm install -g markdown-link-check
 
-      # 4. 检测死链 (已修复捕获逻辑)
+      # 4. 检测死链
       - name: Check dead links
         id: deadlinks
         run: |

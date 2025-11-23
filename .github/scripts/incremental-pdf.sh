@@ -75,11 +75,12 @@ while read -r file; do
     sed -E "s|!\[([^\]]*)\]\(/|![\1]($IMAGE_PREFIX/|g" "$file" > "$tmp_file"
 
     # 修改点：去掉 npx，直接调用，并处理生成后的文件名
-    markdown-to-pdf "$tmp_file" \
-      --output_dir "$(dirname "$pdf_path")" \
-      --build_pdf true \
-      --build_html false \
-      --launch_options '{"args": ["--no-sandbox"]}'
+    npx baileyjm02/markdown-to-pdf "$tmp_file" \
+        --output_dir "$(dirname "$pdf_path")" \
+        --build_pdf true \
+        --build_html false \
+        --launch_options '{"args": ["--no-sandbox"]}'
+
 
     # 修改点：工具生成的是临时文件名.pdf，需要重命名为目标 pdf_path
     gen_tmp_pdf="$(dirname "$pdf_path")/$(basename "$tmp_file" .md).pdf"

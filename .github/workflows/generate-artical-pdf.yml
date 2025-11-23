@@ -19,10 +19,6 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: |
-          npm install -g baileyjm02/markdown-to-pdf
-          sudo apt-get update && sudo apt-get install -y jq
 
       - name: Generate PDFs and Mapping.json
         run: bash .github/scripts/incremental-pdf.sh

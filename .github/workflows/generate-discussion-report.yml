@@ -18,3 +18,15 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.qq.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "博客评论区周报"
+          to: "2396768163@qq.com"
+          from: "Github Action <${{ secrets.MAIL_USERNAME }}>"
+          html_body: file://email.html

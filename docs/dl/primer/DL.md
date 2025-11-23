@@ -117,7 +117,7 @@ date: 2024-01-18
 
   - 先找出**最佳$w,b$**使得似然函数最大，而$$w^*,b^* = argmaxL(w,b) = argmin (- lnL(w,b))$$
   - $$-lnL(w,b) = lnf_{w,b}(x^1)+lnf_{w,b}(x^2)+ln(1-f_{w,b}(x^3)) = \sum_{n}-[\hat{y}^nlnf_{w,b}(x^n)+(1-\hat{y}^n)ln(1-f_{w,b}(x^n))]$$
-  - 可得**Cross entropy**：$ C(f(x^n),\hat{y}^n) = \sum_{n}-[\hat{y}^nlnf_{w,b}(x^n)+(1-\hat{y}^n)ln(1-f_{w,b}(x^n))]$（**交叉熵损失函数**）
+  - 可得**Cross entropy**：$C(f(x^n),\hat{y}^n) = \sum_{n}-[\hat{y}^nlnf_{w,b}(x^n)+(1-\hat{y}^n)ln(1-f_{w,b}(x^n))]$（**交叉熵损失函数**）
 
 ### 使用Gradient Descent求解最佳参数
 

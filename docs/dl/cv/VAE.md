@@ -1,12 +1,12 @@
 ---
 title: 变分自编码器
-description: "比扩散模型简单
+description: 比扩散模型简单
 author: xbZhong
 isOriginal: true
 article: true
 category: cv
 timeline: true
-icon: tabler:math
+icon: "tabler:math"
 date: 2025-06-20
 ---
 

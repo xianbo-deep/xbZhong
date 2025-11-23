@@ -615,9 +615,9 @@ $$
 $$
 \begin{aligned}
 q^{rot}\cdot k^{rot} &=  q_mR_mR_n^Tk_n^T \\
- &= q_mR_mR_{-n}k_n^T \\
- &= q_mR_{m-n}k_n^T
- \end{aligned}
+&= q_mR_mR_{-n}k_n^T \\
+&= q_mR_{m-n}k_n^T
+\end{aligned}
 $$
 可见其将**位置差信息融入**$Q、K$矩阵，同时由于**RoPE**的特性，模型可以**外推自己的上下文能力**并且还保持一定精度
 

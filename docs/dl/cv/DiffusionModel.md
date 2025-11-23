@@ -6,13 +6,11 @@ isOriginal: true
 article: true
 category: cv
 timeline: true
-icon: tabler:math
+icon: "tabler:math"
 date: 2025-07-08
 ---
 
 [本页PDF](/pdfs/dl/cv/DiffusionModel.pdf)
-
-
 
 ## 完全理解数学推导非常难！！！
 
@@ -32,7 +30,6 @@ date: 2025-07-08
 >### 马尔科夫分层自编码器
 >
 >可以看作是VAE的一个扩展，从左到右逐步编码，从右到左逐步解码
->
 >
 >![image-20250511132150467](/screenshot/dl/image-20250511132150467.png)
 >
@@ -122,8 +119,8 @@ date: 2025-07-08
 >x_t &= \sqrt{\alpha_t}x_{t-1} + \sqrt{1-\alpha_t}\epsilon_t
 >\\
 >&= \sqrt{\alpha_t}(\sqrt{\alpha_{t-1}}x_{t-2} + \sqrt{1-\alpha_{t-1}}\epsilon_{t-1}) + \sqrt{1-\alpha_t}\epsilon_t\\
->&= \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} + \underbrace{\sqrt{\alpha_t-\alpha_t\alpha_{t-1}}\epsilon_{t-1}+ \sqrt{1-\alpha_t}\epsilon_t}_{两个相互独立的0均值的高斯分布相加}\\
->&=  \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} + \underbrace{\sqrt{\sqrt{\alpha_t-\alpha_t\alpha_{t-1}}^2+ \sqrt{1-\alpha_t}^2}\epsilon}_{用一个新的高斯分布代替} \\
+>&= \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} + \underbrace{\sqrt{\alpha_t-\alpha_t\alpha_{t-1}}\epsilon_{t-1}+ \sqrt{1-\alpha_t}\epsilon_t}_{\text{两个相互独立的0均值的高斯分布相加}}\\
+>&=  \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} + \underbrace{\sqrt{\sqrt{\alpha_t-\alpha_t\alpha_{t-1}}^2+ \sqrt{1-\alpha_t}^2}\epsilon}_{\text{用一个新的高斯分布代替}} \\
 >&= \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} +{\sqrt{1 - \alpha_t\alpha_{t-1}}\epsilon} \\
 >&= \sqrt{\prod_{i=1}^t{\alpha_i}}x_0 + \sqrt{1 -\prod_{i=1}^t{\alpha_i}}\epsilon \\
 >& = \sqrt{\overline{\alpha_t}}x_0 + \sqrt{1 -\overline{\alpha_t}}\epsilon ,\overline{\alpha_t} = \prod_{i=1}^t{\alpha_i},\epsilon\sim \mathcal{N}(0,I) \\
@@ -165,10 +162,9 @@ date: 2025-07-08
 >&= \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_T)p_{\theta}(x_0|x_1)\prod_{t=2}^Tp_{\theta}(x_{t-1}|x_{t})}{q(x_{T}|x_{T-1})\prod_{t=1}^{T-1} q(x_t|x_{t-1})}}]\\
 >&=\mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_T)p_{\theta}(x_0|x_1)\prod_{t= 1}^{T - 1}p_{\theta}(x_{t}|x_{t+1})}{q(x_{T}|x_{T-1})\prod_{t=1}^{T-1} q(x_t|x_{t-1})}}]\\
 >&=\mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_T)p_{\theta}(x_0|x_1)}{q(x_{T}|x_{T-1})}}] + \mathbb{E}_{q(x_{1:T}|x_0)}[\ln\prod_{t=1}^{T - 1}{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}]\\
->&= \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \mathbb{E}_{q(x_{1:T}|x_0)}[{\sum_{t=1}^{T-1}{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}}]\\
->&= \mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]\\
->&= \underbrace{\mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}]}_{重建项} - \underbrace{\mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] }_{先验匹配项} - \underbrace{\sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]
->}_{一致项}
+>&= \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \mathbb{E}_{q(x_{1:T}|x_0)}[{\sum_{t=1}^{T-1}{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}}]\\
+>&= \mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]\\
+>&= \underbrace{\mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}]}_{\text{重建项}} - \underbrace{\mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] }_{\text{先验匹配项}} - \underbrace{\sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]}_{\text{一致项}}
 >\end{aligned}
 >$$
 >我们接着来说明倒数第三个等式如何推成倒数第二个等式：（本质是对**无关变量**进行边缘化）
@@ -187,7 +183,7 @@ date: 2025-07-08
 >$$
 >\begin{aligned}
 >\mathbb{E}_{q(x_{1:T}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] &= \int{\ln{p_{\theta}(x_0|x_1)}q(x_{1:T}|x_0)}d{x_{1:T}}\\
->&=\int{\ln{p_{\theta}(x_0|x_1)}q(x_1|x_0)}d{x_1}\underbrace{\int{\prod_{2}^{T-1}{q(x_t|x_{t-1})}}d{x_{2:T}}}_{1(积分归一性)}\\
+>&=\int{\ln{p_{\theta}(x_0|x_1)}q(x_1|x_0)}d{x_1}\underbrace{\int{\prod_{2}^{T-1}{q(x_t|x_{t-1})}}d{x_{2:T}}}_{1(\text{积分归一性})}\\
 >&=\mathbb{E}_{q(x_1|x_0)}[{\ln{p_{\theta}(x_0|x_1)}}]
 >\end{aligned}
 >$$
@@ -195,7 +191,7 @@ date: 2025-07-08
 >$$
 >\begin{aligned}
 >\mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] &= \int{\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}q(x_{1:T}|x_0)}d{x_{1:T}} \\
->&= \int{\ln{\frac{p(x_T)}{q(x_T|x_{T-1})}}}q(x_T|x_{T-1})dx_{T-1,T} \underbrace{\int{\prod_{t=1}^{T-1}q(x_t|x_{t-1})}dx_{1:T-2}}_{积分归一性:q(x_{T-1}|x_0)} \\
+>&= \int{\ln{\frac{p(x_T)}{q(x_T|x_{T-1})}}}q(x_T|x_{T-1})dx_{T-1,T} \underbrace{\int{\prod_{t=1}^{T-1}q(x_t|x_{t-1})}dx_{1:T-2}}_{\text{积分归一性}:q(x_{T-1}|x_0)} \\
 >&= \int{\ln{\frac{p(x_T)}{q(x_T|x_{T-1})}}}q(x_T|x_{T-1})q(x_{T-1}|x_0)dx_{T-1,T}\\
 >&= \int{\ln{\frac{p(x_T)}{q(x_T|x_{T-1})}}}q(x_{T-1},x_{T}|x_0)dx_{T-1,T}\\
 >&= \mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] 
@@ -232,9 +228,7 @@ date: 2025-07-08
 
 ### 训练算法
 
->
-
-**学习如何预测噪声，而不是直接生成图像**
+> **学习如何预测噪声，而不是直接生成图像**
 
 1. 从真实图像数据分布$q(x₀)$中采样一张干净图像$x_0$
 2. 从**均匀分布**$Uniform({1, ..., T})$中随机抽取一个时间步$t$

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e # 遇到错误立即停止
+set -e
 set -o pipefail
 
 INPUT_DIR="docs"
@@ -10,15 +10,13 @@ MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
 EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
 
-# --- 【工具更换】 ---
-# 既然 baileyjm02 那个包不是 CLI 工具，我们换成标准的 md-to-pdf
+# --- 准备工作 ---
 echo ">>> Installing md-to-pdf locally..."
 npm install md-to-pdf --no-save --silent
 
-# 定义可执行文件路径
+# 定义工具路径
 MTP_CMD="./node_modules/.bin/md-to-pdf"
 
-# 检查是否安装成功
 if [ ! -f "$MTP_CMD" ]; then
     echo "!!! CRITICAL: md-to-pdf executable not found at $MTP_CMD"
     ls -l node_modules/.bin/
@@ -36,7 +34,7 @@ echo "{}" > "$TEMP_UPDATE_FILE"
 total_files=0
 total_size=0
 
-# 开始处理文件
+# 使用 process substitution 确保循环内的变量修改能带出循环外
 while read -r file; do
     if [[ "$(basename "$file")" == "README.md" ]]; then continue; fi
     
@@ -64,29 +62,24 @@ while read -r file; do
         echo "$IMAGE_PREFIX/$img"
     done | jq -R -s -c 'split("\n")[:-1]')
 
-    # 准备临时文件
     tmp_file="$(mktemp).md"
-    # 这里 md-to-pdf 默认输出文件名是 输入文件名.pdf
-    # 例如 /tmp/tmp.123.md -> /tmp/tmp.123.pdf
-    expected_tmp_pdf="${tmp_file%.md}.pdf"
-
     # 替换图片路径
     sed -E "s|!\[([^\]]*)\]\(/|![\1]($IMAGE_PREFIX/|g" "$file" > "$tmp_file"
 
-    # --- 【执行转换】 ---
-    # 使用 md-to-pdf 进行转换
-    # --launch-options 传递给 puppeteer 用于 CI 环境
-    "$MTP_CMD" "$tmp_file" --launch-options '{"args": ["--no-sandbox"]}'
+    # --- 【关键修改】 ---
+    # 使用 > 将屏幕上的 PDF 数据流直接写入目标文件
+    "$MTP_CMD" "$tmp_file" --launch-options '{"args": ["--no-sandbox"]}' > "$pdf_path"
 
-    # 移动生成的 PDF
-    if [ -f "$expected_tmp_pdf" ]; then
-        mv "$expected_tmp_pdf" "$pdf_path"
+    # 检查文件是否真的生成了
+    if [ -s "$pdf_path" ]; then
+        echo "Success: Generated $pdf_path"
     else
-        echo "Error: PDF generation failed for $file"
-        # 即使失败也删除临时md文件
+        echo "Error: PDF generation failed for $file (File is empty or missing)"
         rm "$tmp_file"
+        # 失败了就跳过，不计入统计
         continue
     fi
+    # ------------------
 
     rm "$tmp_file"
 

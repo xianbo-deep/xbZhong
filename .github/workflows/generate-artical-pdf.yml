@@ -25,7 +25,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y jq
 
       - name: Generate PDFs and Mapping.json
-        run: bash .github/scripts/generate_pdf.sh
+        run: bash .github/scripts/incremental-pdf.sh
 
       - name: Set up Python
         uses: actions/setup-python@v4

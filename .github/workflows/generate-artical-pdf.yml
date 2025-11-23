@@ -25,7 +25,7 @@ jobs:
 
       - name: Commit and Push changes
         run: |
-          配置 Git 用户信息
+          # 配置 Git 用户信息
           git config --global user.name 'xbzhong'
           git config --global user.email '2396768163@qq.com'
           

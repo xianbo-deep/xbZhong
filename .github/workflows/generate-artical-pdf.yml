@@ -1,0 +1,27 @@
+name: 文章PDF生成
+
+on:
+    schedule:
+        - cron: '0 0 * * 1'
+    workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+    Generate-Artical-PDF:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v3
+
+            - name: Install dependencies
+              run: |
+                npm install -g baileyjm02/markdown-to-pdf
+                sudo apt-get update && sudo apt-get install -y jq
+
+            - name: Generate PDFS and Mapping.json
+              run: bash scripts/generate_pdf.sh
+
+
+                

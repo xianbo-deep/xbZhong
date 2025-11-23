@@ -2,7 +2,7 @@ name: 博客性能分析
 
 on: 
  schedule:
-   - cron: '0 16 */3 * *'
+   - cron: '0 0 * * 1'
  workflow_dispatch:
 
 
@@ -71,7 +71,7 @@ jobs:
         path: |
             lighthouse-report.html
             bundle-stats.html
-        retention-days: 365
+        retention-days: 90
     - name: Analyze with DeepSeek AI
       env:
         DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}

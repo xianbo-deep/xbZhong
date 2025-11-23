@@ -36,36 +36,48 @@ fail_count=0
 total_size=0
 
 # ========================================================
-# 【关键】生成 Typora 风格的 LaTeX 样式头文件
+# 【核心修复】生成更稳健的 LaTeX 样式头文件
 # ========================================================
 STYLE_FILE="typora-style.tex"
 cat <<EOF > "$STYLE_FILE"
-% 1. 设置代码块背景色 (浅灰)
+% 1. 基础包
 \usepackage{xcolor}
-\definecolor{codebg}{RGB}{248,248,248} % 接近 Typora/GitHub 的背景色
 \usepackage{framed}
+\usepackage{fvextra} % 必须要有这个才能换行
+
+% 2. 设置代码块背景色 (浅灰)
+\definecolor{codebg}{RGB}{248,248,248}
 \definecolor{shadecolor}{named}{codebg}
 
-% 重定义 Pandoc 的 Shaded 环境，增加背景色框
-\let\oldShaded\Shaded
-\let\endoldShaded\endShaded
-\renewenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+% 3. 【关键修复】安全地定义 Shaded 环境
+% 如果 Pandoc 没有定义 Shaded，我们就自己定义一个简单的
+% 如果定义了，我们就用 snugshade 包裹它来实现背景色
+\ifdefined\Shaded
+  \renewenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\else
+  \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\fi
 
-% 2. 代码自动换行 (解决代码太长不换行的问题)
-\usepackage{fvextra}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+% 4. 【关键修复】正确设置代码自动换行
+% 不要使用 \DefineVerbatimEnvironment 重写 Highlighting
+% 而是直接设置 fvextra 的全局选项
+\fvset{
+  breaklines=true,
+  breakanywhere=true,
+  commandchars=\\\\\{\} 
+}
 
-% 3. 列表样式优化 (强制使用圆点)
+% 5. 列表样式优化 (强制使用圆点)
 \usepackage{enumitem}
 \setlist[itemize,1]{label=\textbullet}
 \setlist[itemize,2]{label=\textbullet}
 \setlist[itemize,3]{label=\textbullet}
 
-% 4. Typora 风格排版 (段落间距，无缩进)
-\usepackage[parfill]{parskip}
-\linespread{1.15} % 行间距稍微大一点点
+% 6. Typora 风格排版
+\usepackage[parfill]{parskip} % 段落间空行，无缩进
+\linespread{1.15}
 
-% 5. 链接颜色 (Typora 蓝)
+% 7. 链接颜色
 \usepackage{hyperref}
 \hypersetup{
   colorlinks=true,
@@ -73,7 +85,7 @@ cat <<EOF > "$STYLE_FILE"
   urlcolor=[rgb]{0.0, 0.3, 0.8}
 }
 
-% 6. 表格样式优化
+% 8. 常用表格和图形包 (防止报错)
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -89,7 +101,7 @@ cat <<EOF > "$STYLE_FILE"
 \usepackage{makecell}
 EOF
 
-echo ">>> Start scanning (Pandoc + Typora Style)..."
+echo ">>> Start scanning (Pandoc + Robust Style)..."
 echo ">>> Static Asset Path: $STATIC_BASE_DIR"
 
 # 遍历文件
@@ -133,7 +145,7 @@ while IFS= read -r -u9 file; do
     tmp_file="$(mktemp).md"
 
     # --- 预处理 ---
-    # 1. 图片路径修复 (替换为绝对路径)
+    # 1. 图片路径修复
     sed -E "s|!\[([^]]*)\]\(/|![\1]($STATIC_BASE_DIR/|g" "$file" > "$tmp_file"
 
     # 2. 自动包裹公式 (简单的应急修复)
@@ -147,8 +159,6 @@ while IFS= read -r -u9 file; do
 
     # ========================================================
     # 【核心转换】
-    # 增加 --include-in-header 引用刚才生成的样式文件
-    # 增加 --highlight-style=pygments (最接近 Typora 的高亮)
     # ========================================================
     set +e
     pandoc "$tmp_file" \

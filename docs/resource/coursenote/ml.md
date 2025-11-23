@@ -14,23 +14,32 @@ timeline: false
 #### 贝叶斯估计
 **对于先验概率**
 假设进行N次实验，先验概率
+
 $$
 P(Y=c_k) = \frac{1}{K} \\
 PK - 1 = 0
 $$
+
 由频率是概率的极大似然估计
+
 $$
 P(Y=c_k) = \frac{\sum_{i=1}^{N}{I(y_i = c_k)}}{N}
 $$
+
 可得
+
 $$
 P(Y=c_k)N - \sum_{i=1}^{N}{I(y_i = c_k)} = 0
 $$
+
 即
+
 $$
 \lambda(P(Y=c_k)K - 1) + P(Y=c_k)N - \sum_{i=1}^{N}{I(y_i = c_k)} = 0
 $$
+
 可得
+
 $$
 P(Y=c_k) = \frac{ \sum_{i=1}^{N}{I(y_i = c_k)} + \lambda}{K\lambda + N}
 $$
@@ -40,11 +49,15 @@ $$
 P(X^{(j)} = a_{jl} | Y =c_k) = \frac{1}{S_j}  \\
 P(X^{(j)} = a_{jl} | Y =c_k) = \frac{\sum_{i=1}^{N}{I(X^{(j)} = a_{jl} , Y =c_k)}}{\sum_{i=1}^{N}{I(Y=c_k)}}
 $$
+
 同上
+
 $$
 \lambda{PS_j - 1} + P\sum_{i=1}^{N}{I(Y=c_k)} - \sum_{i=1}^{N}{I(X^{(j)} = a_{jl} , Y =c_k)} = 0
 $$
+
 可得
+
 $$
 P(X^{(j)} = a_{jl} | Y =c_k)= \frac{\lambda +\sum_{i=1}^{N}{I(X^{(j)} = a_{jl} , Y =c_k)}}{\sum_{i=1}^{N}{I(Y=c_k)} + S_j\cdot \lambda}
 $$
@@ -55,6 +68,7 @@ $$
 这里来证明一下朴素贝叶斯是如何从损失函数最小化推出后验概率最大化的
 
 首先我们写出期望风险的公式
+
 $$
 \begin{aligned}
 R_{exp} &= \int{\int{L(y,f(\vec{x}))P(\vec{x},y)d\vec{x}}dy}\\
@@ -64,7 +78,9 @@ R_{exp} &= \int{\int{L(y,f(\vec{x}))P(\vec{x},y)d\vec{x}}dy}\\
 
 \end{aligned}
 $$
+
 也就是对于每个$x$，我们对$L(y,f(\vec{x}))P(y|\vec{x})$进行最小化
+
 $$
 \begin{aligned}
 f(x) &= argmin_{y\in Y}{\sum_{k=1}^KL(c_k,y)P(c_k|X=x)}\\
@@ -81,10 +97,13 @@ $$
 在软间隔支持向量机里面，引入松弛变量$\xi_i$
 
 目标函数为
+
 $$
 L = \frac{1}{2}||w||^2 + C\sum_{i = 1}^N{\xi_i}
 $$
+
 约束条件
+
 $$
 \begin{aligned}
 y_i(w^Tx_i + b) &\ge 1 - \xi_i \\ 
@@ -99,15 +118,19 @@ $$
   - 为满足约束且使目标函数最小，$\xi_i = 1 - y_i(w^Tx_i + b)$
 
 综上所述
+
 $$
 \xi_i = \max{(0,1 - y_i(w^Tx_i + b))}
 $$
 
 代入目标函数并令$\lambda = \frac{1}{2C}$可得合页损失函数
+
 $$
 \sum_{i=1}^N[1 - y_i(w^Tx_i + b)]_+ + \lambda||w||^2
 $$
+
 其中
+
 $$
 [z]_+ = 
 \begin{cases}
@@ -124,12 +147,14 @@ $$
 首先要了解EM算法的核心：**EM算法是计算每个潜在变量$Z$的后验概率，然后通过加权平均，也就是求期望的方式得到一个近似的估计，最后我们要找到一个能让这个近似估计最大的参数$\theta$**
 
 先来认识一下**KL散度**
+
 $$
 KL(q||p) = \sum_{Z}q(Z)\log{\frac{q(Z)}{p(Z)}}
 $$
 描述的是q分布和p分布之间的距离，因此取值是大于等于0的
 
 首先要明确，EM算法的核心是在每一步**最大化Q函数**
+
 $$
 \begin{aligned}
 Q(\theta,\theta^{(i)})&=\mathbb{E}_{Z}(\log{P(Y,Z|\theta)}|Y,\theta^{(i)}) \\
@@ -140,6 +165,7 @@ $$
 现在来看如何推导出上面这个Q函数
 
 对于EM算法，我们希望最大化观测数据$Y$关于参数$\theta$的对数似然函数
+
 $$
 \begin{aligned}
 L(\theta) = \log{P(Y|\theta)} &= \log{\sum_{Z}{P(Y,Z|\theta)}} \\
@@ -148,6 +174,7 @@ L(\theta) = \log{P(Y|\theta)} &= \log{\sum_{Z}{P(Y,Z|\theta)}} \\
 $$
 
 使用**Jeason不等式**
+
 $$
 \begin{aligned}
 \log{\sum_{Z}{q(Z)\frac{P(Y,Z|\theta)}{q(Z)}}} &\ge \sum_{Z}q(Z)\log{\frac{P(Y,Z|\theta)}{q(Z)}} \\
@@ -156,6 +183,7 @@ $$
 $$
 
 记上式为
+
 $$
 \begin{aligned}
 \mathcal{{L}}(q,\theta) = \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)}
@@ -163,11 +191,13 @@ $$
 $$
 
 因为
+
 $$
 \log{P(Y,Z|\theta)} = \log{P(Z|Y,\theta)P(Y|\theta)}
 $$
 
 因此有
+
 $$
 \begin{aligned}
 \mathcal{{L}}(q,\theta) &= \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)} \\
@@ -179,12 +209,15 @@ $$
 $$
 
 最终等式
+
 $$
 \begin{aligned}
 \log{P(Y|\theta)} &=  KL(q(Z)||P(Z|Y,\theta)) + \mathcal{{L}}(q,\theta)\\
 \end{aligned}
 $$
+
 且
+
 $$
 \log{P(Y|\theta)} \ge \mathcal{{L}}(q,\theta)
 $$
@@ -209,6 +242,7 @@ $$
 > 
 
 因此
+
 $$
 \begin{aligned}
 \log{P(Y|\theta)} &\ge \mathcal{{L}}(q,\theta)\\
@@ -222,22 +256,31 @@ $$
 **单调性的证明**
 
 在E步的时候，取
+
 $$
 q(Z) = P(Z|Y,\theta)
 $$
+
 做完M步之后，新下界大于旧下界
+
 $$
 \mathcal{{L}}(q,\theta^{(i + 1)}) \ge \mathcal{{L}}(q,\theta^{(i)})
 $$
+
 旧似然等于旧下界
+
 $$
 \log{P(Y,Z|\theta^{i})} = \mathcal{{L}}(q,\theta^{(i)})
 $$
+
 新似然做完M步后KL散度大于0，因此
+
 $$
 \log{P(Y,Z|\theta^{i + 1})} \ge \mathcal{{L}}(q,\theta^{(i + 1)})
 $$
+
 最后有
+
 $$
 \log{P(Y,Z|\theta^{i + 1})} \ge \mathcal{{L}}(q,\theta^{(i + 1)})\ge\mathcal{{L}}(q,\theta^{(i)})=\log{P(Y,Z|\theta^{i})}
 $$
@@ -246,12 +289,14 @@ $$
 
 ### 高斯混合模型
 高斯分布
+
 $$
 \phi(y|\theta_{k}) = \frac{1}{\sqrt{2\pi}\sigma_{k}}exp(-\frac{(x-\mu_k)^2}{2\sigma_{k}^2})
 $$
 
 
 用多个高斯分布的加权组合描述复杂数据的分布
+
 $$
 \begin{aligned}
 &P(y|\theta) = \sum_{k=1}^K \alpha_k \phi(y|\theta_k) \\
@@ -265,11 +310,13 @@ Q(\theta,\theta^{(i)}) = \mathbb{E}_{\gamma}[\log{P(y,\gamma|\theta)}|y,\theta^{
 $$
 
 观测数据是由高斯混合模型产生的，模型参数为
+
 $$
 \theta = (\alpha_{k},\mu_{k},\sigma_{k}^2)
 $$
 
 隐变量定义为
+
 $$
 \gamma_{jk} = 
 \begin{cases}
@@ -279,6 +326,7 @@ $$
 $$
 
 现在来推导完全数据的似然函数，因为后续会使用这个代入Q函数
+
 $$
 \begin{aligned}
 P(y,\gamma|\theta) &= \prod_{j = 1}^{N}{p(y_j,\gamma_{j1},\gamma_{j2},\dots,\gamma_{jk}|\theta)} \\
@@ -308,6 +356,7 @@ Q(\theta,\theta^{(i)}) &= \mathbb{E}_{\gamma}\{\sum_{k=1}^N\{n_k\log{\alpha_{k} 
 $$
 
 我们可以很轻松地发现，真正需要计算的只有$\mathbb{E}(\gamma_{jk}|y,\theta^{(i)})$，因为其它的都可以通过期望的线性性质直接拆开得到结果
+
 $$
 \begin{aligned}
 \mathbb{E}(\gamma_{jk}|y,\theta^{(i)}) &= P(\gamma_{jk} = 1|y,\theta^{(i)}) \\
@@ -318,6 +367,7 @@ $$
 $$
 
 并且我们有
+
 $$
 \begin{aligned}
 n_k &= \sum_{j=1}^{N}{\gamma_{jk}} \\
@@ -327,6 +377,7 @@ $$
 
 
 最后得到**Q函数的最终形式**
+
 $$
 \begin{aligned}
 Q(\theta,\theta^{(i)}) &= \sum_{k = 1}^{N}\{\sum_{j=1}^{N}{(\mathbb{E}{\gamma_{jk}})}\log{\alpha_k}+ \sum_{j=1}^N{(\mathbb{E}{\gamma_{jk}})}[(\log{\frac{1}{\sqrt{2\pi}}}- \log{\sigma_{k}} - \frac{(y_j - \mu_k)^2}{2\sigma_k^2})]|y,\theta^{(i)}\}\\
@@ -344,6 +395,7 @@ $$
 
 
 最后对模型参数$\alpha,\mu,\sigma$进行更新
+
 $$
 \begin{aligned}
 \hat{\alpha}_k &= \frac{n_k}{N} = \frac{\sum_{j=1}^{N}{\hat{\gamma}_{jk}}}{N}\\

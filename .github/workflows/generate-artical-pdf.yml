@@ -43,7 +43,7 @@ jobs:
 
       # --- 执行脚本部分 (在容器内) ---
       - name: Generate PDFs and Mapping.json (In Docker)
-        uses: docker://ghcr.io/${{ github.repository }}/pdf-builder:latest
+        uses: docker://ghcr.io/xianbo-deep/xbZhong/pdf-builder:latest
         with:
           # docker action 自动挂载当前目录到 /github/workspace
           # 并且自动设置工作目录

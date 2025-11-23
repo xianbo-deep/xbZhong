@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: .github/Dockerfile  # 确保你的 Dockerfile 确实在这个路径
+          file: .github/pdf.Dockerfile  # 确保你的 Dockerfile 确实在这个路径
           push: true
           # ⚠️ 注意：这里建议直接硬编码为全小写，防止 github.repository 包含大写导致报错
           # 请将下面的 <user>/<repo> 替换为你的真实信息 (全小写)

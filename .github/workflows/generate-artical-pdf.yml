@@ -1,4 +1,4 @@
-name: 文章PDF生成 (Chrome版)
+name: 文章PDF生成
 
 on:
   push:

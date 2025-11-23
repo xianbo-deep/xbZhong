@@ -10,30 +10,21 @@ MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
 EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
 
-# --- 核心修改区 ---
+# --- 【工具更换】 ---
+# 既然 baileyjm02 那个包不是 CLI 工具，我们换成标准的 md-to-pdf
+echo ">>> Installing md-to-pdf locally..."
+npm install md-to-pdf --no-save --silent
 
-# 1. 强制本地安装（不保存到 package.json，避免污染）
-echo ">>> Force installing markdown-to-pdf locally..."
-npm install baileyjm02/markdown-to-pdf --no-save --silent
+# 定义可执行文件路径
+MTP_CMD="./node_modules/.bin/md-to-pdf"
 
-# 2. 显式指定源码入口文件路径 (cli.js)
-# 通常包会安装在 node_modules/markdown-to-pdf 下
-JS_ENTRY="./node_modules/markdown-to-pdf/cli.js"
-
-# 3. 双重保险：检查文件到底在不在
-if [ ! -f "$JS_ENTRY" ]; then
-    echo "!!! Error: Cannot find cli.js at $JS_ENTRY"
-    echo ">>> Debugging: Listing node_modules to see what happened:"
-    ls -F node_modules/
-    if [ -d "node_modules/markdown-to-pdf" ]; then
-        echo ">>> Contents of markdown-to-pdf:"
-        ls -F node_modules/markdown-to-pdf/
-    fi
+# 检查是否安装成功
+if [ ! -f "$MTP_CMD" ]; then
+    echo "!!! CRITICAL: md-to-pdf executable not found at $MTP_CMD"
+    ls -l node_modules/.bin/
     exit 1
-else
-    echo ">>> Found script at: $JS_ENTRY"
 fi
-
+echo ">>> Tool ready at $MTP_CMD"
 # ------------------
 
 command -v jq >/dev/null 2>&1 || echo "Please install jq"
@@ -73,23 +64,28 @@ while read -r file; do
         echo "$IMAGE_PREFIX/$img"
     done | jq -R -s -c 'split("\n")[:-1]')
 
+    # 准备临时文件
     tmp_file="$(mktemp).md"
+    # 这里 md-to-pdf 默认输出文件名是 输入文件名.pdf
+    # 例如 /tmp/tmp.123.md -> /tmp/tmp.123.pdf
+    expected_tmp_pdf="${tmp_file%.md}.pdf"
+
+    # 替换图片路径
     sed -E "s|!\[([^\]]*)\]\(/|![\1]($IMAGE_PREFIX/|g" "$file" > "$tmp_file"
 
-    # --- 关键修改：使用 node 直接运行 JS 文件 ---
-    # 彻底绕过 npx 和 PATH 问题
-    node "$JS_ENTRY" "$tmp_file" \
-        --output_dir "$(dirname "$pdf_path")" \
-        --build_pdf true \
-        --build_html false \
-        --launch_options '{"args": ["--no-sandbox"]}'
+    # --- 【执行转换】 ---
+    # 使用 md-to-pdf 进行转换
+    # --launch-options 传递给 puppeteer 用于 CI 环境
+    "$MTP_CMD" "$tmp_file" --launch-options '{"args": ["--no-sandbox"]}'
 
-    gen_tmp_pdf="$(dirname "$pdf_path")/$(basename "$tmp_file" .md).pdf"
-    
-    if [ -f "$gen_tmp_pdf" ]; then
-        mv "$gen_tmp_pdf" "$pdf_path"
+    # 移动生成的 PDF
+    if [ -f "$expected_tmp_pdf" ]; then
+        mv "$expected_tmp_pdf" "$pdf_path"
     else
         echo "Error: PDF generation failed for $file"
+        # 即使失败也删除临时md文件
+        rm "$tmp_file"
+        continue
     fi
 
     rm "$tmp_file"

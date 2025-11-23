@@ -251,16 +251,16 @@ $$
 
 ！！要注意的是多头拆分也可以**直接通过全局矩阵$Q、K、V$进行分割**
 $$
-\begin{align}
+\begin{aligned}
 Q_1 = QW^{q,1} \quad Q_2 = QW^{q,2} \\
 K_1 = KW^{q,1} \quad K_2 = KW^{q,2}\\
 V_1 = VW^{q,1} \quad V_2 = VW^{q,2}
-\end{align}
+\end{aligned}
 $$
 - **可得出表达式**
 
 $$
-\begin{align}
+\begin{aligned}
 Q_1 &= 
 \begin{bmatrix}
 q^{i,1}\\ q^{j,1}\\q^{m,1}\\q^{n,1}
@@ -270,7 +270,7 @@ Q_2 =
 q^{i,2}\\ q^{j,2}\\q^{m,2}\\q^{n,2}
 \end{bmatrix} \\
 
-\end{align}
+\end{aligned}
 $$
 
 $$
@@ -498,7 +498,7 @@ $$
 
 下面我们来证明一下
 $$
-\begin{align}
+\begin{aligned}
 \begin{bmatrix}
 PE_{(pos + \Delta,2i)} \\
 PE_{(pos + \Delta,2i+1)}
@@ -528,7 +528,7 @@ PE_{(pos,2i+1)}
 \end{bmatrix}
 
 
-\end{align}
+\end{aligned}
 $$
 
 
@@ -536,14 +536,14 @@ $$
 
 已知：
 $$
-\begin{align}
+\begin{aligned}
 
 w_i&= 10000^{2i/d_{model}} \\
 \theta_i &= pos/10000^{2i/d_{model}} \\
 &= pos / w_i
 
 
-\end{align}
+\end{aligned}
 $$
 
 - i小：$w_i$小，**频率高**，对应词向量低维度，$\theta_i$对pos变化敏感，捕捉短距离依赖

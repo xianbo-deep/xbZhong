@@ -91,7 +91,7 @@ date: 2025-06-20
 >
 > 推导出公式(1.2)的下界函数
 > $$
-> \begin{align}
+> \begin{aligned}
 > \mathcal {L}(\theta;x) &= \ln p_{\theta}(x) \\ 
 > &=\ln \int_z{p_{\theta}(x,z)} \\ 
 > &=\ln \int_z{q_{\phi}(z|x)\frac{p_{\theta}(x,z)}{q_{\phi}(z|x)}} \quad \text{同时乘除}q_{\phi}(z|x)\text{，等于没变化}\\ 
@@ -100,14 +100,14 @@ date: 2025-06-20
 > &=\int_z{q_{\phi}(z|x)}\ln{[\frac{p_{\theta}(x,z)}{q_{\phi}(z|x)}]} \\
 > &=[\int_z{q_{\phi}(z|x)\ln{p_{\theta}(x,z)}} - \int_z{q_{\phi}(z|x)}\ln{q_{\phi}(z|x)}] \\
 > &\triangleq \mathcal{L}(q,\theta)
-> \end{align}
+> \end{aligned}
 > $$
 > 找到**下界函数**（ELBO）$ \mathcal{L}(q,\theta)$
 > $$
-> \begin{align}
+> \begin{aligned}
 > \mathcal{L}(q,\theta) &=[\int_z{q_{\phi}(z|x)\ln{p_{\theta}(x,z)}} - \int_z{q_{\phi}(z|x)}\ln{q_{\phi}(z|x)}] \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x,z)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}]
-> \end{align}
+> \end{aligned}
 > $$
 > 而$p(x,z) = p(z)p(x|z) = p(x)p(z|x)$，说明有两种分解方法变换**下界函数ELBO**
 >
@@ -115,13 +115,13 @@ date: 2025-06-20
 >
 > 使用z的后验$p(z|x)$进行分解
 > $$
-> \begin{align}
+> \begin{aligned}
 > \mathcal{L}(q,\theta) &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x,z)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}] \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x)}+\ln{p_{\theta}(z|x)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}] \\
 > &=  \underbrace{\mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x)}]}_{\text{与z无关，期望符号可以直接去掉}}+\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(z|x)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}] \\
 > &= \underbrace{\ln{p_{\theta}(x)}}_{\text{观察数据对数似然/证据}}+\underbrace{\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(z|x)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}]}_{\text{KL散度}} \\
 > &= \underbrace{\ell(\theta;x)}_{\text{观察数据对数似然/证据}}-\underbrace{KL(q_{\phi}(z|x)||p_{\theta}(z|x))}_{\text{KL散度}}
-> \end{align}
+> \end{aligned}
 > $$
 > 整理后可得到
 > $$
@@ -131,22 +131,22 @@ date: 2025-06-20
 > #### 第二种形式（主要优化方向）
 >
 > $$
-> \begin{align}
+> \begin{aligned}
 > \mathcal{L}(q,\theta) &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x,z)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}] \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p(z)}+\ln{p_{\theta}(x|z)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}] \\
 > &=  \mathbb{E}_{z \sim q_{\phi}}[\ln{p(z)}]+\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}] \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}]+\underbrace{\mathbb{E}_{z \sim q_{\phi}}[{\ln{p(z)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}]}_{\text{KL散度}} \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}] - \underbrace{KL(q_{\phi}(z|x)||p(z))}_{q_{\phi}(z)\text{和先验}p(z)\text{的KL散度}}
-> \end{align}
+> \end{aligned}
 > $$
 >
 > 根据前文的结论，当 $q_{\phi}(z)$ 等于 z 的后验 $p_{\theta}(z|x)$ 时，下界函数$ \mathcal{L}(q,\theta)$ 和观测数据的对数似然函数 $\ell(\theta;x)$ 是相等的。因此，我们令 $q_{\phi}(z) = p_{\theta}(z|x)$， 为了符号区分这里记作$ q_{\phi}(z)=q_{\phi}(z|x)$，可得
 > $$
-> \begin{align}
+> \begin{aligned}
 > \mathcal{L}(q,\theta) &= \underbrace{\mathbb{E}_{z \sim q_{\phi}(z|x)}[{\ln{p_{\theta}(x|z)}}]}_{\text{重建项(reconstruction term)}}-
 > \underbrace{KL(q_{\phi}(z|x)||p(z))}_{\text{先验匹配项(prior matching term)}} \\
 > &= \ell(\theta;x)
-> \end{align}
+> \end{aligned}
 > $$
 >
 > #### 疑难杂点
@@ -170,19 +170,19 @@ date: 2025-06-20
 >
 > 在 VAE 中，Z 是一个 **随机变量**，不能从$X$直接映射到$Z$ ，但是输入变量$X$是通过影响$Z $的均值参数和方差参数间接影响到$Z$，就是说均值参数$\mu_z$和方差参数 $\Sigma_z$ 是和$x$相关的，即：
 > $$
-> \begin{align}
+> \begin{aligned}
 > \mu_z &= \mu_{\phi}(x) = encoder_{\phi}(x) \\
 > \Sigma_z &= \Sigma_{\phi}(x) = encoder_{\phi}(x) 
-> \end{align}
+> \end{aligned}
 > $$
 >
 > #### KL散度-正则项
 >
 > $$
-> \begin{align}
+> \begin{aligned}
 > KL(q_{\phi}(z)||p(z)) &= KL(\mathcal{N}(\mu_z,\Sigma_z)||\mathcal{N}(0,I)) \\
 > &= \frac{1}{2}(tr(\Sigma_z)+\mu_z^T\mu_z-k-\log{det(\Sigma_z)})
-> \end{align}
+> \end{aligned}
 > $$
 >
 > 上述是模型训练过程目标函数的一项，$k$是向量的维度，他的作用相当于一个**正则项**，使得后验$q_{\phi}(z|x)$ 尽量接近$z$先验。
@@ -205,10 +205,10 @@ date: 2025-06-20
 
 我们要从后验分布$q_{\phi}(x|z)$中随机采样$z$的值，这个后验分布是一个高斯分布$\mathcal{N}(\mu_z,\Sigma_z)$，直接从这个分布中采样会导致模型不可导，梯度无法传递。这里可以利用高斯分布的一个特点来改变采样过程，**任意均值和方差的高斯分布都可以从一个标准正态分布$\mathcal{N}(0,I)$变换得到**，我们用符号$\epsilon$表示一个多维标准正态分布，即$\epsilon  \sim \mathcal{N}(0,I)$，任意另一个高斯分布$\mathcal{N}(\mu_z,\Sigma_z)$的值可以通过下式直接计算得到
 $$
-\begin{align}
+\begin{aligned}
 z &= \mu_z + \sqrt{\Sigma_z} \odot \epsilon \\
 &=\mu_{\theta}(x)+\sqrt{\Sigma_{\phi}(x)} \odot \epsilon,\epsilon \sim \mathcal{N}(0,I)
-\end{align}
+\end{aligned}
 $$
 也就是说，可以先从标准正态分布$\mathcal{N}(0,I)$随机采样一个值，然后通过上述公式计算得到$z$的值，其中$\odot$表示元素乘法。这就相当于在encoder的输出$\mu_{\phi}(x)$的基础上加上高斯噪声，再乘上encoder的另一个输出$\sqrt{\Sigma_{\phi}(x)}$，随机采样的是高斯噪声$\epsilon$ ，而它不影响模型的梯度传递
 
@@ -220,32 +220,32 @@ p(x) = \frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}}exp\{-\frac{1}{2}(x-\mu)^T\Sigma ^{-1
 $$
 在前面我们假设$p_{\theta}(x|z)$是**一个单位方差的高斯分布**，根据高斯分布的概率密度函数，$p_{\theta}(x|z)$的形式为
 $$
-\begin{align}
+\begin{aligned}
 p(x) &= \frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}}exp\{-\frac{1}{2}(x-\mu)^T\Sigma ^{-1}(x-\mu)\} \\
 & \propto exp\{-\frac{1}{2}(x-\mu_x)^T(x-\mu_x)\} \\
 &= exp\{-\frac{1}{2}(x-\mu_{\theta}(z))^T(x-\mu_{\theta}(z))\} \\
 &= exp\{-\frac{1}{2}(x-decoder(z))^T(x-x-decoder(z))\} \\
-\end{align}
+\end{aligned}
 $$
 最后下界函数$ELBO$的形式为
 $$
-\begin{align}
+\begin{aligned}
 \mathcal{L}(q,\theta) 
 &= \underbrace{\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}]}_{对应解码过程} - \underbrace{KL(q_{\phi}(z|x)||p(z))}_{对应编码过程} \\
 &= \frac{1}{L}\sum_{l=1}^L[\ln{p_{\theta}(x|z^{(l)})}] -  KL(\mathcal{N}(\mu_z,\Sigma_z)||\mathcal{N}(0,I)) \\
 &\propto \frac{1}{L}\sum_{l=1}^L[-\frac{1}{2}(x-\mu_x)^T(x-\mu_x)] - [\frac{1}{2}(tr(\Sigma_z)+\mu_z^T\mu_z-k-\log{det(\Sigma_z)})]\\
 & \propto -\frac{1}{L}\sum_{l=1}^L[(x-\mu_x)^T(x-\mu_x)] - [(tr(\Sigma_z)+\mu_z^T\mu_z-k-\log{det(\Sigma_z)})]\\
-\end{align}
+\end{aligned}
 $$
 其中：
 $$
-\begin{align}
+\begin{aligned}
 \mu_x &= \mu_{\theta}(z^{(l)}) = decoder(z^{(l)}) \\
 z^{(l)} &= \mu_z + \sqrt{\Sigma_z} \odot \epsilon,
 \epsilon \sim \mathcal{N}(0,I)\\
 \mu_z &= \mu_{\phi}(x) = encoder(x)_{\mu_z}\\
 \Sigma_z &= \Sigma_{\phi}(x) = encoder(x)_{\Sigma_z}
-\end{align}
+\end{aligned}
 $$
 由于我们是通过极大化$\mathcal{L}(q,\theta) $进行参数求解，其中有一些参数项可以去掉，最后可以等价于同时极小化下面两项
 $$

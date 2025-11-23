@@ -106,10 +106,10 @@ date: 2025-07-08
 >$$
 >
 >$$
->\begin{align}
+>\begin{aligned}
 >x_t &= \sqrt{\alpha_t}x_{t-1} + \mathcal{N}(0,(1-\alpha_t)I)\\
 >&= \sqrt{\alpha_t}x_{t-1} + \sqrt{1-\alpha_t}\epsilon,\epsilon\sim \mathcal{N}(0,I)
->\end{align}
+>\end{aligned}
 >$$
 >
 >$\alpha_t$**并非固定**，可以随着t的增长**逐渐变小**。
@@ -118,7 +118,7 @@ date: 2025-07-08
 >
 >前向过程中可以从$x_0$一步计算任意的$t$，这样可以并行计算全部的$x_t$。公式中的$\epsilon_t$是从一个标准正态分布中采样的。推导过程如下：
 >$$
->\begin{align}
+>\begin{aligned}
 >x_t &= \sqrt{\alpha_t}x_{t-1} + \sqrt{1-\alpha_t}\epsilon_t
 >\\
 >&= \sqrt{\alpha_t}(\sqrt{\alpha_{t-1}}x_{t-2} + \sqrt{1-\alpha_{t-1}}\epsilon_{t-1}) + \sqrt{1-\alpha_t}\epsilon_t\\
@@ -128,7 +128,7 @@ date: 2025-07-08
 >&= \sqrt{\prod_{i=1}^t{\alpha_i}}x_0 + \sqrt{1 -\prod_{i=1}^t{\alpha_i}}\epsilon \\
 >& = \sqrt{\overline{\alpha_t}}x_0 + \sqrt{1 -\overline{\alpha_t}}\epsilon ,\overline{\alpha_t} = \prod_{i=1}^t{\alpha_i},\epsilon\sim \mathcal{N}(0,I) \\
 >&\sim\mathcal{N}(\sqrt{\overline{\alpha_t}}x_0,(1 -\overline{\alpha_t})I)
->\end{align}
+>\end{aligned}
 >$$
 >我们发现只要设置了超参数$\alpha_{0:T}$的值，这个前向计算过程是可以直接解析（使用公式）计算的， 没有未知参数，不需要用一个模型学习这个过程。
 >
@@ -141,10 +141,10 @@ date: 2025-07-08
 >
 >我们可以知道$p(x_T)$的概率密度，**是一个标准高斯分布，这是前向过程的目标。**但是$p_{\theta}(x_t|x_{t+1})$是难以计算的。
 >$$
->\begin{align}
+>\begin{aligned}
 >p_{\theta}(x_t|x_{t+1}) &= \frac{p(x_{t+1}|x_t)p(x_t)}{p(x_{t + 1})}\\
 >&=\frac{p(x_{t+1}|x_t)p(x_t)}{\int{p(x_{t + 1}|x_t)p(x_t)dx_t}}
->\end{align}
+>\end{aligned}
 >$$
 >这种情况下**要对所有可能的$x_t$进行积分**，显然是不可能做到的。所以我们可以用一个模型去拟合$p_{\theta}(x_t|x_{t+1})$的，从而生成一张真实图片。
 >
@@ -156,7 +156,7 @@ date: 2025-07-08
 >$$
 >显然无法直接通过这个式子求出$p(x_0)$，存在隐变量无法直接积分，下面来推导**ELBO**。
 >$$
->\begin{align}
+>\begin{aligned}
 >\ln{p(x_0)} &= \ln{\int{p(x_{0:T})d{x_{1:T}}}} \\
 >&= \ln{\int{\frac{p(x_{0:T})q(x_{1:T}|x_0)}{q(x_{1:T}|x_0)}}d{x_{1:T}}}\\
 >&= \ln{\mathbb{E}_{q(x_{1:T}|x_0)}[\frac{p(x_{0:T})}{q(x_{1:T}|x_0)}]} \\
@@ -169,45 +169,45 @@ date: 2025-07-08
 >&= \mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]\\
 >&= \underbrace{\mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}]}_{重建项} - \underbrace{\mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] }_{先验匹配项} - \underbrace{\sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]
 >}_{一致项}
->\end{align}
+>\end{aligned}
 >$$
 >我们接着来说明倒数第三个等式如何推成倒数第二个等式：（本质是对**无关变量**进行边缘化）
 >
 >核心公式：
 >$$
->\begin{align}
+>\begin{aligned}
 >q(x_{T-1}|x_0) &= \int{q(x_1|x_0)q(x_2|x_1)\dots q(x_{T-1}|x_{T-2})}dx_{1:T-2} \\
 >&= \int{q(x_1|x_0)q(x_2|x_1,x_0)\dots q(x_{T-1}|x_{T-2},x_{T-3}\dots,x_0)}dx_{1:T-2} \\
 >&= \int{\frac{q(x_{0:T})}{q(x_0)}}dx_{1:T-2} \\
 >&= \int{q(x_{1:T}|x_0)}dx_{1:T-2} \\
 >&= q(x_{T-1}|x_0)
->\end{align}
+>\end{aligned}
 >$$
 >
 >$$
->\begin{align}
+>\begin{aligned}
 >\mathbb{E}_{q(x_{1:T}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] &= \int{\ln{p_{\theta}(x_0|x_1)}q(x_{1:T}|x_0)}d{x_{1:T}}\\
 >&=\int{\ln{p_{\theta}(x_0|x_1)}q(x_1|x_0)}d{x_1}\underbrace{\int{\prod_{2}^{T-1}{q(x_t|x_{t-1})}}d{x_{2:T}}}_{1(积分归一性)}\\
 >&=\mathbb{E}_{q(x_1|x_0)}[{\ln{p_{\theta}(x_0|x_1)}}]
->\end{align}
+>\end{aligned}
 >$$
 >
 >$$
->\begin{align}
+>\begin{aligned}
 >\mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] &= \int{\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}q(x_{1:T}|x_0)}d{x_{1:T}} \\
 >&= \int{\ln{\frac{p(x_T)}{q(x_T|x_{T-1})}}}q(x_T|x_{T-1})dx_{T-1,T} \underbrace{\int{\prod_{t=1}^{T-1}q(x_t|x_{t-1})}dx_{1:T-2}}_{积分归一性:q(x_{T-1}|x_0)} \\
 >&= \int{\ln{\frac{p(x_T)}{q(x_T|x_{T-1})}}}q(x_T|x_{T-1})q(x_{T-1}|x_0)dx_{T-1,T}\\
 >&= \int{\ln{\frac{p(x_T)}{q(x_T|x_{T-1})}}}q(x_{T-1},x_{T}|x_0)dx_{T-1,T}\\
 >&= \mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] 
->\end{align}
+>\end{aligned}
 >$$
 >
 >$$
->\begin{align}
+>\begin{aligned}
 >\mathbb{E}_{q(x_{1:T}|x_0)}[{\sum_{t=1}^{T-1}{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}}] &= \sum_{t=1}^{T-1}\int{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}q(x_{1:T}|x_0)}d_{x_{1:T}} \\
 >&= \sum_{t=1}^{T-1}\int{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}\prod_{k=1}^Tq(x_{k-1}|x_k)dx_{1:T}\\
 >&= \sum_{t=1}^{T-1}\int{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}q(x_{t}|x_{t-1})q(x_{t+1}|x_{t})d{x_{t-1},x_{t},x_{t+1}} \int{\prod_1^{t}}
->\end{align}
+>\end{aligned}
 >$$
 >
 >接着来看最后ELBO的三个式子：

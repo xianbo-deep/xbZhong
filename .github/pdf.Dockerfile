@@ -23,8 +23,11 @@ RUN apt-get update && apt-get install -y \
 
 # 2.  升级：手动安装最新版 Pandoc (这里使用 v3.1.13 作为示例，请用你希望的版本)
 # 注意：v3.x 版本已支持 --highlight-style=github
-RUN wget https://github.com/jgm/pandoc/releases/download/3.1.13/pandoc-3.1.13-1-amd64.deb -O pandoc.deb \
-    # 安装 .deb 包，并使用 apt-get install -f 修复依赖
+RUN echo "FORCE_BUILD_PANDOC_V=20251124" 
+# -------------------------------------------------------------------
+
+RUN PANDOC_VERSION="3.1.13" && \
+    wget https://github.com/jgm/pandoc/releases/download/$PANDOC_VERSION/pandoc-${PANDOC_VERSION}-1-amd64.deb -O pandoc.deb \
     && dpkg -i pandoc.deb \
     && apt-get install -f -y \
     && rm pandoc.deb

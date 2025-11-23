@@ -1,45 +1,45 @@
 name: 文章PDF生成
 
 on:
-    schedule:
-        - cron: '0 0 * * 1'
-    workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'  # 每周一零点
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-    Generate-Artical-PDF:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repo
-              uses: actions/checkout@v3
+  Generate-Artical-PDF:
+    runs-on: ubuntu-latest
 
-            - name: Install dependencies
-              run: |
-                npm install -g baileyjm02/markdown-to-pdf
-                sudo apt-get update && sudo apt-get install -y jq
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
-            - name: Generate PDFS and Mapping.json
-              run: bash scripts/generate_pdf.sh
+      - name: Install dependencies
+        run: |
+          npm install -g baileyjm02/markdown-to-pdf
+          sudo apt-get update && sudo apt-get install -y jq
 
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: '3.x'
+      - name: Generate PDFs and Mapping.json
+        run: bash scripts/generate_pdf.sh
 
-            - name: Generate Email HTML
-              run: python scripts/pdf-json2email.py
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-            - name: Send email
-              uses: dawidd6/action-send-mail@v3
-              with:
-                server_address: smtp.qq.com
-                server_port: 465
-                username: ${{ secrets.MAIL_USERNAME }}
-                password: ${{ secrets.MAIL_PASSWORD }}
-                subject: "博客PDF更新报告"
-                to: "2396768163@qq.com"
-                from: "Github Action <${{ secrets.MAIL_USERNAME }}>"
-                html_body: file://email.html
-                
+      - name: Generate Email HTML
+        run: python scripts/pdf-json2email.py
+
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.qq.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "博客PDF更新报告"
+          to: "2396768163@qq.com"
+          from: "Github Action <${{ secrets.MAIL_USERNAME }}>"
+          html_body: file://email.html

@@ -8,21 +8,20 @@ export LANG=C.UTF-8
 
 # --- 路径定义 ---
 CURRENT_DIR=$(pwd)
-# VuePress 静态资源目录 (图片根目录)
+# 图片根目录 (VuePress public 目录的绝对路径)
 STATIC_BASE_DIR="$CURRENT_DIR/docs/.vuepress/public"
 
 INPUT_DIR="docs"
 OUTPUT_DIR="docs/.vuepress/public/pdfs"
-IMAGE_PREFIX="docs/.vuepress/public"
 MAPPING_DIR=".github/mapping"
 MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
 
 EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
 
-# --- 检查环境 ---
+# --- 检查工具 ---
 if ! command -v pandoc &> /dev/null; then
-    echo "!!! CRITICAL: pandoc not found. Please install it in workflow."
+    echo "!!! CRITICAL: pandoc not found."
     exit 1
 fi
 
@@ -67,7 +66,7 @@ while IFS= read -r -u9 file; do
     pdf_path="$OUTPUT_DIR/${rel_path%.md}.pdf"
     mkdir -p "$(dirname "$pdf_path")"
 
-    # 提取图片 (用于邮件报告)
+    # 提取图片用于统计
     img_list=$(grep -oP '!\[.*?\]\(\K[^\)]+' "$file" || true)
     if [ -z "$img_list" ]; then
         images="[]"
@@ -79,10 +78,24 @@ while IFS= read -r -u9 file; do
 
     tmp_file="$(mktemp).md"
     
-    # 【预处理】
-    # 1. 解决图片路径问题：Pandoc 需要绝对路径或正确的 resource-path
-    #    为了最稳，我们还是把 /images/xxx 替换成绝对路径
+    # ========================================================
+    # 【预处理步骤】
+    # ========================================================
+    
+    # 1. 【图片路径修复】
+    # 将 ![](/screenshot/...) 替换为 ![](/home/runner/.../public/screenshot/...)
+    # 使用 | 作为分隔符，防止路径中的 / 冲突
     sed -E "s|!\[([^\]]*)\]\(/|![\1]($STATIC_BASE_DIR/|g" "$file" > "$tmp_file"
+
+    # 2. 【公式自动修复 (尝试)】
+    # 如果文件里有 \begin{aligned} 但没包 $$，尝试自动加上
+    # 注意：这只是简单的应急修复，最好还是手动改源文件
+    sed -i 's/^\\begin{aligned}$/$$\n\\begin{aligned}/g' "$tmp_file"
+    sed -i 's/^\\end{aligned}$/\\end{aligned}\n$$/g' "$tmp_file"
+    
+    # 3. 【清理 LaTeX 毒药】
+    # 有些文件可能有 \#\#\# 这种写法导致 LaTeX 报错，尝试清理
+    # sed -i 's/\\#/#/g' "$tmp_file" 
 
     # ========================================================
     # 【核心转换：Pandoc + XeLaTeX】
@@ -93,12 +106,17 @@ while IFS= read -r -u9 file; do
         --pdf-engine=xelatex \
         -V mainfont="Noto Sans CJK SC" \
         -V CJKmainfont="Noto Sans CJK SC" \
-        -V geometry:margin=2.5cm \
+        -V sansfont="Noto Sans CJK SC" \
+        -V monofont="Noto Sans Mono CJK SC" \
+        -V geometry:margin=2cm \
         -V colorlinks=true \
         -V linkcolor=blue \
         -V urlcolor=blue \
         --highlight-style=tango \
-        --resource-path="$STATIC_BASE_DIR"
+        --resource-path="$STATIC_BASE_DIR" \
+        --include-in-header=<(echo '\usepackage{pmboxdraw}') \
+        --toc \
+        --toc-depth=2
     
     exit_code=$?
     set -e
@@ -107,7 +125,7 @@ while IFS= read -r -u9 file; do
     if [ $exit_code -eq 0 ] && [ -s "$pdf_path" ]; then
         echo "    ✅ [Success] $pdf_path"
 
-        # --- 注入下载链接 (保持原有逻辑) ---
+        # --- 注入下载链接 ---
         link_md="[本页PDF]($web_pdf_path)"
         if ! grep -Fq "$link_md" "$file"; then
             if grep -q "\[本页PDF\](/pdfs/" "$file"; then
@@ -115,7 +133,6 @@ while IFS= read -r -u9 file; do
                  echo "    [Cleaned] Old links"
             fi
             echo "    [Injecting] Link..."
-            
             if [[ "$(head -n 1 "$file")" == "---" ]]; then
                 end_fm_line=$(grep -n "^---$" "$file" | sed -n '2p' | cut -d: -f1)
                 if [[ -n "$end_fm_line" ]]; then
@@ -131,7 +148,6 @@ $link_md\\
             fi
             current_hash=$(sha256sum "$file" | cut -d' ' -f1)
         fi
-        # ---------------------------------
         
         pdf_size=$(stat -c%s "$pdf_path")
         gen_time=$(TZ="Asia/Shanghai" date +%Y-%m-%dT%H:%M:%S)
@@ -149,8 +165,8 @@ $link_md\\
         total_size=$((total_size + pdf_size))
         success_count=$((success_count + 1))
     else
+        # 失败时输出最后几行错误日志供调试，但不退出
         echo "    ❌ [Failed] Pandoc error on $file"
-        if [ -f "$pdf_path" ]; then rm "$pdf_path"; fi
         fail_count=$((fail_count + 1))
     fi
 

@@ -5,7 +5,7 @@ isOriginal: true
 article: true
 category: primer
 timeline: true
-icon: carbon:machine-learning
+icon: "carbon:machine-learning"
 date: 2024-02-18
 ---
 

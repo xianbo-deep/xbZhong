@@ -67,10 +67,10 @@ $$
 也就是对于每个$x$，我们对$L(y,f(\vec{x}))P(y|\vec{x})$进行最小化
 $$
 \begin{aligned}
-f(x) &= \argmin_{y\in Y}{\sum_{k=1}^KL(c_k,y)P(c_k|X=x)}\\
-&= \argmin_{y\in Y}{\sum_{k=1}^KP(y\not ={c_k}|X= x)} \\
-&= \argmin_{y\in Y}({1 - P(y={c_k}|X= x)}) \quad \text{所有概率和为1，等价为1减去预测正确的概率}\\
-&= \argmax_{y\in Y}{P(y ={c_k}|X= x)} \\
+f(x) &= argmin_{y\in Y}{\sum_{k=1}^KL(c_k,y)P(c_k|X=x)}\\
+&= argmin_{y\in Y}{\sum_{k=1}^KP(y\not ={c_k}|X= x)} \\
+&= argmin_{y\in Y}({1 - P(y={c_k}|X= x)}) \quad \text{所有概率和为1，等价为1减去预测正确的概率}\\
+&= argmax_{y\in Y}{P(y ={c_k}|X= x)} \\
 \end{aligned}
 $$
 

@@ -19,6 +19,11 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
+        
+      - name: Install Fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk fonts-wqy-microhei fonts-firacode
 
       - name: Generate PDFs and Mapping.json
         run: bash .github/scripts/incremental-pdf.sh

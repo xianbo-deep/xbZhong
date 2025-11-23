@@ -26,9 +26,11 @@ jobs:
           # 安装 pandoc
           sudo apt-get install -y pandoc
           # 安装 XeLaTeX 引擎和中文语言包 (比完整版 texlive 小很多)
-          sudo apt-get install -y texlive-xetex texlive-lang-chinese texlive-fonts-recommended
+          sudo apt-get install -y texlive-xetex texlive-lang-chinese texlive-fonts-recommended texlive-latex-extra
           # 安装中文字体 (思源黑体)
           sudo apt-get install -y fonts-noto-cjk
+          
+          
 
       - name: Generate PDFs and Mapping.json
         run: bash .github/scripts/incremental-pdf.sh

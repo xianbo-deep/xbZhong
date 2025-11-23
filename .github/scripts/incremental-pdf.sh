@@ -8,7 +8,7 @@ export LANG=C.UTF-8
 
 # --- 路径定义 ---
 CURRENT_DIR=$(pwd)
-# 图片根目录 (VuePress public 目录的绝对路径)
+# 图片根目录
 STATIC_BASE_DIR="$CURRENT_DIR/docs/.vuepress/public"
 
 INPUT_DIR="docs"
@@ -35,8 +35,62 @@ success_count=0
 fail_count=0
 total_size=0
 
-echo ">>> Start scanning (Pandoc Mode)..."
-echo ">>> Static assets base directory: $STATIC_BASE_DIR"
+# ========================================================
+# 【关键】生成 Typora 风格的 LaTeX 样式头文件
+# ========================================================
+STYLE_FILE="typora-style.tex"
+cat <<EOF > "$STYLE_FILE"
+% 1. 设置代码块背景色 (浅灰)
+\usepackage{xcolor}
+\definecolor{codebg}{RGB}{248,248,248} % 接近 Typora/GitHub 的背景色
+\usepackage{framed}
+\definecolor{shadecolor}{named}{codebg}
+
+% 重定义 Pandoc 的 Shaded 环境，增加背景色框
+\let\oldShaded\Shaded
+\let\endoldShaded\endShaded
+\renewenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+
+% 2. 代码自动换行 (解决代码太长不换行的问题)
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+
+% 3. 列表样式优化 (强制使用圆点)
+\usepackage{enumitem}
+\setlist[itemize,1]{label=\textbullet}
+\setlist[itemize,2]{label=\textbullet}
+\setlist[itemize,3]{label=\textbullet}
+
+% 4. Typora 风格排版 (段落间距，无缩进)
+\usepackage[parfill]{parskip}
+\linespread{1.15} % 行间距稍微大一点点
+
+% 5. 链接颜色 (Typora 蓝)
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=[rgb]{0.0, 0.3, 0.8},
+  urlcolor=[rgb]{0.0, 0.3, 0.8}
+}
+
+% 6. 表格样式优化
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+EOF
+
+echo ">>> Start scanning (Pandoc + Typora Style)..."
+echo ">>> Static Asset Path: $STATIC_BASE_DIR"
 
 # 遍历文件
 while IFS= read -r -u9 file; do
@@ -66,7 +120,7 @@ while IFS= read -r -u9 file; do
     pdf_path="$OUTPUT_DIR/${rel_path%.md}.pdf"
     mkdir -p "$(dirname "$pdf_path")"
 
-    # 提取图片用于统计
+    # 提取图片列表
     img_list=$(grep -oP '!\[.*?\]\(\K[^\)]+' "$file" || true)
     if [ -z "$img_list" ]; then
         images="[]"
@@ -77,28 +131,24 @@ while IFS= read -r -u9 file; do
     fi
 
     tmp_file="$(mktemp).md"
-    
-    # ========================================================
-    # 【预处理步骤】
-    # ========================================================
-    
-    # 1. 【图片路径修复】
-    # 将 ![](/screenshot/...) 替换为 ![](/home/runner/.../public/screenshot/...)
-    # 使用 | 作为分隔符，防止路径中的 / 冲突
-    sed -E "s|!\[([^\]]*)\]\(/|![\1]($STATIC_BASE_DIR/|g" "$file" > "$tmp_file"
 
-    # 2. 【公式自动修复 (尝试)】
-    # 如果文件里有 \begin{aligned} 但没包 $$，尝试自动加上
-    # 注意：这只是简单的应急修复，最好还是手动改源文件
+    # --- 预处理 ---
+    # 1. 图片路径修复 (替换为绝对路径)
+    sed -E "s|!\[([^]]*)\]\(/|![\1]($STATIC_BASE_DIR/|g" "$file" > "$tmp_file"
+
+    # 2. 自动包裹公式 (简单的应急修复)
     sed -i 's/^\\begin{aligned}$/$$\n\\begin{aligned}/g' "$tmp_file"
     sed -i 's/^\\end{aligned}$/\\end{aligned}\n$$/g' "$tmp_file"
-    
-    # 3. 【清理 LaTeX 毒药】
-    # 有些文件可能有 \#\#\# 这种写法导致 LaTeX 报错，尝试清理
-    # sed -i 's/\\#/#/g' "$tmp_file" 
+
+    # 3. 修复 YAML 冒号问题 (针对 ML.md)
+    if [[ "$file" == *"ML.md"* ]]; then
+        sed -i 's/icon: carbon:machine-learning/icon: "carbon:machine-learning"/g' "$tmp_file"
+    fi
 
     # ========================================================
-    # 【核心转换：Pandoc + XeLaTeX】
+    # 【核心转换】
+    # 增加 --include-in-header 引用刚才生成的样式文件
+    # 增加 --highlight-style=pygments (最接近 Typora 的高亮)
     # ========================================================
     set +e
     pandoc "$tmp_file" \
@@ -109,12 +159,9 @@ while IFS= read -r -u9 file; do
         -V sansfont="Noto Sans CJK SC" \
         -V monofont="Noto Sans Mono CJK SC" \
         -V geometry:margin=2cm \
-        -V colorlinks=true \
-        -V linkcolor=blue \
-        -V urlcolor=blue \
-        --highlight-style=tango \
+        --highlight-style=pygments \
         --resource-path="$STATIC_BASE_DIR" \
-        --include-in-header=<(echo '\usepackage{pmboxdraw}') \
+        --include-in-header="$STYLE_FILE" \
         --toc \
         --toc-depth=2
     
@@ -165,12 +212,14 @@ $link_md\\
         total_size=$((total_size + pdf_size))
         success_count=$((success_count + 1))
     else
-        # 失败时输出最后几行错误日志供调试，但不退出
         echo "    ❌ [Failed] Pandoc error on $file"
         fail_count=$((fail_count + 1))
     fi
 
 done 9< <(find "$INPUT_DIR" -type f -name "*.md" | sort)
+
+# 清理样式临时文件
+rm "$STYLE_FILE"
 
 jq --arg total_files "$total_files" --arg total_size "$total_size" \
    '.summary = {total_files: ($total_files|tonumber), total_size: ($total_size|tonumber)}' \

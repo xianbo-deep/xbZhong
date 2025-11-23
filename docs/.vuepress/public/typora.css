@@ -414,3 +414,32 @@ header, .context-menu, .megamenu-content, footer{
     background-color: #f5f8fa;
     background-image: linear-gradient( 180deg , hsla(0, 0%, 100%, 0.8), hsla(0, 0%, 100%, 0)); 
 }
+
+/* 1. 强制使用 Docker 容器内的中文字体 */
+body {
+    font-family: "Noto Sans CJK SC", "Noto Sans CJK", sans-serif !important;
+}
+
+/* 2. 修复代码块字体 */
+pre, code, kbd, samp, .sourceCode {
+    font-family: "Noto Sans Mono CJK SC", monospace !important;
+}
+
+/* 3. 修复图片“爆炸”问题 (强制限制在A4纸宽度内) */
+img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    margin: 1em auto;
+}
+
+/* 4. 修复数学公式溢出 */
+mjx-container {
+    max-width: 100% !important;
+    overflow-x: auto;
+}
+
+/* 5. 隐藏 Pandoc 生成的无关元素 */
+@media print {
+    a[href]:after { content: none !important; } /* 不显示链接的 URL 后缀 */
+}

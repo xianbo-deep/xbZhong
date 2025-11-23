@@ -87,31 +87,45 @@ while IFS= read -r -u9 file; do
     sed -E "s|!\[([^]]*)\]\(/|![\1]($STATIC_BASE_DIR/|g" "$file" > "$tmp_file"
 
     # ========================================================
-    # 【核心转换】Markdown -> HTML -> PDF (Chrome)
+    # 【核心转换】Markdown -> HTML -> PDF (Typora 完美复刻版)
     # ========================================================
     set +e
     
-    # 1. 转 HTML
+    # 1. 转 HTML (关键修正)
+    # --mathjax: 注入 MathJax CDN，让公式能渲染
+    # --highlight-style=github: 使用 Pandoc 内置的 GitHub 代码高亮配色
+    # -V: 注入字体设置
     pandoc "$tmp_file" \
         -o "$html_file" \
         --standalone \
         --css="$CSS_FILE" \
         --resource-path="$STATIC_BASE_DIR" \
         --metadata pagetitle="$(basename "$file" .md)" \
-        -V lang=zh-CN
-    
+        --highlight-style=github \
+        --mathjax="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" \
+        -V lang=zh-CN \
+        -V mainfont="Noto Sans CJK SC"
+
+    pandoc_exit_code=$?
+
     # 2. Chrome 打印
-    # 注意：--no-sandbox 是在 Docker 中运行 Chrome 必须的参数
-    chromium \
-        --headless \
-        --disable-gpu \
-        --no-sandbox \
-        --print-to-pdf="$pdf_path" \
-        --no-pdf-header-footer \
-        --virtual-time-budget=5000 \
-        "file://$html_file"
+    if [ $pandoc_exit_code -eq 0 ]; then
+        # --virtual-time-budget=10000: ⚠️ 增加到 10秒
+        # 这是为了等待 MathJax JS 脚本下载并执行完毕，否则公式还是源代码
+        chromium \
+            --headless \
+            --disable-gpu \
+            --no-sandbox \
+            --print-to-pdf="$pdf_path" \
+            --no-pdf-header-footer \
+            --virtual-time-budget=10000 \
+            "file://$html_file"
+        
+        exit_code=$?
+    else
+        exit_code=1
+    fi
     
-    exit_code=$?
     set -e
     rm "$tmp_file" "$html_file"
 

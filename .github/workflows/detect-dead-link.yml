@@ -35,22 +35,30 @@ jobs:
           touch final_errors.txt
           touch formatted_list.txt
 
+          # -------------------------------------------------------------------
+          # 🛠️ 修改点 1：指定新的配置文件路径进行 sed 替换
+          # -------------------------------------------------------------------
+          CONFIG_FILE=".github/config/.markdown-link-check.json"
+
           # 替换占位符为真实的工作路径
-          sed -i "s|__WORK_DIR__|$GITHUB_WORKSPACE|g" .markdown-link-check.json
+          sed -i "s|__WORK_DIR__|$GITHUB_WORKSPACE|g" "$CONFIG_FILE"
 
 
           echo "开始扫描文件..."
 
           # 循环检测
           while read file; do
-            markdown-link-check "$file" -c .markdown-link-check.json -q >> raw_log.txt 2>&1 || true
+            # -----------------------------------------------------------------
+            # 🛠️ 修改点 2：在命令中通过 -c 指定新的配置文件路径
+            # -----------------------------------------------------------------
+            markdown-link-check "$file" -c "$CONFIG_FILE" -q >> raw_log.txt 2>&1 || true
           done < md_files.txt
 
           
           # 匹配包含 [✖] 符号或 ERROR 字眼的行
           grep -E "\[✖\]|ERROR" raw_log.txt > final_errors.txt || true
 
-          # 【修复点 3】根据过滤后的文件是否有内容来判断
+          # 根据过滤后的文件是否有内容来判断
           if [ -s final_errors.txt ]; then
             COLOR="#d9534f"  # 红色
             echo "Found dead links!"
@@ -70,7 +78,7 @@ jobs:
         run: |
           cp .github/template/deadlink-template.html email.html
           
-          # 插入列表 (使用 'r' 命令读取文件插入，最稳健的方法)
+          # 插入列表
           sed -i "/{{DEADLINK_LIST}}/r formatted_list.txt" email.html
           sed -i "/{{DEADLINK_LIST}}/d" email.html
           

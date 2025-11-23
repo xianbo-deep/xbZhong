@@ -1,18 +1,15 @@
 #!/bin/bash
-set -e # 任何命令失败就退出
-set -o pipefail # 管道命令中任何一个失败就退出
+set -e
+set -o pipefail
 
-# 1. 强制使用 UTF-8 (解决中文文件名乱码)
+# 1. 强制使用 UTF-8
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
 
-# --- 【关键路径定义】 ---
-# 获取当前工作目录的绝对路径
+# --- 路径定义 ---
 CURRENT_DIR=$(pwd)
-# 定义 VuePress 静态资源所在的绝对物理路径
-# md-to-pdf 将使用这个目录作为解析以 '/' 开头的图片路径的根目录
+# VuePress 静态资源目录 (图片根目录)
 STATIC_BASE_DIR="$CURRENT_DIR/docs/.vuepress/public"
-# -----------------------
 
 INPUT_DIR="docs"
 OUTPUT_DIR="docs/.vuepress/public/pdfs"
@@ -20,17 +17,12 @@ IMAGE_PREFIX="docs/.vuepress/public"
 MAPPING_DIR=".github/mapping"
 MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
-# 不生成PDF的目录和文件
+
 EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
 
-# --- 准备工作 ---
-echo ">>> Installing md-to-pdf locally..."
-npm install md-to-pdf --no-save --silent
-
-MTP_CMD="./node_modules/.bin/md-to-pdf"
-
-if [ ! -f "$MTP_CMD" ]; then
-    echo "!!! CRITICAL: md-to-pdf executable not found at $MTP_CMD"
+# --- 检查环境 ---
+if ! command -v pandoc &> /dev/null; then
+    echo "!!! CRITICAL: pandoc not found. Please install it in workflow."
     exit 1
 fi
 
@@ -44,10 +36,10 @@ success_count=0
 fail_count=0
 total_size=0
 
-echo ">>> Start scanning..."
-echo ">>> Static assets base directory set to: $STATIC_BASE_DIR"
+echo ">>> Start scanning (Pandoc Mode)..."
+echo ">>> Static assets base directory: $STATIC_BASE_DIR"
 
-# 使用 FD 9 防止循环被 stdin 干扰，并加上 sort 确保顺序
+# 遍历文件
 while IFS= read -r -u9 file; do
     if [[ "$(basename "$file")" == "README.md" ]]; then continue; fi
 
@@ -75,75 +67,55 @@ while IFS= read -r -u9 file; do
     pdf_path="$OUTPUT_DIR/${rel_path%.md}.pdf"
     mkdir -p "$(dirname "$pdf_path")"
 
-    # 提取图片元数据 (用于 JSON)
+    # 提取图片 (用于邮件报告)
     img_list=$(grep -oP '!\[.*?\]\(\K[^\)]+' "$file" || true)
     if [ -z "$img_list" ]; then
         images="[]"
     else
-        # 简单提取，后续由 basedir 自动处理
         images=$(echo "$img_list" | while read -r img; do
             echo "$img"
         done | jq -R -s -c 'split("\n")[:-1]')
     fi
 
     tmp_file="$(mktemp).md"
-    cp "$file" "$tmp_file"
+    
+    # 【预处理】
+    # 1. 解决图片路径问题：Pandoc 需要绝对路径或正确的 resource-path
+    #    为了最稳，我们还是把 /images/xxx 替换成绝对路径
+    sed -E "s|!\[([^\]]*)\]\(/|![\1]($STATIC_BASE_DIR/|g" "$file" > "$tmp_file"
 
     # ========================================================
-    # 【核心修复：注入 MathJax 公式渲染引擎】
+    # 【核心转换：Pandoc + XeLaTeX】
     # ========================================================
-    # 向临时 Markdown 文件末尾追加 HTML 代码
-    # 1. 引入 MathJax CDN (使用 SVG 配置，无需本地字体)
-    # 2. 配置 MathJax 识别 $...$ 和 $$...$$
-    cat <<EOF >> "$tmp_file"
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_SVG"></script>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\\\(','\\\\)']],
-        displayMath: [['$$','$$'], ['\\\\[','\\\\]']],
-        processEscapes: true
-    },
-    SVG: { 
-        scale: 100, 
-        linebreaks: { automatic: true } 
-    }
-});
-</script>
-<style>
-/* 稍微调整一下公式的间距 */
-.MathJax_SVG_Display { margin: 1em 0; }
-</style>
-EOF
-    # ========================================================
-
-    # --- 容错转换 + 美化 + 公式支持 ---
-    # 新增 --gray-matter-options 'null': 解锁 JS 执行权限，让 MathJax 跑起来
-    set +e 
-    cat "$tmp_file" | "$MTP_CMD" \
-        --basedir "$STATIC_BASE_DIR" \
-        --stylesheet "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" \
-        --body-class "markdown-body" \
-        --gray-matter-options 'null' \
-        --pdf-options '{"format": "A4", "margin": "20mm", "printBackground": true}' \
-        --launch-options '{"args": ["--no-sandbox", "--disable-setuid-sandbox"]}' \
-        > "$pdf_path" 2>/dev/null
+    set +e
+    pandoc "$tmp_file" \
+        -o "$pdf_path" \
+        --pdf-engine=xelatex \
+        -V mainfont="Noto Sans CJK SC" \
+        -V CJKmainfont="Noto Sans CJK SC" \
+        -V geometry:margin=2.5cm \
+        -V colorlinks=true \
+        -V linkcolor=blue \
+        -V urlcolor=blue \
+        --highlight-style=tango \
+        --resource-path="$STATIC_BASE_DIR"
+    
     exit_code=$?
-    set -e 
+    set -e
     rm "$tmp_file"
 
     if [ $exit_code -eq 0 ] && [ -s "$pdf_path" ]; then
-        echo "    [Success] $pdf_path"
+        echo "    ✅ [Success] $pdf_path"
 
-        # 插入链接逻辑 (同前)
+        # --- 注入下载链接 (保持原有逻辑) ---
         link_md="[本页PDF]($web_pdf_path)"
         if ! grep -Fq "$link_md" "$file"; then
             if grep -q "\[本页PDF\](/pdfs/" "$file"; then
                  sed -i '/\[本页PDF\](\/pdfs\//d' "$file"
-                 echo "    [Cleaned] Removed stale PDF links"
+                 echo "    [Cleaned] Old links"
             fi
-            echo "    [Injecting] PDF link into $file ..."
+            echo "    [Injecting] Link..."
+            
             if [[ "$(head -n 1 "$file")" == "---" ]]; then
                 end_fm_line=$(grep -n "^---$" "$file" | sed -n '2p' | cut -d: -f1)
                 if [[ -n "$end_fm_line" ]]; then
@@ -159,6 +131,7 @@ $link_md\\
             fi
             current_hash=$(sha256sum "$file" | cut -d' ' -f1)
         fi
+        # ---------------------------------
         
         pdf_size=$(stat -c%s "$pdf_path")
         gen_time=$(TZ="Asia/Shanghai" date +%Y-%m-%dT%H:%M:%S)
@@ -176,7 +149,7 @@ $link_md\\
         total_size=$((total_size + pdf_size))
         success_count=$((success_count + 1))
     else
-        echo "    [Failed] Could not convert $file"
+        echo "    ❌ [Failed] Pandoc error on $file"
         if [ -f "$pdf_path" ]; then rm "$pdf_path"; fi
         fail_count=$((fail_count + 1))
     fi

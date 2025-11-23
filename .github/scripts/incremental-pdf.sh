@@ -80,12 +80,13 @@ while read -r file; do
     tmp_file="$(mktemp).md"
     sed -E "s|!\[([^\]]*)\]\(/|![\1]($IMAGE_PREFIX/|g" "$file" > "$tmp_file"
 
-    # 修正点：去掉 npx，直接调用全局安装的 markdown-to-pdf
-    markdown-to-pdf "$tmp_file" \
+    # 使用 npx 临时执行 markdown-to-pdf，CI 环境也能找到
+    npx baileyjm02/markdown-to-pdf "$tmp_file" \
         --output_dir "$(dirname "$pdf_path")" \
         --build_pdf true \
         --build_html false \
         --launch_options '{"args": ["--no-sandbox"]}'
+
 
     # 处理生成后的文件名 (工具生成的通常是 临时文件名.pdf)
     gen_tmp_pdf="$(dirname "$pdf_path")/$(basename "$tmp_file" .md).pdf"

@@ -23,6 +23,26 @@ jobs:
       - name: Generate PDFs and Mapping.json
         run: bash .github/scripts/incremental-pdf.sh
 
+      - name: Commit and Push changes
+        run: |
+          配置 Git 用户信息
+          git config --global user.name 'xbzhong'
+          git config --global user.email '2396768163@qq.com'
+          
+          git add .github/mapping/mapping.json
+          git add docs/.vuepress/public/pdfs
+
+          # 检查是否有变更，有则提交
+          if [[ -n $(git status -s) ]]; then
+            echo "Changes detected, committing..."
+            # [skip ci] 很重要，防止 push 后再次触发 workflow 导致死循环
+            git commit -m "chore(pdf): update generated PDFs and mapping [skip ci]"
+            git push origin test
+          else
+            echo "No changes to commit."
+          fi
+
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:

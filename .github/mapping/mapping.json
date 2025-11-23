@@ -834,5 +834,29 @@
     "hash": "8d3b17bc69d42eac9bc6d8e21f721c3acae56822c19f8112e4d63964bae642fa",
     "size": "10661",
     "gen_time": "2025-11-23T19:43:11"
+  },
+  "docs/coding/正则表达式.md": {
+    "pdf": "docs/.vuepress/public/pdfs/coding/正则表达式.pdf",
+    "images": [],
+    "hash": "54c5520d52829e24559e6c796c4aff33bc48e46c4c5665b9a8c77ef8267c12f5",
+    "size": "54758",
+    "gen_time": "2025-11-23T20:30:27"
+  },
+  "docs/ds/Acwing.md": {
+    "pdf": "docs/.vuepress/public/pdfs/ds/Acwing.pdf",
+    "images": [
+      "/screenshot/ds/image-20250703102140742.png",
+      "/screenshot/ds/image-20250714111902028.png"
+    ],
+    "hash": "a344345bec7a3f3a72ff751f24a6edeb568845f01247f7b9f1e4b87a3cfe8677",
+    "size": "566966",
+    "gen_time": "2025-11-23T20:30:56"
+  },
+  "docs/resource/coursenote/ml.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ml.pdf",
+    "images": [],
+    "hash": "c0eb31bdb1ecb09c0bdea6eb526c01a1af04f83ab312cf63bf991c3801274f98",
+    "size": "107383",
+    "gen_time": "2025-11-23T20:31:05"
   }
 }

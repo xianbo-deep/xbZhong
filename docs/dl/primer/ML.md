@@ -1,6 +1,6 @@
 ---
-title: 机器学习
-author: xbZhong
+title: "机器学习"
+author: "xbZhong"
 isOriginal: true
 article: true
 category: primer

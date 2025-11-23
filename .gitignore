@@ -5,6 +5,8 @@ docs/.vuepress/.temp/
 docs/.vuepress/dist/
 .github/workflows/send-comment-email.yml
 .github/workflows/send-reaction-email.yml
+.github/workflows/generate-discussion-report.yml
 .github/template/comment_template.html
 .github/template/reaction_template.html
+.github/template/discussion-report-template.html
 psw.yml

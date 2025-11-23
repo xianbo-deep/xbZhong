@@ -466,18 +466,18 @@ $$
 \underbrace{\begin{bmatrix}
 PE_{(pos + \Delta,2i)} \\
 PE_{(pos + \Delta,2i+1)}
-\end{bmatrix}}_{位置(pos + \Delta)处的编码}
+\end{bmatrix}}_{\text{位置(pos + \Delta)处的编码}}
 =
 \underbrace{
 \begin{bmatrix}
 cos(\Delta \theta_i) & sin(\Delta \theta_i)\\
 -sin(\Delta \theta_i) & cos(\Delta \theta_i)
-\end{bmatrix}}_{相对位置信息}
+\end{bmatrix}}_{\text{相对位置信息}}
 \underbrace{
 \begin{bmatrix}
 PE_{(pos ,2i)} \\
 PE_{(pos ,2i+1)}
-\end{bmatrix}}_{位置pos处的编码}
+\end{bmatrix}}_{\text{位置pos处的编码}}
 $$
 
 其中：$\Delta$为绝对位置之差，$\theta_i = \frac{1}{10000^{\frac{2i}{d_{model}}}}$
@@ -488,7 +488,7 @@ $$
 \begin{bmatrix}
 cos(\Delta \theta_i) & sin(\Delta \theta_i)\\
 -sin(\Delta \theta_i) & cos(\Delta \theta_i)
-\end{bmatrix}}_{顺时针旋转\Delta\theta_i}
+\end{bmatrix}}_{\text{顺时针旋转\Delta\theta_i}}
 $$
 
 
@@ -561,15 +561,15 @@ $$
 二者做内积
 $$
 q_i^Tk_j = (x_i+p_i)^TW_q^TW_k(x_j+p_j)\\
-=\underbrace{x_i^TW_q^TW_kx_j}_{输入向量内积}+\underbrace{x_i^TW_q^TW_kp_j+p_i^TW_q^TW_kx_j}_{输入-位置交互项}+\underbrace{p_i^TW_q^TW_kp_j}_{位置编码内积}
+=\underbrace{x_i^TW_q^TW_kx_j}_{\text{输入向量内积}}+\underbrace{x_i^TW_q^TW_kp_j+p_i^TW_q^TW_kx_j}_{\text{输入-位置交互项}}+\underbrace{p_i^TW_q^TW_kp_j}_{\text{位置编码内积}}
 $$
 假设位置信息和输入信息**相互独立**，上式可化成
 
 
 $$
 q_i^Tk_j =x_i^TW_q^TW_kx_j +
-\underbrace{p_i^TW_q^TW_kp_j}_{相对位置项}
-\\ = x_i^TW_q^TW_kx_j +\underbrace{\beta_{i-j}}_{相对位置项}
+\underbrace{p_i^TW_q^TW_kp_j}_{\text{相对位置项}}
+\\ = x_i^TW_q^TW_kx_j +\underbrace{\beta_{i-j}}_{\text{相对位置项}}
 $$
 而$\beta_{i-j}$是偏置项，也就是**相对位置编码**，在多头注意力中，每个注意力头$head_h$都会分配一**组**偏置项$\beta_{i-j}^h$(why??/)
 

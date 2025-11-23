@@ -269,7 +269,6 @@ Q_2 =
 \begin{bmatrix}
 q^{i,2}\\ q^{j,2}\\q^{m,2}\\q^{n,2}
 \end{bmatrix} \\
-
 \end{aligned}
 $$
 
@@ -466,7 +465,7 @@ $$
 \underbrace{\begin{bmatrix}
 PE_{(pos + \Delta,2i)} \\
 PE_{(pos + \Delta,2i+1)}
-\end{bmatrix}}_{\text{位置(pos + \Delta)处的编码}}
+\end{bmatrix}}_{\text{位置}(\text{pos} + \Delta)\text{处的编码}}
 =
 \underbrace{
 \begin{bmatrix}
@@ -488,11 +487,11 @@ $$
 \begin{bmatrix}
 cos(\Delta \theta_i) & sin(\Delta \theta_i)\\
 -sin(\Delta \theta_i) & cos(\Delta \theta_i)
-\end{bmatrix}}_{\text{顺时针旋转\Delta\theta_i}}
+\end{bmatrix}}_{\text{顺时针旋转}\Delta\theta_i}
 $$
 
 
-是一个旋转矩阵，表示顺时针旋转$\Delta\theta_i$**（与具体的位置pos无关）**
+是一个旋转矩阵，表示顺时针旋转$\Delta \theta_i$ **（与具体的位置pos无关）**
 
 ![image-20250701224305593](/screenshot/dl/image-20250701224305593.png)
 

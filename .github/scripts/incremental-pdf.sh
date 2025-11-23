@@ -1,13 +1,13 @@
 #!/bin/bash
 set -euo pipefail
-
+set -x
 INPUT_DIR="docs"
 OUTPUT_DIR="docs/.vuepress/public/pdfs"
 IMAGE_PREFIX="docs/.vuepress/public"
 MAPPING_DIR=".github/mapping"
 MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
-
+EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
 # 增加 --no-sandbox 参数防止 CI 环境报错
 INPUT_ARGS="--launch_options '{\"args\": [\"--no-sandbox\"]}'"
 
@@ -31,6 +31,24 @@ total_size=0
 
 # 修改点：使用进程替换 < <() 替代管道 |，确保变量在循环后保留
 while read -r file; do
+    # 判断是否为README.md
+    if [[ "$(basename "$file")" == "README.md" ]]; then
+        echo "Skipping $file (README.md)"
+        continue
+    fi
+    # 判断是否在排除列表
+    skip=false
+    for e in "${EXCLUDE[@]}"; do
+        if [[ "$file" == $e ]]; then
+            skip=true
+            break
+        fi
+    done
+    if [ "$skip" = true ]; then
+        echo "Skipping $file (excluded)"
+        continue
+    fi
+
     # 判断文件是否被修改
     last_hash=$(jq -r --arg key "$file" '.[$key].hash // ""' "$MAP_FILE")
     current_hash=$(sha256sum "$file" | cut -d' ' -f1)

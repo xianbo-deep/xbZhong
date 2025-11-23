@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
-set -x
+# set -x # 调试时可开启，平时建议注释掉以免日志过多
+
 INPUT_DIR="docs"
 OUTPUT_DIR="docs/.vuepress/public/pdfs"
 IMAGE_PREFIX="docs/.vuepress/public"
@@ -8,6 +9,7 @@ MAPPING_DIR=".github/mapping"
 MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
 EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
+
 # 增加 --no-sandbox 参数防止 CI 环境报错
 INPUT_ARGS="--launch_options '{\"args\": [\"--no-sandbox\"]}'"
 
@@ -29,9 +31,9 @@ echo "{}" > "$TEMP_UPDATE_FILE"
 total_files=0
 total_size=0
 
-# 修改点：使用进程替换 < <() 替代管道 |，确保变量在循环后保留
+# 使用进程替换 < <() 遍历文件
 while read -r file; do
-    # 判断是否为README.md
+    # 判断是否为 README.md
     if [[ "$(basename "$file")" == "README.md" ]]; then
         echo "Skipping $file (README.md)"
         continue
@@ -66,26 +68,29 @@ while read -r file; do
     mkdir -p "$(dirname "$pdf_path")"
 
     # 将md文件的图片转换成json数组
-    images=$(grep -oP '!\[.*?\]\(\K[^\)]+\)' "$file" | while read -r img; do
+    # 修正点：移除了正则末尾的 '\)'，防止文件名包含右括号
+    images=$(grep -oP '!\[.*?\]\(\K[^\)]+' "$file" | while read -r img; do
         echo "$IMAGE_PREFIX/$img"
     done | jq -R -s -c 'split("\n")[:-1]')
 
-    # 替换md文件中的图片路径 (修改点：添加 .md 后缀)
+    # 替换md文件中的图片路径
     tmp_file="$(mktemp).md"
     sed -E "s|!\[([^\]]*)\]\(/|![\1]($IMAGE_PREFIX/|g" "$file" > "$tmp_file"
 
-    # 修改点：去掉 npx，直接调用，并处理生成后的文件名
-    npx baileyjm02/markdown-to-pdf "$tmp_file" \
+    # 修正点：去掉 npx，直接调用全局安装的 markdown-to-pdf
+    markdown-to-pdf "$tmp_file" \
         --output_dir "$(dirname "$pdf_path")" \
         --build_pdf true \
         --build_html false \
         --launch_options '{"args": ["--no-sandbox"]}'
 
-
-    # 修改点：工具生成的是临时文件名.pdf，需要重命名为目标 pdf_path
+    # 处理生成后的文件名 (工具生成的通常是 临时文件名.pdf)
     gen_tmp_pdf="$(dirname "$pdf_path")/$(basename "$tmp_file" .md).pdf"
+    
     if [ -f "$gen_tmp_pdf" ]; then
         mv "$gen_tmp_pdf" "$pdf_path"
+    else
+        echo "Error: PDF generation failed for $file"
     fi
 
     rm "$tmp_file"

@@ -116,6 +116,9 @@ while IFS= read -r -u9 file; do
             --headless \
             --disable-gpu \
             --no-sandbox \
+            --disable-dev-shm-usage \
+            --disable-software-rasterizer \
+            --run-all-compositor-stages-before-draw \
             --print-to-pdf="$pdf_path" \
             --no-pdf-header-footer \
             --virtual-time-budget=10000 \

@@ -10,6 +10,9 @@ icon: devicon:linux
 date: 2025-08-26
 ---
 
+[本页PDF](/pdfs/dl/notes/Production.pdf)
+
+
 **阿里云镜像**：`-i https://mirrors.aliyun.com/pypi/simple/`
 
 `nvidia-smi`：针对N卡，查看GPU型号，显存使用情况，使用率等

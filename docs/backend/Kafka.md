@@ -8,6 +8,9 @@ timeline: true
 icon: skill-icons:kafka
 date: 2025-10-30
 ---
+
+[本页PDF](/pdfs/backend/Kafka.pdf)
+
 [Kafka原理文档](https://docs.confluent.io/kafka/overview.html)
 
 [Spring Kafka](https://docs.spring.io/spring-kafka/reference/index.html)

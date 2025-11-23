@@ -9,6 +9,9 @@ icon: mdi:github
 date: 2025-10-24
 ---
 
+[本页PDF](/pdfs/backend/GitHubActions.pdf)
+
+
 ## GithubAction
 
 Github提供的一个**持续集成与持续部署(CI/CD)平台**

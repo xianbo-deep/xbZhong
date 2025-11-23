@@ -8,6 +8,9 @@ timeline: true
 icon: devicon:python
 date: 2024-03-29
 ---
+
+[本页PDF](/pdfs/coding/Python.pdf)
+
 ## My_Note
 
 ### 操作系统

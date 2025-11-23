@@ -9,6 +9,9 @@ timeline: true
 icon: roentgen:transformer
 date: 2025-06-28
 ---
+
+[本页PDF](/pdfs/dl/llm/Transformer.pdf)
+
 ## Transformer
 
 是**Sequence to Sequence Model**的一种

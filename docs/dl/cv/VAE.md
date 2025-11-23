@@ -9,6 +9,9 @@ timeline: true
 icon: tabler:math
 date: 2025-06-20
 ---
+
+[本页PDF](/pdfs/dl/cv/VAE.pdf)
+
 ## VAE（Variational Autoencoder 变分自编码器）
 
 - 与**AE**结构相似，但是用了特殊技巧使得**VAE的decoder**对于一个**随机的向量**可以产生结果较好的图

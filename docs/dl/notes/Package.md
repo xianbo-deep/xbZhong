@@ -10,6 +10,9 @@ icon: material-symbols:note
 date: 2025-08-24
 ---
 
+[本页PDF](/pdfs/dl/notes/Package.pdf)
+
+
 如果碰到服务器无法访问外网情况，可设置环境变量
 
 - 在文件开始写入这两行代码，代表访问HG的镜像社区

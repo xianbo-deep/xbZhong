@@ -8,3 +8,6 @@ category: backend
 timeline: true
 icon: simple-icons:langchain
 ---
+
+[本页PDF](/pdfs/backend/LangChain4j.pdf)
+

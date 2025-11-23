@@ -8,6 +8,9 @@ timeline: true
 icon: material-symbols:adjust
 date: 2025-06-18
 ---
+
+[本页PDF](/pdfs/dl/finetune/Finetune.pdf)
+
 ## Finetune
 
 ### 1. 全参数微调(Full Fine-tuning)

@@ -9,6 +9,9 @@ timeline: true
 icon: lucide:network
 date: 2025-07-15
 ---
+
+[本页PDF](/pdfs/dl/cv/RNN.pdf)
+
 ## Recurrent Neural Network（RNN）
 
 **核心思想**

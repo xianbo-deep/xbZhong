@@ -8,6 +8,9 @@ category: backend
 timeline: true
 date: 2025-10-08
 ---
+
+[本页PDF](/pdfs/backend/SpringCloud.pdf)
+
 ## MybatisPlus
 
 对于`Mybaits`的增强和升级，两者之间是合作的关系

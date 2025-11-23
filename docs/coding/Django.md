@@ -8,6 +8,9 @@ timeline: true
 icon: material-icon-theme:django
 date: 2025-01-29
 ---
+
+[本页PDF](/pdfs/coding/Django.pdf)
+
 ## 项目结构
 
 1. `manage.py`：与项目交互的文件，一般在终端输入`python manage.py [子命令]`

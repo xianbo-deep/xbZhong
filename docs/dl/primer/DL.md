@@ -9,6 +9,9 @@ timeline: true
 icon: eos-icons:machine-learning
 date: 2024-01-18
 ---
+
+[本页PDF](/pdfs/dl/primer/DL.pdf)
+
 ## Linear Regression
 
 ### Gradient Descent

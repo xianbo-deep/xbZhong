@@ -8,6 +8,9 @@ timeline: true
 icon: logos:mysql
 date: 2024-10-29
 ---
+
+[本页PDF](/pdfs/coding/MySQL.pdf)
+
 ## 数据库
 
 ### 数据库管理系统(DBMS)

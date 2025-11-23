@@ -8,6 +8,9 @@ timeline: true
 icon: devicon:pandas
 date: 2024-08-19
 ---
+
+[本页PDF](/pdfs/coding/Pandas.pdf)
+
 ## 数据读取
 
 **常用类型的读取**

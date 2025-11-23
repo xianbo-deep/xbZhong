@@ -8,6 +8,9 @@ timeline: true
 icon: logos:javascript
 date: 2025-03-15
 ---
+
+[本页PDF](/pdfs/coding/Javascript.pdf)
+
 ## Javascript的使用方式
 
 - 行内式

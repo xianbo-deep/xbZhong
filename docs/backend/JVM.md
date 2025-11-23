@@ -9,6 +9,9 @@ timeline: true
 icon: eos-icons:virtual-guest
 date: 2025-09-08
 ---
+
+[本页PDF](/pdfs/backend/JVM.pdf)
+
 **java编译流程**
 
 - 由`javac` 把`.java` 文件编译成`.class`文件

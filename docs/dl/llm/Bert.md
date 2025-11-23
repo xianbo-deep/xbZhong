@@ -9,6 +9,9 @@ timeline: true
 icon: carbon:model
 date: 2025-07-29
 ---
+
+[本页PDF](/pdfs/dl/llm/Bert.pdf)
+
 ## Bert
 
 **架构**

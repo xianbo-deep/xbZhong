@@ -8,6 +8,9 @@ timeline: true
 icon: logos:seaborn
 date: 2024-04-11
 ---
+
+[本页PDF](/pdfs/coding/Seaborn.pdf)
+
 ## 导包
 
 `import seaborn as sns`

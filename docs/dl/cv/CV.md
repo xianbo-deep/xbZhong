@@ -9,6 +9,9 @@ icon: line-md:computer-twotone
 date: 2025-07-01
 ---
 
+[本页PDF](/pdfs/dl/cv/CV.pdf)
+
+
 
 ## Alexnet
 

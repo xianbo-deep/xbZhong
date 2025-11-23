@@ -10,6 +10,9 @@ icon: tabler:math
 date: 2025-07-08
 ---
 
+[本页PDF](/pdfs/dl/cv/DiffusionModel.pdf)
+
+
 
 ## 完全理解数学推导非常难！！！
 

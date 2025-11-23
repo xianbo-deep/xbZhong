@@ -8,6 +8,9 @@ timeline: true
 icon: material-icon-theme:git
 date: 2024-08-29
 ---
+
+[本页PDF](/pdfs/coding/git.pdf)
+
 ## Git
 
 ==**分布式版本控制工具**==

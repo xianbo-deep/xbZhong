@@ -8,6 +8,9 @@ timeline: true
 icon: devicon:kubernetes
 date: 2025-10-18
 ---
+
+[本页PDF](/pdfs/backend/Kubernetes.pdf)
+
 [Kubernetes 文档 | Kubernetes](https://kubernetes.io/zh-cn/docs/home/)
 
 ## 概念

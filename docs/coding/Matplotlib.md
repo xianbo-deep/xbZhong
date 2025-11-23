@@ -8,6 +8,9 @@ timeline: true
 icon: logos:matplotlib
 date: 2024-10-18
 ---
+
+[本页PDF](/pdfs/coding/Matplotlib.pdf)
+
 ## 导包
 
 `import matplotlib.pyplot as plt`

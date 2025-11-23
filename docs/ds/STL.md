@@ -8,6 +8,9 @@ timeline: true
 icon: hugeicons:cpp
 date: 2024-05-10
 ---
+
+[本页PDF](/pdfs/ds/STL.pdf)
+
 ## 迭代器(可以看作指针)
 * c++里面可以用auto自动识别迭代器类型
 * 不用auto,则需要写完整代码。例如：vector< int > :: iterator it

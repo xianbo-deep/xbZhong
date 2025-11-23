@@ -5,6 +5,9 @@ article: false
 timeline: false
 ---
 
+[本页PDF](/pdfs/resource/minor.pdf)
+
+
 ### 最优化方法
 [课件](https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E4%B8%93%E4%B8%9A%E9%80%89%E4%BF%AE/%E6%9C%80%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95)
 

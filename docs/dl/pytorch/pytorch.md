@@ -9,6 +9,9 @@ timeline: true
 icon: material-icon-theme:pytorch
 date: 2025-01-24
 ---
+
+[本页PDF](/pdfs/dl/pytorch/pytorch.pdf)
+
 ## Pytorch
 
 **pytorch**与**tensorflow**的区别：

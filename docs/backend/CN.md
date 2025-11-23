@@ -8,6 +8,9 @@ timeline: true
 icon: streamline:network-solid
 date: 2025-10-16
 ---
+
+[本页PDF](/pdfs/backend/CN.pdf)
+
 ## 计网常见知识
 
 ### 常见含义

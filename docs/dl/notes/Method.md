@@ -8,6 +8,9 @@ timeline: true
 icon: material-symbols:compress
 date: 2025-06-26
 ---
+
+[本页PDF](/pdfs/dl/notes/Method.pdf)
+
 **模型压缩三部分优化**：
 
 1. 减少内存密集的范围量

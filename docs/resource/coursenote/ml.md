@@ -4,6 +4,9 @@ index: false
 article: false
 timeline: false
 ---
+
+[本页PDF](/pdfs/resource/coursenote/ml.pdf)
+
 ## 朴素贝叶斯
 
 ### 推导朴素贝叶斯中的概率估计公式

@@ -9,6 +9,9 @@ timeline: true
 icon: material-symbols:lock-outline
 date: 2025-09-02
 ---
+
+[本页PDF](/pdfs/backend/Lock.pdf)
+
 ## 悲观锁
 
 悲观锁认为自己在使用数据的时候**一定会有别的线程来修改数据**，因此在获取数据的时候会先加锁，确保数据不会被其他线程修改

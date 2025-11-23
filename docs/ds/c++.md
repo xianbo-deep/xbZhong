@@ -7,6 +7,9 @@ category: ds
 timeline: true
 icon: hugeicons:cpp
 ---
+
+[本页PDF](/pdfs/ds/c++.pdf)
+
 ## 面向对象
 **封装，继承，多态**
 ### 封装

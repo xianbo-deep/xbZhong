@@ -7,6 +7,9 @@ category: ds
 timeline: true
 icon: hugeicons:cpp
 ---
+
+[本页PDF](/pdfs/ds/cpp函数.pdf)
+
 ### memset()函数(内存块初始化函数)
 * 功能：将一块内存空间的每个字节都设置为指定的值
 * 通常用于初始化内存空间或删除一个内存空间

@@ -8,6 +8,9 @@ timeline: true
 icon: carbon:model
 date: 2025-08-20
 ---
+
+[本页PDF](/pdfs/dl/llm/LLM.pdf)
+
 ## 大模型训练过程
 
 1. **预训练**

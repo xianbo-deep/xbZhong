@@ -9,6 +9,9 @@ timeline: true
 icon: oui:generate
 date: 2024-06-18
 ---
+
+[本页PDF](/pdfs/dl/primer/GenerativeModels.pdf)
+
 ## PixelRNN
 
 - 随机给一个像素，给予模型**random**值

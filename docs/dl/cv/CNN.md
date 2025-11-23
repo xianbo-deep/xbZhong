@@ -10,6 +10,9 @@ icon: lucide:network
 date: 2024-06-01
 ---
 
+[本页PDF](/pdfs/dl/cv/CNN.pdf)
+
+
 
 ## Convolutional Neutral Network（卷积神经网络）
 

@@ -9,6 +9,9 @@ timeline: true
 icon: tabler:ai
 date: 2025-09-24
 ---
+
+[本页PDF](/pdfs/backend/SpringAI.pdf)
+
 ## SpringAI
 
 **使用步骤**

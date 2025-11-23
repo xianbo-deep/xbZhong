@@ -10,6 +10,9 @@ icon: devicon-plain:redis
 date: 2025-09-25
 
 ---
+
+[本页PDF](/pdfs/backend/Redis.pdf)
+
 ##  Redis
 
 Redis是**键值数据库**，属于`NoSql`数据库

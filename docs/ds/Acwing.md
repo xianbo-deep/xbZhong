@@ -8,6 +8,9 @@ timeline: true
 icon: mingcute:code-line
 date: 2025-07-10
 ---
+
+[本页PDF](/pdfs/ds/Acwing.pdf)
+
 ## 基础算法
 
 | 类型      | 范围                   |

@@ -9,6 +9,9 @@ timeline: true
 icon: devicon:rabbitmq
 date: 2025-10-06
 ---
+
+[本页PDF](/pdfs/backend/RabbitMQ.pdf)
+
 ## RabbitMQ
 
 是一种消息队列，负责在不同的服务之间传递消息

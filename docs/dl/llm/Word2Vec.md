@@ -9,6 +9,9 @@ timeline: true
 icon: carbon:model
 date: 2025-06-24
 ---
+
+[本页PDF](/pdfs/dl/llm/Word2Vec.pdf)
+
 ## Word2Vec
 
 基于**CBOW**或者**skip-gram**来计算词向量矩阵，主要目的是**为了得到词向量**

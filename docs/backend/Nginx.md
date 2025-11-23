@@ -9,6 +9,9 @@ icon: material-icon-theme:nginx
 date: 2025-10-12
 ---
 
+[本页PDF](/pdfs/backend/Nginx.pdf)
+
+
 [官方文档](https://nginx.org/en/docs/)
 [高阶指南](https://docs.nginx.com/nginx/admin-guide/)
 

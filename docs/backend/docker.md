@@ -10,6 +10,9 @@ icon: devicon:docker
 date: 2025-10-01
 ---
 
+[本页PDF](/pdfs/backend/docker.pdf)
+
+
 ## Docker
 
 当我们利用Docker安装应用时，Docker会自动搜索并下载应用**镜像**。镜像不仅包含应用本身，还包含应用运行所需要的环境、配置、系统函数库。Docker会在运行镜像时创建一个**隔离环境**，称为**容器**

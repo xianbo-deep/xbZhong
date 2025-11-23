@@ -9,6 +9,9 @@ icon: devicon:apache
 date: 2025-10-18
 ---
 
+[本页PDF](/pdfs/backend/Dubbo.pdf)
+
+
 [Dubbo中文文档](https://cn.dubbo.apache.org/zh-cn/overview/what/)
 
 ## 介绍

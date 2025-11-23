@@ -8,6 +8,9 @@ timeline: true
 icon: logos:go
 date: 2025-10-11
 ---
+
+[本页PDF](/pdfs/backend/Go.pdf)
+
 ## Golang的优势
 
 由`Google`开发的语言，是一门**编译型语言**，编译出来的可执行文件（机器码）是**单独的二进制文件**，无需安装Go环境，不需要任何依赖（特殊情况除外）**即可直接运行！！！**

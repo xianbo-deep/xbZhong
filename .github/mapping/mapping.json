@@ -858,5 +858,34 @@
     "hash": "c0eb31bdb1ecb09c0bdea6eb526c01a1af04f83ab312cf63bf991c3801274f98",
     "size": "107383",
     "gen_time": "2025-11-23T20:31:05"
+  },
+  "docs/dl/llm/Word2Vec.md": {
+    "pdf": "docs/.vuepress/public/pdfs/dl/llm/Word2Vec.pdf",
+    "images": [
+      "/screenshot/dl/image-20250705224627824.png",
+      "/screenshot/dl/image-20250705224657637.png",
+      "/screenshot/dl/image-20250705162047281.png"
+    ],
+    "hash": "bc68f21766e628878318f1ab884e1a7e54ee5cc49964fae1f8a8bb42529ec893",
+    "size": "599922",
+    "gen_time": "2025-11-23T20:46:39"
+  },
+  "docs/ds/排序算法.md": {
+    "pdf": "docs/.vuepress/public/pdfs/ds/排序算法.pdf",
+    "images": [
+      "/screenshot/ds/image-44.png",
+      "/screenshot/ds/image-45.png",
+      "/screenshot/ds/image-46.png",
+      "/screenshot/ds/image-48.png",
+      "/screenshot/ds/image-49.png",
+      "/screenshot/ds/image-50.png",
+      "/screenshot/ds/image-51.png",
+      "/screenshot/ds/image-52.png",
+      "/screenshot/ds/image-53.png",
+      "/screenshot/ds/image-54.png"
+    ],
+    "hash": "d950d256f189f2419710443093ef81877303c3dc91dcb7ad609ed57841d7a820",
+    "size": "1876306",
+    "gen_time": "2025-11-23T20:46:54"
   }
 }

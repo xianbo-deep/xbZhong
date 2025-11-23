@@ -926,5 +926,23 @@
     "hash": "185b80742a7a0e458ecfb88b7398371bdb4cae6a415bb4e0883948965bbe099f",
     "size": "2018374",
     "gen_time": "2025-11-23T21:36:27"
+  },
+  "docs/dl/llm/Transformer.md": {
+    "pdf": "docs/.vuepress/public/pdfs/dl/llm/Transformer.pdf",
+    "images": [
+      "/screenshot/dl/image-20250702225431058.png",
+      "/screenshot/dl/image-20250427121123206.png",
+      "/screenshot/dl/image-20250510194255934.png",
+      "/screenshot/dl/image-20250418130432286.png",
+      "/screenshot/dl/image-20250420112828589.png",
+      "/screenshot/dl/image-20250702191639250.png",
+      "/screenshot/dl/image-20250701224305593.png",
+      "/screenshot/dl/image-20250702192315616.png",
+      "/screenshot/dl/image-20250702191639250.png",
+      "/screenshot/dl/image-20250702191137599.png"
+    ],
+    "hash": "5af19cce3d380f80873340d490894d94c4ce66cf380a8ead17b33c0406553e6f",
+    "size": "1877465",
+    "gen_time": "2025-11-23T21:45:02"
   }
 }

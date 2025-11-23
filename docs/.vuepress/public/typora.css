@@ -443,3 +443,43 @@ mjx-container {
 @media print {
     a[href]:after { content: none !important; } /* 不显示链接的 URL 后缀 */
 }
+
+
+/* 1. 修复代码块“破碎/切片”问题 */
+/* 强制把背景色加在最外层的 pre 标签上，而不是里面的文字上 */
+div.sourceCode, pre.sourceCode, pre {
+    background-color: #f6f8fa !important; /* 统一的大背景色 */
+    border-radius: 6px !important;
+    padding: 12px !important;
+    margin-bottom: 1.2em !important;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+
+/* 2. 消除内部元素的背景色 (消除白色间隙) */
+pre code, 
+pre span, 
+code.sourceCode, 
+span.sourceCode {
+    background-color: transparent !important; /* 让文字背景透明 */
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+}
+
+/* 3. 强制修复字体 (Docker 环境通用) */
+/* 使用 monospace 关键字，让系统自动选一个能用的等宽字体 */
+code, kbd, pre, samp {
+    font-family: "Noto Sans Mono CJK SC", "DejaVu Sans Mono", "Courier New", monospace !important;
+    font-size: 14px !important; /* 调整字号 */
+    line-height: 1.5 !important;
+    white-space: pre-wrap !important; /* 强制长代码换行，防止溢出 */
+    word-break: break-all !important; 
+}
+
+/* 4. 专门针对 Go 语言等高亮颜色的微调 (可选) */
+/* 确保文字颜色对比度足够 */
+.sourceCode {
+    color: #24292e; 
+}

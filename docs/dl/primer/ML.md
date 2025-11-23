@@ -29,7 +29,7 @@ date: 2024-02-18
 * 成本函数（平方误差成本函数）：$J = \frac{\sum_{i=1}^{m}{(\hat{y^(i)} - y^(i) )^2}}{2m}$
 * 成本函数是w和b的函数,取斜率为0的切线的那个切点即为极小值，使得成本函数最小
 ![alt text](/screenshot/dl/image-3.png)
----
+
 ![alt text](/screenshot/dl/image-4.png)
 
 ###### 梯度下降
@@ -45,7 +45,7 @@ $b = b - \alpha\frac{\partial}{\partial b}J(w,b)$
     * 学习率太大，会导致发散，找不到局部最优解
     * 随着导数的不断变化自动调整步长，不断逼近最小值
     * ![alt text](/screenshot/dl/image-7.png)
----
+
 **左边为正确的代码写法**：要实现并行计算
 ![alt text](/screenshot/dl/image-6.png)
 
@@ -115,15 +115,15 @@ $$
 **线性回归中的成本函数在逻辑回归中并不适用，因为其有许多极小值，不利于找到最低成本**
 ![alt text](/screenshot/dl/image-11.png)
 
----
+
 所以要构建一个新的损失函数，即**对数似然损失**
 ![alt text](/screenshot/dl/image-14.png)
 
----
+
 **下图为真实值为1的损失函数图像，当f->1，即预估值趋近1时，y的值很小且斜率趋于0，表明此时损失很小**
 ![alt text](/screenshot/dl/image-13.png)
 
----
+
 **目标就是找到最适合的参数使得损失函数(成本函数)的值最小**
 **损失函数**： $L(f_{\vec{w},b}(\vec{x}^{(i)}),y^{(i)}) = -y^{(i)}\log(f_{\vec{w},b}(\vec{x}^{(i)})) - (1 - y^{(i)})\log(1 - f_{\vec{w},b}(\vec{x}^{(i)}))$
 **成本函数**：$J(\vec{w},b) = -\frac{1}{m} \sum_{i=1}^{m}y^{(i)}\log(f_{\vec{w},b}(\vec{x}^{(i)})) + (1 - y^{(i)})\log(1 - f_{\vec{w},b}(\vec{x}^{(i)}))$
@@ -282,12 +282,12 @@ $J = (c^{(1)},\dots,c^{(m)},\mu_1,\dots,\mu_k) = \frac{1}{m}\sum_{i=1}^{m}||x^{(
 * 有输入层，输出层和多个隐藏层
 
 
----
+
 * 本质上是用多个神经元分别处理特征，然后将他们的输出值作为一个神经元的输入值，再由其输出概率
 * 如下图所示，将处理特征的多个神经元称为层，最左边为输入层，中间为隐藏层，右边为输出层
 ![alt text](/screenshot/dl/image-16.png)
 
----
+
 **每个输出和参数右上角的数字表示他隶属于第几层的神经层**
 ![alt text](/screenshot/dl/image-17.png)
 #### 激活
@@ -355,17 +355,17 @@ $J = (c^{(1)},\dots,c^{(m)},\mu_1,\dots,\mu_k) = \frac{1}{m}\sum_{i=1}^{m}||x^{(
 **增加数据集不会改变成本函数的大小**
 ![alt text](/screenshot/dl/image-29.png)
 
----
+
 **高偏差图像**
 **因为其模型拟合有问题，所以增加再多的训练集也不会提升模型性能**
 ![alt text](/screenshot/dl/image-30.png)
 
----
+
 **高方差图像**
 **增加足够多的训练集可以帮助提升模型性能**
 ![alt text](/screenshot/dl/image-31.png)
 
----
+
 **解决高偏差高方差的方法**
 ![alt text](/screenshot/dl/image-32.png)
 

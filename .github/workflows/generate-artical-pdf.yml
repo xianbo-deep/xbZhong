@@ -44,23 +44,27 @@ jobs:
           cache-to: type=gha,mode=max
 
       # --- 执行脚本部分 (在容器内) ---
+      # -------------------------------------------------------
+      # ✅ 修复方案：改用 docker run 手动运行
+      # -------------------------------------------------------
+      
       - name: Generate PDFs and Mapping.json (In Docker)
-        # ⚠️ 修正：uses 必须是静态字符串，不能含变量，且必须全小写
-        uses: docker://ghcr.io/xianbo-deep/xbzhong/pdf-builder:latest
-        with:
-          entrypoint: bash
-          args: .github/scripts/incremental-pdf.sh
+        run: |
+          # --rm: 运行完自动删除容器
+          # -v $PWD:/app: 把当前代码目录挂载到容器内部
+          # -w /app: 设置容器内工作目录
+          docker run --rm \
+            -v $PWD:/app \
+            -w /app \
+            ghcr.io/xianbo-deep/xbzhong/pdf-builder:latest \
+            bash .github/scripts/incremental-pdf.sh
 
       # --- 提交更改 ---
       - name: Commit and Push changes
         run: |
-          # 修复 Docker 容器产生的 root 权限文件问题
           sudo chown -R $USER:$USER .
-          
           git config --global user.name 'xbzhong'
           git config --global user.email '2396768163@qq.com'
-          
-          # 确保目录存在，防止 add 报错
           mkdir -p .github/mapping
           git add .github/mapping/mapping.json
           git add docs
@@ -75,15 +79,18 @@ jobs:
 
       # --- 生成邮件 HTML ---
       - name: Generate Email HTML
-        # ⚠️ 修正：这里之前报错了，现在改为硬编码，与上面保持一致
-        uses: docker://ghcr.io/xianbo-deep/xbzhong/pdf-builder:latest
-        with:
-          entrypoint: python3
-          args: .github/scripts/pdf-json2email.py
+        run: |
+          docker run --rm \
+            -v $PWD:/app \
+            -w /app \
+            ghcr.io/xianbo-deep/xbzhong/pdf-builder:latest \
+            python3 .github/scripts/pdf-json2email.py
 
+      # --- 发送邮件 (保持不变) ---
       - name: Send email
         uses: dawidd6/action-send-mail@v3
         with:
+          # ... (保持你的配置不变)
           server_address: smtp.qq.com
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}

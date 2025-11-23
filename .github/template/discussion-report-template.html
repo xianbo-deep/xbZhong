@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub 讨论区周报</title>
+  <style>
+    /* --- 客户端重置 --- */
+    body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background-color: #f6f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', 'SimHei', Helvetica, Arial, sans-serif; }
+    table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+    
+    /* --- 移动端适配 --- */
+    @media only screen and (max-width: 600px) {
+      .main-card { width: 100% !important; border-radius: 0 !important; margin-top: 0 !important; box-shadow: none !important; }
+      .content-padding { padding: 20px 15px !important; }
+      .avatar-col { width: 40px !important; }
+      .avatar-img { width: 32px !important; height: 32px !important; }
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f6f8fa; color: #24292e;">
+
+  <!-- 外部容器 -->
+  <div style="background-color: #f6f8fa; width: 100%; padding-bottom: 40px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;">
+    
+    <center>
+      <!-- 主卡片 -->
+      <table class="main-card" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; margin-top: 30px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.12); max-width: 600px; width: 100%; border: 1px solid #e1e4e8;">
+        
+        <!-- 顶部 Header (居中版) -->
+        <tr>
+          <!-- 修改点：将 text-align 改为 center -->
+          <td style="background-color: #24292e; padding: 32px 24px; text-align: center;">
+            <h1 style="color: #ffffff; font-size: 20px; font-weight: 600; margin: 0; letter-spacing: 0.5px; line-height: 1.4;">
+              GitHub 讨论区周报
+            </h1>
+            <p style="margin: 8px 0 0 0; color: #959da5; font-size: 12px;">
+              本周动态汇总
+            </p>
+          </td>
+        </tr>
+        <!-- 装饰性线条 -->
+        <tr>
+          <td style="height: 3px; width: 100%; background-color: #0366d6; font-size: 0; line-height: 0;">&nbsp;</td>
+        </tr>
+
+        <!-- 日期范围 (居中) -->
+        <tr>
+          <!-- 修改点：添加 text-align: center -->
+          <td class="content-padding" style="padding: 24px 32px 10px 32px; text-align: center;">
+            <div style="background-color: #f1f8ff; border: 1px solid #c8e1ff; color: #0366d6; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 6px; display: inline-block;">
+              统计周期：{{DATE_START}} 至 {{DATE_END}}
+            </div>
+          </td>
+        </tr>
+
+        <!-- ================= 新评论区域 ================= -->
+        <tr>
+          <td class="content-padding" style="padding: 10px 32px 0 32px;">
+            <h2 style="margin: 20px 0 15px 0; font-size: 16px; font-weight: 600; color: #24292e; border-left: 4px solid #0366d6; padding-left: 10px;">
+              新评论
+            </h2>
+          </td>
+        </tr>
+
+        <!-- 循环开始：单个评论 Item -->
+        <!-- {{COMMENT_LOOP_START}} -->
+        <tr>
+          <td class="content-padding" style="padding: 0 32px 24px 32px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <!-- 头像 -->
+                <td valign="top" width="48" class="avatar-col" style="width: 48px; padding-right: 12px;">
+                  <!-- 如果没有头像，这里可以放置一个纯色块或保留img标签由后端填充 -->
+                  <img src="{{AUTHOR_AVATAR}}" alt="头像" class="avatar-img" width="36" height="36" style="border-radius: 50%; background-color: #e1e4e8; display: block;">
+                </td>
+                <!-- 内容主体 -->
+                <td valign="top">
+                  <!-- 头部信息 -->
+                  <div style="margin-bottom: 4px;">
+                    <strong style="font-size: 14px; color: #24292e;">{{AUTHOR_NAME}}</strong>
+                    <span style="font-size: 12px; color: #586069; margin-left: 6px;">{{TIMESTAMP}}</span>
+                  </div>
+                  
+                  <!-- 评论内容框 -->
+                  <div style="font-size: 14px; line-height: 1.6; color: #24292e; margin-bottom: 6px;">
+                    {{COMMENT_BODY}}
+                  </div>
+
+                  <!-- 来源链接 -->
+                  <div style="font-size: 12px; color: #586069; background-color: #f6f8fa; padding: 4px 8px; border-radius: 4px; display: inline-block;">
+                    主题：<a href="{{DISCUSSION_LINK}}" style="color: #0366d6; text-decoration: none;">{{DISCUSSION_TITLE}}</a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <!-- 分隔线 (除最后一条外) -->
+            <div style="height: 1px; background-color: #eaecef; margin-top: 16px;"></div>
+          </td>
+        </tr>
+        <!-- {{COMMENT_LOOP_END}} -->
+
+
+        <!-- ================= 新回复区域 ================= -->
+        <tr>
+          <td class="content-padding" style="padding: 10px 32px 0 32px;">
+            <h2 style="margin: 20px 0 15px 0; font-size: 16px; font-weight: 600; color: #24292e; border-left: 4px solid #6f42c1; padding-left: 10px;">
+              新回复
+            </h2>
+          </td>
+        </tr>
+
+        <!-- 循环开始：单个回复 Item -->
+        <!-- {{REPLY_LOOP_START}} -->
+        <tr>
+          <td class="content-padding" style="padding: 0 32px 24px 32px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td valign="top" width="48" class="avatar-col" style="width: 48px; padding-right: 12px;">
+                  <img src="{{REPLY_AUTHOR_AVATAR}}" alt="头像" class="avatar-img" width="36" height="36" style="border-radius: 50%; background-color: #e1e4e8; display: block;">
+                </td>
+                <td valign="top">
+                  <div style="margin-bottom: 4px;">
+                    <strong style="font-size: 14px; color: #24292e;">{{REPLY_AUTHOR_NAME}}</strong>
+                    <span style="font-size: 12px; color: #586069; margin-left: 6px;">{{REPLY_TIMESTAMP}}</span>
+                  </div>
+                  
+                  <div style="font-size: 14px; line-height: 1.6; color: #24292e; margin-bottom: 6px;">
+                    <span style="color: #586069; font-size: 12px; display: block; margin-bottom: 2px;">回复了评论：</span>
+                    {{REPLY_BODY}}
+                  </div>
+
+                  <div style="font-size: 12px; color: #586069; background-color: #f6f8fa; padding: 4px 8px; border-radius: 4px; display: inline-block;">
+                    所在主题：<a href="{{REPLY_LINK}}" style="color: #0366d6; text-decoration: none;">{{DISCUSSION_TITLE}}</a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+             <!-- 分隔线 -->
+            <div style="height: 1px; background-color: #eaecef; margin-top: 16px;"></div>
+          </td>
+        </tr>
+        <!-- {{REPLY_LOOP_END}} -->
+
+        <!-- 底部 Footer -->
+        <tr>
+          <td style="background-color: #f6f8fa; padding: 32px 24px; text-align: center; border-top: 1px solid #e1e4e8;">
+            <p style="margin: 0 0 8px 0; font-size: 12px; color: #586069;">
+              本邮件由 GitHub Actions 自动生成。
+            </p>
+            <p style="margin: 0; font-size: 12px; color: #adb5bd;">
+              &copy; {{YEAR}} xbzhong.cn
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </center>
+  </div>
+</body>
+</html>

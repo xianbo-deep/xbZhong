@@ -2,10 +2,9 @@
 set -e
 set -o pipefail
 
-# --- 【关键修复】强制使用 UTF-8 编码，解决中文文件名乱码问题 ---
+# 1. 强制使用 UTF-8 (解决中文文件名乱码)
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
-# ---------------------------------------------------------
 
 INPUT_DIR="docs"
 OUTPUT_DIR="docs/.vuepress/public/pdfs"
@@ -39,19 +38,12 @@ total_size=0
 
 echo ">>> Start scanning..."
 
-# 使用 FD 9 防止循环中断
+# 使用 FD 9 防止循环被 stdin 干扰
 while IFS= read -r -u9 file; do
-    # --- 调试打印：看看到底扫到了什么文件 ---
-    # echo "[DEBUG] Found: $file"
-    # -------------------------------------
-
-    # 忽略 README
     if [[ "$(basename "$file")" == "README.md" ]]; then continue; fi
 
-    # 排除逻辑
     skip=false
     for e in "${EXCLUDE[@]}"; do
-        # 通配符匹配
         if [[ "$file" == $e ]]; then skip=true; break; fi
     done
     if [ "$skip" = true ]; then 
@@ -59,7 +51,6 @@ while IFS= read -r -u9 file; do
         continue
     fi
     
-    # 增量检测
     last_hash=$(jq -r --arg key "$file" '.[$key].hash // ""' "$MAP_FILE")
     current_hash=$(sha256sum "$file" | cut -d' ' -f1)
 
@@ -74,9 +65,18 @@ while IFS= read -r -u9 file; do
     pdf_path="$OUTPUT_DIR/${rel_path%.md}.pdf"
     mkdir -p "$(dirname "$pdf_path")"
 
-    images=$(grep -oP '!\[.*?\]\(\K[^\)]+' "$file" | while read -r img; do
-        echo "$IMAGE_PREFIX/$img"
-    done | jq -R -s -c 'split("\n")[:-1]')
+    # --- 【关键修复】安全地提取图片 ---
+    # 使用 || true 防止 grep 找不到图片时返回 1 导致脚本崩溃
+    img_list=$(grep -oP '!\[.*?\]\(\K[^\)]+' "$file" || true)
+
+    if [ -z "$img_list" ]; then
+        images="[]"
+    else
+        images=$(echo "$img_list" | while read -r img; do
+            echo "$IMAGE_PREFIX/$img"
+        done | jq -R -s -c 'split("\n")[:-1]')
+    fi
+    # -------------------------------
 
     tmp_file="$(mktemp).md"
     sed -E "s|!\[([^\]]*)\]\(/|![\1]($IMAGE_PREFIX/|g" "$file" > "$tmp_file"
@@ -93,13 +93,11 @@ while IFS= read -r -u9 file; do
         pdf_size=$(stat -c%s "$pdf_path")
         gen_time=$(TZ="Asia/Shanghai" date +%Y-%m-%dT%H:%M:%S)
 
-        # 更新 mapping
         jq --arg key "$file" --arg pdf "$pdf_path" --argjson imgs "$images" --arg hash "$current_hash" \
            --arg size "$pdf_size" --arg gen_time "$gen_time" \
            '.[$key] = {pdf:$pdf, images:$imgs, hash:$hash, size:$size, gen_time:$gen_time}' \
            "$MAP_FILE" > tmp_map.json && mv tmp_map.json "$MAP_FILE"
 
-        # 更新本次运行统计
         jq --arg key "$file" --arg pdf "$pdf_path" --argjson imgs "$images" --arg size "$pdf_size" --arg gen_time "$gen_time" \
            '.[$key] = {pdf:$pdf, images:$imgs, size:$size, gen_time:$gen_time}' \
            "$TEMP_UPDATE_FILE" > tmp_run.json && mv tmp_run.json "$TEMP_UPDATE_FILE"
@@ -116,7 +114,6 @@ while IFS= read -r -u9 file; do
 
 done 9< <(find "$INPUT_DIR" -type f -name "*.md")
 
-# 总结
 jq --arg total_files "$total_files" --arg total_size "$total_size" \
    '.summary = {total_files: ($total_files|tonumber), total_size: ($total_size|tonumber)}' \
    "$TEMP_UPDATE_FILE" > tmp_run.json && mv tmp_run.json "$TEMP_UPDATE_FILE"

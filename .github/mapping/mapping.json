@@ -887,5 +887,32 @@
     "hash": "d950d256f189f2419710443093ef81877303c3dc91dcb7ad609ed57841d7a820",
     "size": "1876306",
     "gen_time": "2025-11-23T20:46:54"
+  },
+  "docs/coding/HTML-CSS.md": {
+    "pdf": "docs/.vuepress/public/pdfs/coding/HTML-CSS.pdf",
+    "images": [],
+    "hash": "b76c1619ca7ccc68bc20480146b1ef036e04df52347a2072aba8959fd8a330bc",
+    "size": "166652",
+    "gen_time": "2025-11-23T21:02:30"
+  },
+  "docs/dl/cv/VAE.md": {
+    "pdf": "docs/.vuepress/public/pdfs/dl/cv/VAE.pdf",
+    "images": [
+      "/screenshot/dl/image-20250430233601234.png",
+      "/screenshot/dl/image-20250501000147212.png",
+      "/screenshot/dl/image-20250502115738249.png"
+    ],
+    "hash": "031d6211bae0729e027b632bdfad0e242ce1965e0d0165df4922eec079ad9054",
+    "size": "773159",
+    "gen_time": "2025-11-23T21:02:40"
+  },
+  "docs/dl/primer/DL.md": {
+    "pdf": "docs/.vuepress/public/pdfs/dl/primer/DL.pdf",
+    "images": [
+      "/screenshot/dl/image-20250416233353334.png"
+    ],
+    "hash": "fcb593310dbb762cd46eb465322b7f34f474eea4aa431a8c08bc04319ecddd66",
+    "size": "541209",
+    "gen_time": "2025-11-23T21:02:50"
   }
 }

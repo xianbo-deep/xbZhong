@@ -35,31 +35,33 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: .github/Dockerfile
-          push: true # 必须 push 才能在下一步引用
-          tags: ghcr.io/${{ github.repository }}/pdf-builder:latest
+          file: .github/Dockerfile  # 确保你的 Dockerfile 确实在这个路径
+          push: true
+          # ⚠️ 注意：这里建议直接硬编码为全小写，防止 github.repository 包含大写导致报错
+          # 请将下面的 <user>/<repo> 替换为你的真实信息 (全小写)
+          tags: ghcr.io/xianbo-deep/xbzhong/pdf-builder:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       # --- 执行脚本部分 (在容器内) ---
       - name: Generate PDFs and Mapping.json (In Docker)
-        uses: docker://ghcr.io/xianbo-deep/xbZhong/pdf-builder:latest
+        # ⚠️ 修正：uses 必须是静态字符串，不能含变量，且必须全小写
+        uses: docker://ghcr.io/xianbo-deep/xbzhong/pdf-builder:latest
         with:
-          # docker action 自动挂载当前目录到 /github/workspace
-          # 并且自动设置工作目录
           entrypoint: bash
           args: .github/scripts/incremental-pdf.sh
 
-      
-      # 只有在 Docker 修改了文件后才需要提交
+      # --- 提交更改 ---
       - name: Commit and Push changes
         run: |
-          # 修复 Docker 容器可能产生的权限问题 (root 用户生成的文件)
+          # 修复 Docker 容器产生的 root 权限文件问题
           sudo chown -R $USER:$USER .
           
           git config --global user.name 'xbzhong'
           git config --global user.email '2396768163@qq.com'
           
+          # 确保目录存在，防止 add 报错
+          mkdir -p .github/mapping
           git add .github/mapping/mapping.json
           git add docs
 
@@ -71,10 +73,10 @@ jobs:
             echo "No changes to commit."
           fi
 
-      # 生成邮件 HTML (Python 已经在 Docker 里装了，但为了方便，这里直接用 Action 也行)
-      # 或者为了利用 Docker 里的 Python 环境，也可以继续用 Docker 跑
+      # --- 生成邮件 HTML ---
       - name: Generate Email HTML
-        uses: docker://ghcr.io/${{ github.repository }}/pdf-builder:latest
+        # ⚠️ 修正：这里之前报错了，现在改为硬编码，与上面保持一致
+        uses: docker://ghcr.io/xianbo-deep/xbzhong/pdf-builder:latest
         with:
           entrypoint: python3
           args: .github/scripts/pdf-json2email.py

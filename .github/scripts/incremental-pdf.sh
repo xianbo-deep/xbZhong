@@ -16,7 +16,7 @@ MAP_FILE="$MAPPING_DIR/mapping.json"
 TEMP_UPDATE_FILE="$MAPPING_DIR/this_run.json"
 CSS_FILE="$STATIC_BASE_DIR/typora.css" # 样式文件路径
 
-EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*")
+EXCLUDE=("docs/me/intro.md" "docs/jottings/*" "docs/ZJ/*" "docs/aboutblog/*" "docs/dl/*")
 
 # --- 检查工具 ---
 if ! command -v pandoc &> /dev/null; then echo "!!! CRITICAL: pandoc not found."; exit 1; fi

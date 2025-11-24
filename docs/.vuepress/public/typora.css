@@ -500,3 +500,32 @@ pre > code {
     margin: 0 !important;
     border: none !important;
 }
+
+div.sourceCode, pre.sourceCode {
+    background-color: #f6f8fa !important;
+    border: 1px solid #d0d7de !important;
+    border-radius: 6px !important;
+}
+
+/* 2. 语法高亮颜色 (精确对应 GitHub 浅色模式) */
+code span.kw { color: #cf222e !important; font-weight: bold; } /* 关键字 (if, else) - 红色 */
+code span.dt { color: #cf222e !important; } /* 数据类型 - 红色 */
+code span.dv { color: #0550ae !important; } /* 数字 - 蓝色 */
+code span.bn { color: #0550ae !important; } /* 函数名 - 蓝色 */
+code span.fl { color: #0550ae !important; } /* 浮点数 - 蓝色 */
+code span.st { color: #0a3069 !important; } /* 字符串 - 深蓝 */
+code span.ch { color: #0a3069 !important; } /* 字符 - 深蓝 */
+code span.co { color: #6e7781 !important; font-style: italic; } /* 注释 - 灰色 */
+code span.ot { color: #24292f !important; } /* 其他符号 - 黑色 */
+code span.al { color: #82071e !important; background-color: #ffebe9 !important; font-weight: bold; } /* 警告 */
+code span.fu { color: #8250df !important; } /* 函数调用 - 紫色 */
+code span.cn { color: #0550ae !important; } /* 常量 - 蓝色 */
+code span.sc { color: #0550ae !important; } 
+code span.vs { color: #0a3069 !important; }
+code span.ss { color: #0a3069 !important; }
+code span.im { color: #0550ae !important; } /* Import */
+code span.va { color: #953800 !important; } /* 变量 - 橙色 */
+code span.cf { color: #cf222e !important; font-weight: bold; } /* 控制流 - 红色 */
+code span.op { color: #24292f !important; } /* 运算符 */
+code span.bu { color: #8250df !important; } /* 内置函数 - 紫色 */
+code span.pp { color: #cf222e !important; } /* 预处理 */

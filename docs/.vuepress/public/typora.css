@@ -502,80 +502,113 @@ pre > code {
 }
 
 /* ==========================================================================
-   【Typora-GitHub 复刻版】代码块专用样式
+   【最终整合版】Typora-GitHub 完美复刻 (含字体放大 + 单行背景修复)
    ========================================================================== */
 
-/* ==========================================================================
-   【最终完美版】解决双框 + 代码溢出问题
-   ========================================================================== */
-
-/* ==========================================================================
-   【最终修正版】字体大小调整 + 修复行内代码背景
-   ========================================================================== */
-
-/* --- 1. 字体大小与字体族 (解决字体太小) --- */
-code, kbd, pre, samp {
-    /* 之前的 0.85em 可能太小，这里改回 14px (Typora 默认约 14-16px) */
-    font-size: 14px !important;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
+/* --- 1. 全局字体与环境修正 --- */
+body {
+    font-family: "Noto Sans CJK SC", sans-serif !important;
+}
+img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    margin: 1em auto;
+}
+mjx-container {
+    max-width: 100% !important;
+    overflow-x: auto;
+}
+@media print {
+    a[href]:after { content: none !important; }
 }
 
-/* --- 2. 行内代码 (Inline Code) 样式 (解决 `code` 没背景) --- */
-/* 策略：先给所有 code 标签加背景，然后在代码块里取消它 */
-code {
-    background-color: rgba(27,31,35,0.05) !important; /* GitHub 浅灰背景 */
-    padding: 0.2em 0.4em !important;                  /* 像按钮一样的小边距 */
-    margin: 0 !important;
-    border-radius: 6px !important;                    /* 小圆角 */
-    white-space: normal !important;                   /* 允许行内长代码换行 */
+/* --- 2. 行内代码 (Inline Code) --- */
+/* 针对：文本中间的 `git status` 这种小代码片段 */
+code:not([class]) {
+    background-color: rgba(27,31,35,0.05) !important; /* 浅灰背景 */
+    padding: 0.2em 0.4em !important;                  /* 小间距 */
+    border-radius: 6px !important;                    /* 圆角 */
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
+    font-size: 0.9em !important;                      /* 比正文稍小一点点，显得精致 */
+    color: #333 !important;
 }
 
 /* --- 3. 代码块容器 (Block Wrapper) --- */
+/* 针对：```java 这种大段代码块 */
 div.sourceCode {
-    background-color: #f6f8fa !important;  /* 代码块的大背景 */
-    border: 1px solid #d0d7de !important;
+    background-color: #f6f8fa !important;  /* 统一的大灰背景 */
+    border: 1px solid #d0d7de !important;  /* 统一的边框 */
     border-radius: 6px !important;
     
     padding: 16px !important;
     margin: 16px 0 !important;
     
-    page-break-inside: avoid; /* 防止打印时断开 */
+    page-break-inside: avoid; /* 打印时不切断 */
 }
 
-/* --- 4. 代码块内部重置 (Block Inner) --- */
-/* ⚠️ 核心逻辑：代码块内部的 code 不需要单独的灰色背景，因为外面 div 已经有了 */
+/* --- 4. 代码块排版与字体 (核心修正) --- */
+div.sourceCode, 
+pre.sourceCode, 
+pre.sourceCode > code {
+    /* ✅ 这里控制代码块字体大小，15px 足够清晰，觉得小就改 16px */
+    font-size: 15px !important; 
+    line-height: 1.6 !important;
+    
+    /* 强制使用等宽字体 */
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
+}
+
+/* --- 5. 代码块内部重置 (防止双框和溢出) --- */
 pre.sourceCode {
-    background-color: transparent !important;
+    background-color: transparent !important; /* 必须透明 */
     border: none !important;
     padding: 0 !important;
     margin: 0 !important;
     
-    /* 强制换行，防止溢出 */
-    white-space: pre-wrap !important;
+    /* ✅ 强制换行，防止代码冲出 PDF 页面 */
+    white-space: pre-wrap !important; 
     word-break: break-all !important;
     overflow: hidden !important;
 }
 
-/* ⚠️ 关键：重置代码块内 code 的样式，避免“双重背景”或“小灰块” */
+/* 重置代码块内的 code 标签，防止出现“双重背景” */
 pre.sourceCode > code {
-    background-color: transparent !important; /* 必须透明，透出 div 的背景 */
+    background-color: transparent !important;
     padding: 0 !important;
-    border-radius: 0 !important;
-    white-space: inherit !important;
-    font-size: inherit !important; /* 继承外层大小 */
+    border: none !important;
+    font-size: inherit !important;
+    color: inherit !important;
 }
 
-/* --- 5. 高亮颜色 (保持 GitHub 风格) --- */
-code span.kw { color: #cf222e !important; font-weight: bold; } 
-code span.dt { color: #953800 !important; }
-code span.dv { color: #0550ae !important; }
-code span.bn { color: #0550ae !important; }
-code span.fl { color: #0550ae !important; }
-code span.ch { color: #0a3069 !important; }
-code span.st { color: #0a3069 !important; }
-code span.co { color: #6e7781 !important; font-style: italic; }
-code span.ot { color: #cf222e !important; }
-code span.al { color: #cf222e !important; background-color: #ffebe9 !important; font-weight: bold; }
-code span.fu { color: #8250df !important; }
-code span.re { color: #0550ae !important; }
-code span.er { color: #cf222e !important; background-color: #ffebe9 !important; }
+/* --- 6. 语法高亮 (GitHub Light 风格) --- */
+code span.kw { color: #cf222e !important; font-weight: bold; } /* 关键字 */
+code span.dt { color: #953800 !important; } /* 数据类型 */
+code span.dv { color: #0550ae !important; } /* 数字 */
+code span.bn { color: #0550ae !important; } 
+code span.fl { color: #0550ae !important; } 
+code span.ch { color: #0a3069 !important; } 
+code span.st { color: #0a3069 !important; } /* 字符串 */
+code span.co { color: #6e7781 !important; font-style: italic; } /* 注释 */
+code span.ot { color: #cf222e !important; } 
+code span.al { color: #cf222e !important; background-color: #ffebe9 !important; font-weight: bold; } 
+code span.fu { color: #8250df !important; } /* 函数 */
+code span.re { color: #0550ae !important; } 
+code span.er { color: #cf222e !important; background-color: #ffebe9 !important; } 
+code span.wa { color: #953800 !important; font-weight: bold; }
+code span.cn { color: #0550ae !important; }
+code span.sc { color: #0550ae !important; }
+code span.vs { color: #0a3069 !important; }
+code span.ss { color: #0a3069 !important; }
+code span.im { color: #8250df !important; }
+code span.va { color: #953800 !important; }
+code span.cf { color: #cf222e !important; font-weight: bold; }
+code span.op { color: #cf222e !important; }
+code span.bu { color: #8250df !important; }
+code span.ex { color: #8250df !important; }
+code span.pp { color: #cf222e !important; }
+code span.at { color: #953800 !important; }
+code span.do { color: #6e7781 !important; font-style: italic; }
+code span.an { color: #6e7781 !important; font-style: italic; }
+code span.cv { color: #6e7781 !important; font-style: italic; }
+code span.in { color: #6e7781 !important; font-style: italic; }

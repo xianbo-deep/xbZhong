@@ -19,27 +19,23 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------------------------------------------------
-# 2. 安装 Pandoc 3.1.13
+# 2. 安装 Pandoc 3.1.13 (.deb 方法)
 # ---------------------------------------------------
 RUN PANDOC_VERSION="3.1.13" && \
-    (apt-get remove -y pandoc pandoc-data || true) && \
+    # ⚠️ 关键修正：使用 purge 彻底清除旧包
+    (apt-get purge -y pandoc pandoc-data || true) && \
     apt-get autoremove -y && \
+    # 下载并安装新版本 .deb
     wget https://github.com/jgm/pandoc/releases/download/$PANDOC_VERSION/pandoc-${PANDOC_VERSION}-1-amd64.deb -O pandoc.deb && \
     dpkg -i pandoc.deb && \
+    # 验证版本
     pandoc --version && \
     rm pandoc.deb
 
 # ---------------------------------------------------
-# 3. 下载 GitHub highlight theme（适配 Pandoc 3.x）
+# 3. 移除无效的 Theme 下载
 # ---------------------------------------------------
-RUN mkdir -p /usr/local/share/pandoc && \
-    wget https://raw.githubusercontent.com/jgm/pandoc/main/data/themes/github.theme \
-        -O /usr/local/share/pandoc/github.theme
 
-# 注意：调用 Pandoc 时这样用 ↓
-#   pandoc --highlight-style=/usr/local/share/pandoc/github.theme
-#
 # ---------------------------------------------------
 # 4. 提醒：Chromium 在 Docker 内必须用 --no-sandbox
 # ---------------------------------------------------
-

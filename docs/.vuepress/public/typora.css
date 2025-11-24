@@ -415,11 +415,9 @@ header, .context-menu, .megamenu-content, footer{
     background-image: linear-gradient( 180deg , hsla(0, 0%, 100%, 0.8), hsla(0, 0%, 100%, 0)); 
 }
 
-/* ==========================================================================
-   【最终修正版】Docker 环境适配 + Typora 代码块完美复刻
-   ========================================================================== */
 
-/* --- 1. 基础环境修复 (保留你满意的部分) --- */
+
+
 /* 强制使用 Docker 内置中文字体 */
 body {
     font-family: "Noto Sans CJK SC", sans-serif !important;
@@ -441,9 +439,6 @@ mjx-container {
     a[href]:after { content: none !important; }
 }
 
-/* --- 2. 代码块样式重构 (核心修改) --- */
-
-/* 针对 Pandoc 生成的结构 (div.sourceCode > pre) 进行样式重置 */
 /* 目标：复刻 Typora .md-fences 的样式 */
 div.sourceCode, pre.sourceCode, pre {
     /* Typora Github 主题的标准背景色 */
@@ -466,7 +461,6 @@ div.sourceCode, pre.sourceCode, pre {
     box-sizing: border-box;
 }
 
-/* --- 3. 代码字体与排版修正 --- */
 
 /* 针对所有代码相关元素 */
 code, kbd, pre, samp, .sourceCode, span.sourceCode {
@@ -485,14 +479,14 @@ code, kbd, pre, samp, .sourceCode, span.sourceCode {
     color: #333 !important; /* 默认代码颜色，会被高亮覆盖 */
 }
 
-/* --- 4. 换行控制 --- */
+
 /* 让长代码自动换行，防止冲出 PDF 页面边界 */
 pre.sourceCode {
     white-space: pre-wrap !important;
     word-break: break-all !important;
 }
 
-/* --- 5. 消除 Pandoc 默认样式的干扰 --- */
+
 /* 这一步是为了防止 Pandoc 的 pygments 样式给每一行加背景导致白色间隙 */
 pre > code {
     background-color: transparent !important;
@@ -501,9 +495,7 @@ pre > code {
     border: none !important;
 }
 
-/* ==========================================================================
-   【最终整合版】Typora-GitHub 完美复刻 (含字体放大 + 单行背景修复)
-   ========================================================================== */
+
 
 /* --- 1. 全局字体与环境修正 --- */
 body {
@@ -523,7 +515,7 @@ mjx-container {
     a[href]:after { content: none !important; }
 }
 
-/* --- 2. 行内代码 (Inline Code) --- */
+
 /* 针对：文本中间的 `git status` 这种小代码片段 */
 code:not([class]) {
     background-color: rgba(27,31,35,0.05) !important; /* 浅灰背景 */
@@ -534,7 +526,7 @@ code:not([class]) {
     color: #333 !important;
 }
 
-/* --- 3. 代码块容器 (Block Wrapper) --- */
+
 /* 针对：```java 这种大段代码块 */
 div.sourceCode {
     background-color: #f6f8fa !important;  /* 统一的大灰背景 */
@@ -547,7 +539,6 @@ div.sourceCode {
     page-break-inside: avoid; /* 打印时不切断 */
 }
 
-/* --- 4. 代码块排版与字体 (核心修正) --- */
 div.sourceCode, 
 pre.sourceCode, 
 pre.sourceCode > code {

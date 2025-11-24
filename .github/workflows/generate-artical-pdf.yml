@@ -1,9 +1,6 @@
 name: 文章PDF生成
 
 on:
-  push:
-    branches:
-      - test
   schedule:
     - cron: '0 0 * * 1'
   workflow_dispatch:

@@ -552,7 +552,7 @@ div.sourceCode,
 pre.sourceCode, 
 pre.sourceCode > code {
     /* ✅ 这里控制代码块字体大小，15px 足够清晰，觉得小就改 16px */
-    font-size: 15px !important; 
+    font-size: 13px !important; 
     line-height: 1.6 !important;
     
     /* 强制使用等宽字体 */

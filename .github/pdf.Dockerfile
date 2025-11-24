@@ -4,9 +4,7 @@ FROM debian:bullseye-slim
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-# ---------------------------------------------------
 # 1. 安装基础依赖（Chromium + 字体 + Python + Git）
-# ---------------------------------------------------
 RUN apt-get update && apt-get install -y \
     wget \
     chromium \
@@ -18,11 +16,9 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# ---------------------------------------------------
 # 2. 安装 Pandoc 3.1.13 (.deb 方法)
-# ---------------------------------------------------
+
 RUN PANDOC_VERSION="3.1.13" && \
-    # ⚠️ 关键修正：使用 purge 彻底清除旧包
     (apt-get purge -y pandoc pandoc-data || true) && \
     apt-get autoremove -y && \
     # 下载并安装新版本 .deb
@@ -31,11 +27,3 @@ RUN PANDOC_VERSION="3.1.13" && \
     # 验证版本
     pandoc --version && \
     rm pandoc.deb
-
-# ---------------------------------------------------
-# 3. 移除无效的 Theme 下载
-# ---------------------------------------------------
-
-# ---------------------------------------------------
-# 4. 提醒：Chromium 在 Docker 内必须用 --no-sandbox
-# ---------------------------------------------------

@@ -509,58 +509,63 @@ pre > code {
    【最终完美版】解决双框 + 代码溢出问题
    ========================================================================== */
 
-/* 1. 样式重置：先清理所有潜在干扰 */
-div.sourceCode, pre.sourceCode, code {
-    box-sizing: border-box;
-}
+/* ==========================================================================
+   【最终修正版】字体大小调整 + 修复行内代码背景
+   ========================================================================== */
 
-/* 2. 外层容器 (div)：负责画框、背景、圆角 */
-/* 只在这里定义边框，就不会出现“双框”了 */
-div.sourceCode {
-    background-color: #f6f8fa !important;  /* GitHub 浅灰背景 */
-    border: 1px solid #d0d7de !important;  /* GitHub 边框 */
-    border-radius: 6px !important;         /* 圆角 */
-    
-    /* 容器间距 */
-    margin: 16px 0 !important;
-    padding: 16px !important;              /* 内部留白 */
-    
-    /* 打印安全性 */
-    page-break-inside: avoid;              /* 尽量不把代码块切成两半 */
-}
-
-/* 3. 内层容器 (pre)：负责排版、换行 */
-/* ⚠️ 必须把这里的边框和背景去掉，否则会和外面叠加 */
-pre.sourceCode {
-    background-color: transparent !important; /* 透明，透出外面的灰色 */
-    border: none !important;                  /* 去掉内层边框 */
-    margin: 0 !important;
-    padding: 0 !important;
-    
-    /* --- 核心修复：长代码自动换行 --- */
-    /* Typora PDF 的行为是换行，而不是滚动 */
-    white-space: pre-wrap !important;         /* 保留空格，但允许换行 */
-    word-break: break-all !important;         /* 强制在一个长单词中间断开，防止溢出 */
-    overflow-x: hidden !important;            /* 隐藏滚动条 */
-}
-
-/* 4. 字体修正 (保持您之前的设置) */
-code, kbd, pre, samp, .sourceCode, span.sourceCode {
+/* --- 1. 字体大小与字体族 (解决字体太小) --- */
+code, kbd, pre, samp {
+    /* 之前的 0.85em 可能太小，这里改回 14px (Typora 默认约 14-16px) */
+    font-size: 14px !important;
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
-    font-size: 0.85em !important; /* 稍微调小一点点，让长代码更不容易换行太频繁 */
-    line-height: 1.5 !important;
 }
 
-/* 5. 消除多余的行间距干扰 */
-pre > code {
+/* --- 2. 行内代码 (Inline Code) 样式 (解决 `code` 没背景) --- */
+/* 策略：先给所有 code 标签加背景，然后在代码块里取消它 */
+code {
+    background-color: rgba(27,31,35,0.05) !important; /* GitHub 浅灰背景 */
+    padding: 0.2em 0.4em !important;                  /* 像按钮一样的小边距 */
+    margin: 0 !important;
+    border-radius: 6px !important;                    /* 小圆角 */
+    white-space: normal !important;                   /* 允许行内长代码换行 */
+}
+
+/* --- 3. 代码块容器 (Block Wrapper) --- */
+div.sourceCode {
+    background-color: #f6f8fa !important;  /* 代码块的大背景 */
+    border: 1px solid #d0d7de !important;
+    border-radius: 6px !important;
+    
+    padding: 16px !important;
+    margin: 16px 0 !important;
+    
+    page-break-inside: avoid; /* 防止打印时断开 */
+}
+
+/* --- 4. 代码块内部重置 (Block Inner) --- */
+/* ⚠️ 核心逻辑：代码块内部的 code 不需要单独的灰色背景，因为外面 div 已经有了 */
+pre.sourceCode {
     background-color: transparent !important;
     border: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    
+    /* 强制换行，防止溢出 */
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+    overflow: hidden !important;
 }
 
-/* 6. 高亮颜色 (配合 --highlight-style=haddock) */
-/* 保持您现有的高亮颜色不变，或者把之前的颜色粘贴到这里 */
+/* ⚠️ 关键：重置代码块内 code 的样式，避免“双重背景”或“小灰块” */
+pre.sourceCode > code {
+    background-color: transparent !important; /* 必须透明，透出 div 的背景 */
+    padding: 0 !important;
+    border-radius: 0 !important;
+    white-space: inherit !important;
+    font-size: inherit !important; /* 继承外层大小 */
+}
+
+/* --- 5. 高亮颜色 (保持 GitHub 风格) --- */
 code span.kw { color: #cf222e !important; font-weight: bold; } 
 code span.dt { color: #953800 !important; }
 code span.dv { color: #0550ae !important; }

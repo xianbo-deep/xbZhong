@@ -17,14 +17,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
-          
+          python-version: '3.9' 
+
+      - name: Install Requests
+        run:
+          pip install requests
+
       - name: Generate Report (HTML)
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           REPO_OWNER: 'xbzhong-deep'  # 请修改为你的用户名/组织名
           REPO_NAME: 'MyBlogComments'  # 请修改为你的仓库名
-        run: python generate_report.py
+        run: python generate-discussion-report.py
 
       - name: Send email
         uses: dawidd6/action-send-mail@v3

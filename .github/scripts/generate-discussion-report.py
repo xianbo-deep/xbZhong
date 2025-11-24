@@ -133,7 +133,7 @@ def main():
         # 但为了简单，这里还是生成报告，只是内容为空
     
     # 3. 读取 HTML 模板
-    with open(".github/discussion-report-template.html", "r", encoding="utf-8") as f:
+    with open("./discussion-report-template.html", "r", encoding="utf-8") as f:
         html = f.read()
 
     # 4. 替换基础信息

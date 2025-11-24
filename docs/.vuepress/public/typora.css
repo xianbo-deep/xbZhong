@@ -505,70 +505,72 @@ pre > code {
    【Typora-GitHub 复刻版】代码块专用样式
    ========================================================================== */
 
+/* ==========================================================================
+   【最终完美版】解决双框 + 代码溢出问题
+   ========================================================================== */
 
-/* 1. 容器样式：圆角、灰背景、边框 */
-div.sourceCode, pre.sourceCode {
-    background-color: #f6f8fa !important; /* GitHub 官方浅灰背景 */
-    border: 1px solid #d0d7de !important; /* GitHub 官方边框色 */
-    border-radius: 6px !important;        /* 圆角 */
-    padding: 16px !important;             /* 内部舒适的留白 */
-    margin-bottom: 16px !important;
-    margin-top: 16px !important;
-    overflow-x: auto;                     /* 长代码滚动 */
+/* 1. 样式重置：先清理所有潜在干扰 */
+div.sourceCode, pre.sourceCode, code {
+    box-sizing: border-box;
 }
 
-/* 2. 字体核心修正：这决定了代码是否“丑” */
-/* 优先使用英文编程字体，最后才是中文字体 */
+/* 2. 外层容器 (div)：负责画框、背景、圆角 */
+/* 只在这里定义边框，就不会出现“双框”了 */
+div.sourceCode {
+    background-color: #f6f8fa !important;  /* GitHub 浅灰背景 */
+    border: 1px solid #d0d7de !important;  /* GitHub 边框 */
+    border-radius: 6px !important;         /* 圆角 */
+    
+    /* 容器间距 */
+    margin: 16px 0 !important;
+    padding: 16px !important;              /* 内部留白 */
+    
+    /* 打印安全性 */
+    page-break-inside: avoid;              /* 尽量不把代码块切成两半 */
+}
+
+/* 3. 内层容器 (pre)：负责排版、换行 */
+/* ⚠️ 必须把这里的边框和背景去掉，否则会和外面叠加 */
+pre.sourceCode {
+    background-color: transparent !important; /* 透明，透出外面的灰色 */
+    border: none !important;                  /* 去掉内层边框 */
+    margin: 0 !important;
+    padding: 0 !important;
+    
+    /* --- 核心修复：长代码自动换行 --- */
+    /* Typora PDF 的行为是换行，而不是滚动 */
+    white-space: pre-wrap !important;         /* 保留空格，但允许换行 */
+    word-break: break-all !important;         /* 强制在一个长单词中间断开，防止溢出 */
+    overflow-x: hidden !important;            /* 隐藏滚动条 */
+}
+
+/* 4. 字体修正 (保持您之前的设置) */
 code, kbd, pre, samp, .sourceCode, span.sourceCode {
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
-    font-size: 14px !important; /* 调整为适合阅读的大小 */
+    font-size: 0.85em !important; /* 稍微调小一点点，让长代码更不容易换行太频繁 */
     line-height: 1.5 !important;
-    
-    /* 消除 Pandoc/Pygments 可能带来的背景干扰 */
-    background-color: transparent !important;
-    border: none !important;
-    white-space: pre !important; /* 保持格式 */
 }
 
-/* 3. 强制消除多余空白 */
+/* 5. 消除多余的行间距干扰 */
 pre > code {
     background-color: transparent !important;
+    border: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    border: none !important;
 }
 
-/* ==========================================================================
-   【语法高亮颜色】精确复刻 GitHub Light 主题
-   配合 --highlight-style=haddock 使用
-   ========================================================================== */
-code span.kw { color: #cf222e !important; font-weight: bold; } /* 关键字 (return, if) */
-code span.dt { color: #953800 !important; } /* 数据类型 (int, bool) */
-code span.dv { color: #0550ae !important; } /* 数字 */
-code span.bn { color: #0550ae !important; } /* Base N */
-code span.fl { color: #0550ae !important; } /* Float */
-code span.ch { color: #0a3069 !important; } /* Char */
-code span.st { color: #0a3069 !important; } /* String */
-code span.co { color: #6e7781 !important; font-style: italic; } /* 注释 */
-code span.ot { color: #cf222e !important; } /* 操作符 */
-code span.al { color: #cf222e !important; background-color: #ffebe9 !important; font-weight: bold; } /* Alert */
-code span.fu { color: #8250df !important; } /* 函数名 */
-code span.re { color: #0550ae !important; } /* Region */
-code span.er { color: #cf222e !important; background-color: #ffebe9 !important; } /* Error */
-code span.wa { color: #953800 !important; font-weight: bold; } /* Warning */
-code span.cn { color: #0550ae !important; } /* Constant */
-code span.sc { color: #0550ae !important; } /* Special Char */
-code span.vs { color: #0a3069 !important; } /* Verbatim String */
-code span.ss { color: #0a3069 !important; } /* Special String */
-code span.im { color: #8250df !important; } /* Import */
-code span.va { color: #953800 !important; } /* Variable */
-code span.cf { color: #cf222e !important; font-weight: bold; } /* Control Flow */
-code span.op { color: #cf222e !important; } /* Operator */
-code span.bu { color: #8250df !important; } /* Builtin */
-code span.ex { color: #8250df !important; } /* Extension */
-code span.pp { color: #cf222e !important; } /* Preprocessor */
-code span.at { color: #953800 !important; } /* Attribute */
-code span.do { color: #6e7781 !important; font-style: italic; } /* Doc String */
-code span.an { color: #6e7781 !important; font-style: italic; } /* Annotation */
-code span.cv { color: #6e7781 !important; font-style: italic; } /* Comment Var */
-code span.in { color: #6e7781 !important; font-style: italic; } /* Information */
+/* 6. 高亮颜色 (配合 --highlight-style=haddock) */
+/* 保持您现有的高亮颜色不变，或者把之前的颜色粘贴到这里 */
+code span.kw { color: #cf222e !important; font-weight: bold; } 
+code span.dt { color: #953800 !important; }
+code span.dv { color: #0550ae !important; }
+code span.bn { color: #0550ae !important; }
+code span.fl { color: #0550ae !important; }
+code span.ch { color: #0a3069 !important; }
+code span.st { color: #0a3069 !important; }
+code span.co { color: #6e7781 !important; font-style: italic; }
+code span.ot { color: #cf222e !important; }
+code span.al { color: #cf222e !important; background-color: #ffebe9 !important; font-weight: bold; }
+code span.fu { color: #8250df !important; }
+code span.re { color: #0550ae !important; }
+code span.er { color: #cf222e !important; background-color: #ffebe9 !important; }

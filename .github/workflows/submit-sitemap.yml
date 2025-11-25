@@ -25,7 +25,7 @@ jobs:
     - name: Prepare Email Content
       if: success()
       run: |
-          if [ -f .github/indexnow-template.html ]; then
+          if [ -f .github/template/indexnow-template.html ]; then
             cp .github/template/indexnow-template.html email.html
           else
             echo "Error: Template not found, creating basic one."

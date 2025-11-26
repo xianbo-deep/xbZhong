@@ -22,6 +22,12 @@ date: 2025-10-10
   preview="/jhwangblog.png"
 />
 
+<SiteInfo
+  name="宋文韬的博客"
+  url="https://wentao2297.github.io"
+  preview="/wentaoblog.png"
+/>
+
 ### 自动生成评论通知邮件
 Giscus还是有些鸡肋，别人评论的时候自己完全不知道，因此我使用了GithubAction去监听Discussion，当有人评论的时候即可自动发送邮件到我的QQ邮箱
 

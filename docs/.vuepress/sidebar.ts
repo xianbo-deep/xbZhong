@@ -409,6 +409,11 @@ export default sidebar({
       expanded: true
     },
     {
+      text: "工具箱",
+      link: "tools.md",
+      expanded: true
+    },
+    {
       text: "课程笔记",
       prefix: "coursenote/",
       expanded: true,

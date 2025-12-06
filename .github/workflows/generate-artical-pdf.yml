@@ -69,7 +69,7 @@ jobs:
           if ! git diff --cached --quiet; then
             echo "Changes detected, committing..."
             git commit -m "chore(pdf): update generated PDFs and mapping [skip ci]"
-            git push origin test
+            git push origin main
           else
             echo "No changes to commit."
           fi

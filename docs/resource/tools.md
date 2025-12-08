@@ -5,6 +5,8 @@ article: false
 timeline: false
 ---
 
+[本页PDF](/pdfs/resource/tools.pdf)\n
+
 [矩阵计算](https://matrixcalc.org/zh-CN/vectors.html)
 
 [函数可视化](https://ggb123.cn/calculator)

@@ -997,5 +997,12 @@
     "hash": "8d3b17bc69d42eac9bc6d8e21f721c3acae56822c19f8112e4d63964bae642fa",
     "size": "61565",
     "gen_time": "2025-11-24T13:37:06"
+  },
+  "docs/resource/tools.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/tools.pdf",
+    "images": [],
+    "hash": "8c21eea5aa90b4807a7253e8452c67a26b357c931ff00d60ce39a24e7c6bb6a2",
+    "size": "77531",
+    "gen_time": "2025-12-08T15:39:21"
   }
 }

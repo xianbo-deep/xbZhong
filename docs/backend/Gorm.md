@@ -8,6 +8,8 @@ timeline: true
 icon: devicon:go
 date: 2025-12-10
 ---
+
+[本页PDF](/pdfs/backend/Gorm.pdf)\n
 ## Gorm
 
 是Go的**ORM框架**，支持：MySQL、PostgreSQL等，但所有方法的参数都是空接口类型，不看文档很难知道要传递什么参数

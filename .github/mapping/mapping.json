@@ -1004,5 +1004,19 @@
     "hash": "8c21eea5aa90b4807a7253e8452c67a26b357c931ff00d60ce39a24e7c6bb6a2",
     "size": "77531",
     "gen_time": "2025-12-08T15:39:21"
+  },
+  "docs/backend/Gin.md": {
+    "pdf": "docs/.vuepress/public/pdfs/backend/Gin.pdf",
+    "images": [],
+    "hash": "03641c200e5785120546dd381571fa8f01913d5eda7722eeab201b93c55c3c1f",
+    "size": "1303901",
+    "gen_time": "2025-12-11T09:11:33"
+  },
+  "docs/backend/Gorm.md": {
+    "pdf": "docs/.vuepress/public/pdfs/backend/Gorm.pdf",
+    "images": [],
+    "hash": "54b39c03cc288758e319c6aacd95b7d359fef1148c154384fd37735349855cb4",
+    "size": "303728",
+    "gen_time": "2025-12-11T09:11:33"
   }
 }

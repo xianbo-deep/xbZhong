@@ -8,6 +8,8 @@ timeline: true
 icon: logos:gin
 date: 2025-12-10
 ---
+
+[本页PDF](/pdfs/backend/Gin.pdf)\n
 ## HttpRouter
 
 **Gin的路由组件**

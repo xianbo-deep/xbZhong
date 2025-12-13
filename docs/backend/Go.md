@@ -141,6 +141,46 @@ func main(){
 
 - **函数的主左括号一定要和函数名同一行**，否则编译不通过
 
+### 常见API
+
+- `fmt.Print()`：按顺序输出参数，但不会自动添加空格或换行
+- `fmt.Println()`：会在每个参数之间自动添加空格，并在结尾自动换行
+- `fmt.Printf()`：可以用 `%d`、`%s`、`%v` 等占位符来自定义输出，不会自动换行
+- `fmt.Sprint()`：拼接字符串并返回
+- `fmt.Sprintf()`：按照规则拼接字符串
+- `fmt.Sprintln()`：拼接并加空格 + 换行
+- `strconv.ParseInt`：将字符串转换为整型，返回值为**转换结果和错误信息**
+  - `s`：要转换的字符串
+  - `base`：进制
+    - `10` ：十进制（最常用）
+    - `2` ：二进制
+    - `8` ： 八进制
+    - `16` ： 十六进制
+  - `bitSize`：目标整数位数
+- `math.MaxInt64`：有符号最大值
+- `math.MinInt64`：有符号最小值
+- `变量一，变量二 = 变量二，变量一`：变量交换
+- Go内置了`Error`接口，实现类的时候若有要求可以直接实现`Error`接口
+
+**排序**
+
+```go
+// 整数切片排序
+sort.Ints(nums []int)                    // 升序
+sort.IntsAreSorted(nums []int) bool      // 检查是否已排序
+sort.SearchInts(a []int, x int) int      // 二分查找
+
+// 浮点数切片排序
+sort.Float64s(f []float64)               // 升序
+sort.Float64sAreSorted(f []float64) bool
+
+// 字符串切片排序
+sort.Strings(s []string)                  // 字典序
+sort.StringsAreSorted(s []string) bool
+```
+
+
+
 ### 基本数据类型
 
 ```go
@@ -157,7 +197,7 @@ uint uint8 uint16 uint32 uint64 uintptr
 // uint8的别名，即一个字节
 byte
 
-// int32的别名，表示一个Unicode字符，常用来表示单个字符
+// int32的别名，四个字节，表示一个Unicode字符，常用来表示单个字符
 rune
 
 // 浮点类型
@@ -284,8 +324,8 @@ func fool1(a string,b int) (int,int){
 **带名称的返回值**
 
 - 函数值的返回值可以被**命名**
-  - 作用域为**当前函数范围**
-- 使用空的return语句直接返回已命名的返回值
+  - 作用域为**当前函数范围！！！**
+- 使用空的return语句直接返回**已命名的返回值**
 
 ```go
 func split(sum int) (x,y int){
@@ -326,11 +366,146 @@ func main(){
 }
 ```
 
+### 异常
+
+在 Go 中的异常有三种级别：
+
+- `error`：正常的流程出错，需要处理，直接忽略掉不处理程序也不会崩溃
+- `panic`：很严重的问题，程序应该在处理完问题后立即退出
+- `fatal`：非常致命的问题，程序应该立即退出
+
+**`panic`和`recover`**
+
+- 可以使用`panic`抛出异常，异常会逐层向上传播，如果没有`recover`，**程序会崩溃**
+- 可以使用`recover`捕获异常
+
+```go
+func checkTemperature(temp float64) {
+    // defer 函数会在 checkTemperature 返回前执行,无论是因为正常 return 还是因为 panic
+    defer func() {
+        // 在函数结束前检查是否有 panic
+        if r := recover(); r != nil {
+            fmt.Println("\"体温异常\"")
+        }
+    }()
+    
+    if temp > 37.5 {
+        panic("体温异常")  // 触发异常
+    }
+    // 函数正常结束
+}
+```
+
+#### error
+
+本身是一个预定义的接口，该接口方法下只有一个方法`Error()`，该方法的返回值是字符串，用于输出类型信息
+
+```go
+type error interface {
+   Error() string
+}
+```
+
+**创建error**
+
+- 使用`errors`包下的`New`函数
+
+```go
+err := errors.New("这是一个错误")
+```
+
+- 是使用`fmt`包下的`Errorf`函数，可以得到一个格式化参数的 error
+
+```go
+err := fmt.Errorf("这是%d个格式化参数的的错误", 1)
+```
+
+**错误传递**
+
+- 使用`wrapError`进行包装
+  - 实现了`error`接口，用于返回当前**当前层的错误**
+  - 拥有`Unwrap`方法，用于返回**被包装的下层错误**
+
+```go
+type wrapError struct{
+    msg string
+    err error
+}
+
+func (e *wrapError) Error() string {
+   return e.msg
+}
+
+func (e *wrapError) Unwrap() error {
+   return e.err
+}
+```
+
+- `wrapError`不对外暴露，需要使用`fmt.Errorf()`进行创建
+  - 创建时必须使用`%w`对错误进行格式化，且参数只能是一个有效的`err`
+
+```go
+err := errors.New("错误")
+wrapErr := fmt.Errorf("错误,%w",err)
+```
+
+**处理**
+
+- 使用`errors.Is`方法判断错误链中是否包含指定的错误
+
+```go
+func Is(err, target error) bool
+```
+
+- `errors.Unwrap()`函数用于**解包**一个错误链
+
+#### panic
+
+**注意：**当程序中存在多个协程时，只要任一协程发生`panic`，如果不将其捕获的话，整个程序都会崩溃
+
+**创建**
+
+- 使用内置函数`panic`，签名如下
+  - 当输出错误的堆栈信息时，`v`也会被输出
+
+```go
+func panic(v any)
+```
+
+**善后**
+
+- 使用`defer`进行出现`panic`后的善后工作，这里不细说
+
+**恢复**
+
+- 使用`recover`函数进行及时的处理并且保证程序继续运行，且必须要在`defer`里运行
+
+```go
+func main() {
+   dangerOp()
+   fmt.Println("程序正常退出")
+}
+
+func dangerOp() {
+   defer func() {
+      if err := recover(); err != nil {
+         fmt.Println(err)
+         fmt.Println("panic恢复")
+      }
+   }()
+   panic("发生panic")
+}
+```
+
+
+
 ### 条件判断
 
 - `if`后面必须**要有大括号**，且不能把`if`语句写到同一行
 - `if-else`判断语句**没有小括号**
 - 允许在判断条件之前执行一个简单的语句，用`;`隔开，一般用于声明临时变量
+- `else`一定要跟在`if`大括号后面
+- 使用`else if`而不是`elif`
 
 ```go
 // 不合法
@@ -345,6 +520,8 @@ if v > 10{
 if st:=0 ;v > 10{
     st = 1
     work()
+}else{
+    // ...
 }
 ```
 
@@ -354,6 +531,7 @@ if st:=0 ;v > 10{
 - `switch`的`case`可以判断多个值
 - `switch`里面的每个分支结尾自带`break`
 - 可以用`fallthrough`关键字**强制进入**下一个`case`
+- 若`switch 变量`，则`case` 后面必须写与变量匹配的值
 
 ```go
 switch{
@@ -396,7 +574,7 @@ for i<=3{
 - defer后面必须是**函数调用语句**
 - defer后面跟的函数会在外层函数返回之前触发
 - 有多个defer的时候会**按顺序入栈**，外层函数返回之后会**依次出栈**
-- **defer是在return之后执行的**
+- **defer是在return之前执行的**
 
 ```go
 import "fmt"
@@ -406,6 +584,20 @@ func main(){
     fmt.Println("hello")
 }// 输出 hello world
 ```
+
+调用defer函数体
+
+- 在最后加`()`，是为了立刻调用这个`defer`函数
+
+```go
+defer func(){
+        if r := recover(); r != nil{
+           msg = "体温异常"
+        }
+    }()
+```
+
+
 
 ### Slice
 
@@ -470,6 +662,7 @@ for _,value := range myArray1{
   }
   ```
 
+- 可以用`fmt.Println()`打印数组
 
 
 **动态数组**
@@ -483,7 +676,7 @@ for _,value := range myArray1{
 
 ```go
 // 声明切片并初始化
-slice1 := [int]{1,2,3}
+slice1 := []int{1,2,3}
 
 // 声明slice是一个切片，但是并没有给slice分配空间
 var slice1 []int
@@ -524,6 +717,7 @@ func main() {
   - 可以使用`append`关键字进行切片扩容，增加**合法元素数量**，`a = append(a,value)`
     - 也可以使用`append`进行**切片对切片的追加**
     - 当切片总空间不足，底层会进行扩容，**扩容一倍**
+    - `append`如果跟了多个独立切片，需要用`...`解包运算符
 
 ```go
 // 声明切片
@@ -532,6 +726,29 @@ var numbers = make([]int,3,5)
 // 扩容
 numbers = append(numbers,1)
 ```
+
+- 从头部插入元素
+
+```go
+nums = append([]int{-1, 0}, nums...)
+fmt.Println(nums) // [-1 0 1 2 3 4 5 6 7 8 9 10]
+```
+
+- 从中间下标i插入元素
+
+```go
+nums = append(nums[:i+1], append([]int{999, 999}, nums[i+1:]...)...)
+fmt.Println(nums) // i=3，[1 2 3 4 999 999 5 6 7 8 9 10]
+```
+
+- 从尾部插入元素
+
+```go
+nums = append(nums, 99, 100)
+fmt.Println(nums) // [1 2 3 4 5 6 7 8 9 10 99 100]
+```
+
+
 
 - **切片的截取**
   - `s[i:]`：从i切到末尾
@@ -552,17 +769,19 @@ s1 = s[0:2]
 **声明Map类型**
 
 - `[]`里面存的是`key`的类型，外卖放`value`的类型
+  - 空间不够会自动扩容
   - 使用`make`方法开辟内存空间
   - 使用`:=`直接声明
   - 声明的时候进行初始化
     - 使用**中括号**插入键值对
+
 - 可以使用`key`和`value`直接赋值
 
 ```go
 // 声明map
 var myMap1 map[string]string
 // 开辟内存空间
-myMap1 = make(map[string][string],10)
+myMap1 = make(map[string]string,10)
 // 直接赋值
 myMap1["one"] = "php"
 myMap2["tow"] = 'js'
@@ -572,7 +791,7 @@ myMap3["three"] = "go"
 var myMap2 := make(map[int]string,10)
 
 // 声明的时候初始化
-myMap3 := map[string][string]{
+myMap3 := map[string]string{
     "one":"php",
     "two":"js",
     "three":"go"
@@ -584,7 +803,7 @@ myMap3 := map[string][string]{
 - **遍历：**使用`range`关键字进行遍历
 
 ```go
-myMap3 := map[string][string]{
+myMap3 := map[string]string{
     "one":"php",
     "two":"js",
     "three":"go"
@@ -601,7 +820,7 @@ for key,value := range myMap3{
   - 第二个参数为要删除的键值对的`key`
 
 ```go
-myMap3 := map[string][string]{
+myMap3 := map[string]string{
     "one":"php",
     "two":"js",
     "three":"go"
@@ -810,6 +1029,17 @@ func (this *SuperMan) Eat(){
     
     ```
 
+- `interface{}`（空接口）可以存储**任意类型的值**，是万能容器
+
+```go
+type iface struct {
+    tab  *itab          // 类型信息
+    data unsafe.Pointer // 实际数据的指针
+}
+```
+
+
+
 **多态**
 
 - 使用接口**声明**，实现接口的类**定义**
@@ -912,6 +1142,8 @@ func main(){
 
 **变量构造**（`pair`）
 
+Go中的每个变量，在底层都是一个`(type,value)`对
+
 - 变量类型：`type`
   - 静态类型：`static type`，**声明**时就能确定的类型
   - 具体类型：`concrete type`，**运行**时才能确定的类型
@@ -928,6 +1160,8 @@ allType = a
 ```
 
 **反射**
+
+用于接口`interface`
 
 - 需要导入`reflect`库
 
@@ -1054,8 +1288,6 @@ func main(){
 - `goroutine`创建与销毁的开销较小
 - `goroutine`的调度发生在**用户态**（轻量级的线程），**切换成本低**；系统线程的调度发生在**内核态**，**切换成本高**
 - `goroutine`的通信可通过**`channel`**完成，系统线程通信依赖**共享内存和锁机制**
-
-
 
 **协程的调度模型**
 

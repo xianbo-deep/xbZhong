@@ -76,9 +76,9 @@
       "/screenshot/backend/image-20251015173754231.png",
       "/screenshot/backend/image-20251015173810451.png"
     ],
-    "hash": "164bf895aba342ec77de68c439e8333a5a6cde9ad23353102058aafda1e038b9",
-    "size": "4355801",
-    "gen_time": "2025-11-24T13:35:38"
+    "hash": "2f479c2720f4df2ac0917e5b8c7f51d6515c47a6d7a628931c2ffaa2dbe34fa6",
+    "size": "4660364",
+    "gen_time": "2025-12-16T09:12:09"
   },
   "docs/backend/JVM.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/JVM.pdf",
@@ -1015,8 +1015,8 @@
   "docs/backend/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Gorm.pdf",
     "images": [],
-    "hash": "54b39c03cc288758e319c6aacd95b7d359fef1148c154384fd37735349855cb4",
-    "size": "303728",
-    "gen_time": "2025-12-11T09:11:33"
+    "hash": "182591aece001c074bef3699a093fa1c5d41976696220523c6ec8866857167d1",
+    "size": "1896705",
+    "gen_time": "2025-12-16T09:12:10"
   }
 }

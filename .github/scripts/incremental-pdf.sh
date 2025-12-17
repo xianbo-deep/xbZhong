@@ -56,19 +56,23 @@ while IFS= read -r -u9 file; do
     done
     if [ "$skip" = true ]; then continue; fi
     
+    # 提前计算 PDF 路径，用于判断文件是否存在
+    rel_path="${file#$INPUT_DIR/}"
+    pdf_path="$OUTPUT_DIR/${rel_path%.md}.pdf"
+
     last_hash=$(jq -r --arg key "$file" '.[$key].hash // ""' "$MAP_FILE")
     current_hash=$(sha256sum "$file" | cut -d' ' -f1)
 
-    if [ "$last_hash" = "$current_hash" ]; then
+    # 只有当 hash 一致 且 目标 PDF 文件存在时，才跳过
+    if [ "$last_hash" = "$current_hash" ] && [ -f "$pdf_path" ]; then
         # echo "[Unchanged] $file"
         continue
     fi
 
     echo ">>> Processing $file ..."
 
-    rel_path="${file#$INPUT_DIR/}"
     web_pdf_path="/pdfs/${rel_path%.md}.pdf"
-    pdf_path="$OUTPUT_DIR/${rel_path%.md}.pdf"
+    # pdf_path 已在上面定义
     mkdir -p "$(dirname "$pdf_path")"
 
     # 提取图片
@@ -141,7 +145,7 @@ while IFS= read -r -u9 file; do
             if grep -q "\[本页PDF\](/pdfs/" "$file"; then sed -i '/\[本页PDF\](\/pdfs\//d' "$file"; fi
             if [[ "$(head -n 1 "$file")" == "---" ]]; then
                 end_fm_line=$(grep -n "^---$" "$file" | sed -n '2p' | cut -d: -f1)
-                if [[ -n "$end_fm_line" ]]; then sed -i "${end_fm_line}a \\\\n$link_md\\\\n" "$file"; else sed -i "1i $link_md\\n" "$file"; fi
+                if [[ -n "$end_fm_line" ]]; then sed -i "${end_fm_line}a \\n$link_md\\n" "$file"; else sed -i "1i $link_md\\n" "$file"; fi
             else
                 sed -i "1i $link_md\\n" "$file"
             fi
@@ -169,6 +173,24 @@ while IFS= read -r -u9 file; do
     fi
 
 done 9< <(find "$INPUT_DIR" -type f -name "*.md" | sort)
+
+# 清理僵尸数据
+echo ">>> Checking for obsolete files..."
+jq -r 'keys[]' "$MAP_FILE" | while read -r key; do
+    if [ ! -f "$key" ]; then
+        echo "Source file missing: $key"
+        
+        # 1. 删除对应的 PDF 文件
+        pdf_path=$(jq -r --arg k "$key" '.[$k].pdf // empty' "$MAP_FILE")
+        if [[ -n "$pdf_path" && -f "$pdf_path" ]]; then
+            rm "$pdf_path"
+            echo "Deleted orphan PDF: $pdf_path"
+        fi
+        
+        # 2. 从 mapping.json 中删除
+        jq --arg k "$key" 'del(.[$k])' "$MAP_FILE" > tmp_map_clean.json && mv tmp_map_clean.json "$MAP_FILE"
+    fi
+done
 
 jq --arg total_files "$total_files" \
    --arg total_size "$total_size" \

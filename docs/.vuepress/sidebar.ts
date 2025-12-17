@@ -92,24 +92,6 @@ export default sidebar({
       
     },
     {
-      text: "Go",
-      icon: "logos:go",
-      link: "Go.md",
-      expanded: true, 
-    },
-    {
-      text: "Gin",
-      icon: "logos:gin",
-      link: "Gin.md",
-      expanded: true, 
-    },
-    {
-      text: "Gorm",
-      icon: "devicon:go",
-      link: "Gorm.md",
-      expanded: true, 
-    },
-    {
       text: "JVM",
       icon: "eos-icons:virtual-guest",
       link: "JVM.md",
@@ -212,6 +194,26 @@ export default sidebar({
       link: "LangChain4j.md",
       expanded: true,
       
+    },
+  ],
+  "/golang/":[
+    {
+      text: "Go",
+      icon: "logos:go",
+      link: "Go.md",
+      expanded: true, 
+    },
+    {
+      text: "Gin",
+      icon: "logos:gin",
+      link: "Gin.md",
+      expanded: true, 
+    },
+    {
+      text: "Gorm",
+      icon: "devicon:go",
+      link: "Gorm.md",
+      expanded: true, 
     },
   ],
   "/ds/":[

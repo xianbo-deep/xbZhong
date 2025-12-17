@@ -3,7 +3,7 @@ title: Go
 author: xbZhong
 isOriginal: true
 article: true
-category: backend
+category: golang
 timeline: true
 icon: logos:go
 date: 2025-10-11

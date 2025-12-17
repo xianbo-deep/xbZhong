@@ -3,13 +3,13 @@ title: Gin
 author: xbZhong
 isOriginal: true
 article: true
-category: backend
+category: golang
 timeline: true
 icon: logos:gin
 date: 2025-12-10
 ---
 
-[本页PDF](/pdfs/backend/Gin.pdf)\n
+[本页PDF](/pdfs/backend/Gin.pdf)
 ## HttpRouter
 
 **Gin的路由组件**

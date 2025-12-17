@@ -6,6 +6,7 @@ export default navbar([
   "/dl/",
   "/ds/",
   "/backend/",
+  "/golang/",
   "/coding/",
   "/jottings/",
   "/resource/",

@@ -727,7 +727,7 @@ $$
 
 计算Precision和Recall，体温超过38度为阳性患者
 
-![image-20251216104253184](C:\Users\23967\AppData\Roaming\Typora\typora-user-images\image-20251216104253184.png)
+![image-20251216104253184](/myMajor/note/image-20251216104253184.png)
 
 |       | P     | N     |
 | ----- | ----- | ----- |
@@ -750,7 +750,7 @@ $$
 3. 选择不同的距离范数不会影响1-NN的决策边界。**[错误]**
 4. 最近邻算法是一种参数化方法。**[错误]**
 
-![image-20251216110606101](C:\Users\23967\AppData\Roaming\Typora\typora-user-images\image-20251216110606101.png)
+![image-20251216110606101](/myMajor/note/image-20251216110606101.png)
 
 **A**，解析：
 

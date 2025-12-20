@@ -215,6 +215,12 @@ export default sidebar({
       link: "Gorm.md",
       expanded: true, 
     },
+    {
+      text: "Bash",
+      icon: "mdi:bash",
+      link: "Bash.md",
+      expanded: true, 
+    },
   ],
   "/ds/":[
      {
@@ -437,6 +443,10 @@ export default sidebar({
         {
           text: "模式识别与统计学习",
           link: "ml.md"
+        },
+        {
+          text: "人工智能原理及其应用",
+          link: "ai_application.md"
         },
       ]
     },

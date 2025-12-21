@@ -8,8 +8,9 @@ timeline: true
 icon: logos:go
 date: 2025-10-11
 ---
+n[本页PDF](/pdfs/golang/Go.pdf)
 
-[本页PDF](/pdfs/backend/Go.pdf)
+
 
 ## Golang的优势
 

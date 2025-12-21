@@ -61,25 +61,6 @@
     "size": "423301",
     "gen_time": "2025-11-24T13:35:36"
   },
-  "docs/backend/Go.md": {
-    "pdf": "docs/.vuepress/public/pdfs/backend/Go.pdf",
-    "images": [
-      "/screenshot/backend/image-20251011122440219.png",
-      "/screenshot/backend/image-20251011171819781.png",
-      "/screenshot/backend/image-20251015154123809.png",
-      "/screenshot/backend/image-20251015122659139.png",
-      "/screenshot/backend/image-20251015160120180.png",
-      "/screenshot/backend/image-20251015161152465.png",
-      "/screenshot/backend/image-20251015161111010.png",
-      "/screenshot/backend/image-20251015165748812.png",
-      "/screenshot/backend/image-20251015165732289.png",
-      "/screenshot/backend/image-20251015173754231.png",
-      "/screenshot/backend/image-20251015173810451.png"
-    ],
-    "hash": "2f479c2720f4df2ac0917e5b8c7f51d6515c47a6d7a628931c2ffaa2dbe34fa6",
-    "size": "4660364",
-    "gen_time": "2025-12-16T09:12:09"
-  },
   "docs/backend/JVM.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/JVM.pdf",
     "images": [
@@ -758,9 +739,9 @@
       "/screenshot/dl/image-48.png",
       "/screenshot/dl/image-49.png"
     ],
-    "hash": "96f92b08540ea61d801995e6fd8b38f422390f4b21b5840d38823633a2b3b696",
+    "hash": "162ccb6adde5473b0166a1ac6113df41cc211bfeced606579e0e494c97518ca2",
     "size": "10213015",
-    "gen_time": "2025-11-24T13:36:43"
+    "gen_time": "2025-12-21T09:14:26"
   },
   "docs/dl/pytorch/pytorch.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/pytorch/pytorch.pdf",
@@ -986,10 +967,13 @@
   },
   "docs/resource/coursenote/ml.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ml.pdf",
-    "images": [],
-    "hash": "c0eb31bdb1ecb09c0bdea6eb526c01a1af04f83ab312cf63bf991c3801274f98",
-    "size": "659701",
-    "gen_time": "2025-11-24T13:37:06"
+    "images": [
+      "/myMajor/note/image-20251216104253184.png",
+      "/myMajor/note/image-20251216110606101.png"
+    ],
+    "hash": "d0d70ac3240622880432a9769826304546ba7cee2f656cfc8fc6d58f2ff7de16",
+    "size": "1336907",
+    "gen_time": "2025-12-21T09:14:36"
   },
   "docs/resource/minor.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/minor.pdf",
@@ -1005,18 +989,51 @@
     "size": "77531",
     "gen_time": "2025-12-08T15:39:21"
   },
-  "docs/backend/Gin.md": {
-    "pdf": "docs/.vuepress/public/pdfs/backend/Gin.pdf",
+  "docs/golang/Bash.md": {
+    "pdf": "docs/.vuepress/public/pdfs/golang/Bash.pdf",
     "images": [],
-    "hash": "03641c200e5785120546dd381571fa8f01913d5eda7722eeab201b93c55c3c1f",
-    "size": "1303901",
-    "gen_time": "2025-12-11T09:11:33"
+    "hash": "0bf1d1233cb1ca93a6b7eae0ccdddf8ecf3bd7babfb6adefe5855b3edde06c72",
+    "size": "1101369",
+    "gen_time": "2025-12-21T09:14:28"
   },
-  "docs/backend/Gorm.md": {
-    "pdf": "docs/.vuepress/public/pdfs/backend/Gorm.pdf",
+  "docs/golang/Gin.md": {
+    "pdf": "docs/.vuepress/public/pdfs/golang/Gin.pdf",
     "images": [],
-    "hash": "182591aece001c074bef3699a093fa1c5d41976696220523c6ec8866857167d1",
-    "size": "1896705",
-    "gen_time": "2025-12-16T09:12:10"
+    "hash": "0b09ddbb3e0e770b444b7ae7f318dea152724ad0f0ea093d4179947c5fe428dd",
+    "size": "1305257",
+    "gen_time": "2025-12-21T09:14:29"
+  },
+  "docs/golang/Go.md": {
+    "pdf": "docs/.vuepress/public/pdfs/golang/Go.pdf",
+    "images": [
+      "/screenshot/backend/image-20251011122440219.png",
+      "/screenshot/backend/image-20251011171819781.png",
+      "/screenshot/backend/image-20251015154123809.png",
+      "/screenshot/backend/image-20251015122659139.png",
+      "/screenshot/backend/image-20251015160120180.png",
+      "/screenshot/backend/image-20251015161152465.png",
+      "/screenshot/backend/image-20251015161111010.png",
+      "/screenshot/backend/image-20251015165748812.png",
+      "/screenshot/backend/image-20251015165732289.png",
+      "/screenshot/backend/image-20251015173754231.png",
+      "/screenshot/backend/image-20251015173810451.png"
+    ],
+    "hash": "ebbe5b25b03be81274ad11f98b2f041d25f02229bd9be0c32f9b592acf5bd21c",
+    "size": "4660364",
+    "gen_time": "2025-12-21T09:14:31"
+  },
+  "docs/golang/Gorm.md": {
+    "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
+    "images": [],
+    "hash": "42b323b2f02280b119f66d1dcb0591f5f18c8622af34568d58df4f49d42f1e49",
+    "size": "1896366",
+    "gen_time": "2025-12-21T09:14:32"
+  },
+  "docs/resource/coursenote/ai_application.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ai_application.pdf",
+    "images": [],
+    "hash": "101648c51b29d3cd0975ef45d599599a8dc5fd0d8e7ddab5322db6809fca4c48",
+    "size": "444547",
+    "gen_time": "2025-12-21T09:14:32"
   }
 }

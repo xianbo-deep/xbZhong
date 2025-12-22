@@ -207,11 +207,11 @@ k值的选取对模型的影响
 ## 朴素贝叶斯
 **贝叶斯定理**
 $$
-\begin{align}
+\begin{aligned}
 p(x|y) &= \frac{p(y|x)p(x)}{p(y)} \\
 p(x|y,z) &= \frac{p(x|z)p(y|x,z)}{p(y,z)} \\ &= \frac{p(x,y,z)}{p(y,z)}\\
  &= \frac{p(z)p(x|z)p(y|x,z)}{p(z)p(y|z)}
-\end{align}
+\end{aligned}
 $$
 
 **基本思想**
@@ -228,25 +228,25 @@ $$
 
 **条件独立性假设**：假设特征之间是相互独立的 
 $$
-\begin{align}
+\begin{aligned}
 P(X = x | Y = c_k) &= P(X^{(1)}= x^{(1)},\cdots,X^{(n)} = x^{(n)} | Y = c_k) \\
 &= \prod_{j = 1}^nP(X^{(j)} = x^{(j)}|Y = c_k)
-\end{align}
+\end{aligned}
 $$
 
 具体的推导
 $$
-\begin{align}
+\begin{aligned}
 P(Y = c_k | X = x) &= \frac{P(X = x|Y = c_k)P(Y = c_k)}{\sum_k{P(X = x|Y = c_k)P(Y=c_k)}} \\
 &= \frac{P(Y = c_k) \prod_{j = 1}^nP(X^{(j)} = x^{(j)}|Y = c_k)}{\sum_k{P(X = x|Y = c_k)P(Y=c_k)}}
-\end{align}
+\end{aligned}
 $$
 
 分母是常数，可忽略，最后的目标为最大化$y$，即
 $$
-\begin{align}
+\begin{aligned}
 y = f(x) = \argmax_{c_k}{P(Y = c_k) \prod_{j = 1}^nP(X^{(j)} = x^{(j)}|Y = c_k)}
-\end{align}
+\end{aligned}
 $$
 
 为何最大化后验概率？下文后验概率最大化的含义给出了证明
@@ -395,10 +395,10 @@ Logistic回归是广义线性模型，决策边界是线性的
 **二项Logistic回归**
 
 $$
-\begin{align}
-P(Y = 1 | X) = \frac{e^{w\cdot x + b}}{1 + e^{w\cdot x + b}}
-P(Y = 0 | X) = \frac{1}{1 + e^{w\cdot x + b}}
-\end{align}
+\begin{aligned}
+P(Y = 1 | X) &= \frac{e^{w\cdot x + b}}{1 + e^{w\cdot x + b}} \\
+P(Y = 0 | X) &= \frac{1}{1 + e^{w\cdot x + b}}
+\end{aligned}
 $$
 
 事件发生比：发生与不发生概率之比

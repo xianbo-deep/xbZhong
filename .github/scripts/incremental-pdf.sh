@@ -143,11 +143,20 @@ while IFS= read -r -u9 file; do
         link_md="[本页PDF]($web_pdf_path)"
         if ! grep -Fq "$link_md" "$file"; then
             if grep -q "\[本页PDF\](/pdfs/" "$file"; then sed -i '/\[本页PDF\](\/pdfs\//d' "$file"; fi
+            
+            # Escape & for sed replacement
+            link_md_safe="${link_md//&/\\&}"
+
             if [[ "$(head -n 1 "$file")" == "---" ]]; then
                 end_fm_line=$(grep -n "^---$" "$file" | sed -n '2p' | cut -d: -f1)
-                if [[ -n "$end_fm_line" ]]; then sed -i "${end_fm_line}a \\n$link_md\\n" "$file"; else sed -i "1i $link_md\\n" "$file"; fi
+                if [[ -n "$end_fm_line" ]]; then 
+                    # Use s command to append after line, handling newlines correctly
+                    sed -i "${end_fm_line}s|$|\n\n$link_md_safe\n|" "$file"
+                else 
+                    sed -i "1s|^|$link_md_safe\n\n|" "$file"
+                fi
             else
-                sed -i "1i $link_md\\n" "$file"
+                sed -i "1s|^|$link_md_safe\n\n|" "$file"
             fi
             current_hash=$(sha256sum "$file" | cut -d' ' -f1)
         fi

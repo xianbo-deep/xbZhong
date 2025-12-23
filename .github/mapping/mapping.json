@@ -370,8 +370,8 @@
       "/screenshot/backend/image-20251008145844622.png"
     ],
     "hash": "9c09369155616e5333b1d388ac0347191050ed8dafe43cd043be9676590228ff",
-    "size": "9125033",
-    "gen_time": "2025-11-24T13:36:03"
+    "size": "8674051",
+    "gen_time": "2025-12-23T15:21:37"
   },
   "docs/backend/docker.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/docker.pdf",
@@ -972,8 +972,8 @@
       "/myMajor/note/image-20251216110606101.png"
     ],
     "hash": "1480239582a66a635c89837ebaeea749e590375fd6f71528dc956e7ffc4afa91",
-    "size": "1385541",
-    "gen_time": "2025-12-23T14:30:44"
+    "size": "1400729",
+    "gen_time": "2025-12-23T15:21:43"
   },
   "docs/resource/minor.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/minor.pdf",

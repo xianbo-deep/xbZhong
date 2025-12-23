@@ -1,3 +1,5 @@
+[本页PDF](/pdfs/.vuepress/public/assets/highlight/DIGESTS.pdf)
+
 ## Subresource Integrity
 
 If you are loading Highlight.js via CDN you may wish to use [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) to guarantee that you are using a legimitate build of the library.

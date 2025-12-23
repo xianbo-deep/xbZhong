@@ -200,6 +200,15 @@ ul:last-child,
 ol:last-child {
     margin-bottom: 0;
 }
+
+/* 修复无序列表在表格或特殊布局中被忽略的问题 */
+ul {
+    list-style-type: disc;
+}
+ol {
+    list-style-type: decimal;
+}
+
 blockquote {
     border-left: 4px solid #dfe2e5;
     padding: 0 15px;
@@ -211,20 +220,28 @@ blockquote blockquote {
 table {
     padding: 0;
     word-break: initial;
+    /* 修复表格渲染问题：确保边框合并，防止双线或间隙 */
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%; /* 可选：让表格撑满宽度 */
+    overflow: auto; /* 防止表格溢出 */
+    display: block; /* 允许横向滚动，防止撑破布局 */
 }
 table tr {
-    border: 1px solid #dfe2e5;
+    border-top: 1px solid #dfe2e5; /* 修改为 border-top，更符合 GitHub 风格 */
     margin: 0;
     padding: 0;
+    background-color: white; /* 确保背景色 */
 }
-table tr:nth-child(2n),
-thead {
+table tr:nth-child(2n) {
     background-color: #f8f8f8;
 }
+/* 移除 thead 的背景色设置，通常只给偶数行加背景 */
+/* thead { background-color: #f8f8f8; } */
+
 table th {
     font-weight: bold;
     border: 1px solid #dfe2e5;
-    border-bottom: 0;
     margin: 0;
     padding: 6px 13px;
 }
@@ -499,7 +516,7 @@ pre > code {
 
 /* --- 1. 全局字体与环境修正 --- */
 body {
-    font-family: "Noto Sans CJK SC", sans-serif !important;
+    font-family: "Open Sans", "Noto Sans CJK SC", sans-serif !important;
 }
 img {
     max-width: 100% !important;
@@ -528,7 +545,12 @@ code:not([class]) {
 
 
 /* 针对：```java 这种大段代码块 */
-div.sourceCode {
+/* 
+   注意：当使用 highlight.js 时，Pandoc 不会生成 div.sourceCode 容器，
+   而是生成 <pre><code class="language-xxx">...</code></pre>。
+   因此我们需要调整选择器来匹配 highlight.js 的结构。
+*/
+pre {
     background-color: #f6f8fa !important;  /* 统一的大灰背景 */
     border: 1px solid #d0d7de !important;  /* 统一的边框 */
     border-radius: 6px !important;
@@ -537,25 +559,6 @@ div.sourceCode {
     margin: 16px 0 !important;
     
     page-break-inside: avoid; /* 打印时不切断 */
-}
-
-div.sourceCode, 
-pre.sourceCode, 
-pre.sourceCode > code {
-    /* ✅ 这里控制代码块字体大小，15px 足够清晰，觉得小就改 16px */
-    font-size: 13px !important; 
-    line-height: 1.6 !important;
-    
-    /* 强制使用等宽字体 */
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
-}
-
-/* --- 5. 代码块内部重置 (防止双框和溢出) --- */
-pre.sourceCode {
-    background-color: transparent !important; /* 必须透明 */
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
     
     /* ✅ 强制换行，防止代码冲出 PDF 页面 */
     white-space: pre-wrap !important; 
@@ -563,16 +566,27 @@ pre.sourceCode {
     overflow: hidden !important;
 }
 
-/* 重置代码块内的 code 标签，防止出现“双重背景” */
-pre.sourceCode > code {
+pre > code {
+    /* ✅ 这里控制代码块字体大小，15px 足够清晰，觉得小就改 16px */
+    font-size: 13px !important; 
+    line-height: 1.6 !important;
+    
+    /* 强制使用等宽字体 */
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
+    
     background-color: transparent !important;
     padding: 0 !important;
     border: none !important;
-    font-size: inherit !important;
     color: inherit !important;
 }
 
 /* --- 6. 语法高亮 (GitHub Light 风格) --- */
+/* 
+   由于使用了 highlight.js，这里的 Pandoc 默认类名 (span.kw, span.dt 等) 将不再生效。
+   highlight.js 会使用 .hljs-keyword, .hljs-string 等类名。
+   但因为我们引入了 highlight.js 的 github.min.css，所以这里不需要手动定义颜色了。
+   我们可以删除下面这些旧的 Pandoc 样式，或者保留作为备用。
+*/
 code span.kw { color: #cf222e !important; font-weight: bold; } /* 关键字 */
 code span.dt { color: #953800 !important; } /* 数据类型 */
 code span.dv { color: #0550ae !important; } /* 数字 */

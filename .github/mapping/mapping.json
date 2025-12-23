@@ -35,8 +35,8 @@
       "/screenshot/backend/image-20251016122723629.png"
     ],
     "hash": "22c60d9b6db47dedcc1a550c71c98b795889114c58b5412036aeba4d4defe93c",
-    "size": "13315851",
-    "gen_time": "2025-11-24T13:35:33"
+    "size": "13298729",
+    "gen_time": "2025-12-23T16:31:33"
   },
   "docs/backend/Dubbo.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Dubbo.pdf",
@@ -51,15 +51,15 @@
       "/screenshot/backend/image-20251018142537953.png"
     ],
     "hash": "ec30fe72b297b732b23c33f934e52bdbca9f93f74b2f30f979216a479ad30212",
-    "size": "2985125",
-    "gen_time": "2025-11-24T13:35:35"
+    "size": "2889282",
+    "gen_time": "2025-12-23T16:31:35"
   },
   "docs/backend/GitHubActions.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/GitHubActions.pdf",
     "images": [],
     "hash": "97543802165bf20d1cfb5e44d2bdd92a743d2a857f8f31653e42b604d2ec3a54",
-    "size": "423301",
-    "gen_time": "2025-11-24T13:35:36"
+    "size": "425407",
+    "gen_time": "2025-12-23T16:31:35"
   },
   "docs/backend/JVM.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/JVM.pdf",
@@ -146,8 +146,8 @@
       "/screenshot/backend/image-20250907105940188.png"
     ],
     "hash": "bf9de2f39b423c38d41689b659ac85587814d6eb2b62618cba116c569577eac9",
-    "size": "13114858",
-    "gen_time": "2025-11-24T13:35:44"
+    "size": "12976806",
+    "gen_time": "2025-12-23T16:31:41"
   },
   "docs/backend/Java.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Java.pdf",
@@ -156,8 +156,8 @@
       "/screenshot/backend/image-20250822144303974.png"
     ],
     "hash": "6b3a871e22e59a3df1996118c2e8ebe98a7adb3ee041af849d14e45608308df7",
-    "size": "2640268",
-    "gen_time": "2025-11-24T13:35:45"
+    "size": "2438863",
+    "gen_time": "2025-12-23T16:31:42"
   },
   "docs/backend/Kafka.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Kafka.pdf",
@@ -172,8 +172,8 @@
       "/screenshot/backend/image-20251026163046158.png"
     ],
     "hash": "8896bf29142d38f4c6a8bbf7fb7f439f826fd2d6729255b516d2daa1ff571839",
-    "size": "2795453",
-    "gen_time": "2025-11-24T13:35:47"
+    "size": "2591569",
+    "gen_time": "2025-12-23T16:31:44"
   },
   "docs/backend/Kubernetes.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Kubernetes.pdf",
@@ -188,29 +188,29 @@
       "/screenshot/backend/image-20251018153151400.png"
     ],
     "hash": "b9e4061531916e296363da45e74201f4c13cb97cedc6e382b56fbb5a9563171f",
-    "size": "3372044",
-    "gen_time": "2025-11-24T13:35:48"
+    "size": "3354705",
+    "gen_time": "2025-12-23T16:31:45"
   },
   "docs/backend/LangChain4j.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/LangChain4j.pdf",
     "images": [],
     "hash": "2a74830eaee15c768d075d92100b6bf4b5d7215f74fc152dcd1ca994c43f81a8",
-    "size": "17745",
-    "gen_time": "2025-11-24T13:35:49"
+    "size": "19605",
+    "gen_time": "2025-12-23T16:31:46"
   },
   "docs/backend/Lock.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Lock.pdf",
     "images": [],
     "hash": "28022e9765e82ae468d84f25aea42a19cf2506eac2c5546201049a9bb0afffe3",
-    "size": "758949",
-    "gen_time": "2025-11-24T13:35:49"
+    "size": "742682",
+    "gen_time": "2025-12-23T16:31:46"
   },
   "docs/backend/Nginx.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Nginx.pdf",
     "images": [],
     "hash": "23ca5716a8504a89ef9ba61f880488e3aea475f78f94e322401c352ec6ba7c94",
-    "size": "798423",
-    "gen_time": "2025-11-24T13:35:50"
+    "size": "835338",
+    "gen_time": "2025-12-23T16:31:47"
   },
   "docs/backend/RabbitMQ.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/RabbitMQ.pdf",
@@ -226,8 +226,8 @@
       "/screenshot/backend/image-20251006155739041.png"
     ],
     "hash": "9e981f5503b78695d10487090c43bdd17766806a9916ea342dfc64b8a04b81fe",
-    "size": "2627391",
-    "gen_time": "2025-11-24T13:35:51"
+    "size": "2528013",
+    "gen_time": "2025-12-23T16:31:49"
   },
   "docs/backend/Redis.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Redis.pdf",
@@ -302,8 +302,8 @@
       "/screenshot/backend/image-20250926120009590.png"
     ],
     "hash": "7782e71902dcd0cb7aad5434aed8192d3395ba00246c64b10db114ae4b28ab1d",
-    "size": "11953741",
-    "gen_time": "2025-11-24T13:35:56"
+    "size": "11789477",
+    "gen_time": "2025-12-23T16:31:54"
   },
   "docs/backend/Spring.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Spring.pdf",
@@ -321,8 +321,8 @@
       "/screenshot/backend/image-20250913103324320.png"
     ],
     "hash": "4726a52b2530a2ea7728c6d9f4cb56f6c2d419b00791be525eabd72f4813828a",
-    "size": "5591305",
-    "gen_time": "2025-11-24T13:35:59"
+    "size": "5414055",
+    "gen_time": "2025-12-23T16:31:57"
   },
   "docs/backend/SpringAI.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/SpringAI.pdf",
@@ -330,8 +330,8 @@
       "/screenshot/backend/image-20250915194026653.png"
     ],
     "hash": "6632d10bb6be708f8652d31febca2be7cd7bbd9a97f972e129934384fb90ed94",
-    "size": "633363",
-    "gen_time": "2025-11-24T13:36:00"
+    "size": "616003",
+    "gen_time": "2025-12-23T16:31:57"
   },
   "docs/backend/SpringCloud.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/SpringCloud.pdf",
@@ -371,7 +371,7 @@
     ],
     "hash": "9c09369155616e5333b1d388ac0347191050ed8dafe43cd043be9676590228ff",
     "size": "8836372",
-    "gen_time": "2025-12-23T16:07:27"
+    "gen_time": "2025-12-23T16:32:01"
   },
   "docs/backend/docker.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/docker.pdf",
@@ -382,36 +382,36 @@
       "/screenshot/backend/image-20250930114318613.png"
     ],
     "hash": "204b654b2b8104f14a36c55102c6cd9a9d1590690ed063935451bda7a60f81a3",
-    "size": "1682144",
-    "gen_time": "2025-11-24T13:36:05"
+    "size": "1663043",
+    "gen_time": "2025-12-23T16:32:02"
   },
   "docs/coding/Django.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/Django.pdf",
     "images": [],
     "hash": "2d488ffc9f73b4227ec208488410de7579e9cf3ec92676e323543e174643f3a6",
-    "size": "411557",
-    "gen_time": "2025-11-24T13:36:05"
+    "size": "431110",
+    "gen_time": "2025-12-23T16:32:02"
   },
   "docs/coding/HTML-CSS.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/HTML-CSS.pdf",
     "images": [],
     "hash": "b76c1619ca7ccc68bc20480146b1ef036e04df52347a2072aba8959fd8a330bc",
-    "size": "1084073",
-    "gen_time": "2025-11-24T13:36:06"
+    "size": "1157965",
+    "gen_time": "2025-12-23T16:32:04"
   },
   "docs/coding/Javascript.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/Javascript.pdf",
     "images": [],
     "hash": "975e7fe7b4ca43949136dd2c5b9c570723ef2d54e99de95b880c9b9b2e903b3d",
-    "size": "1264432",
-    "gen_time": "2025-11-24T13:36:07"
+    "size": "1246537",
+    "gen_time": "2025-12-23T16:32:04"
   },
   "docs/coding/Matplotlib.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/Matplotlib.pdf",
     "images": [],
     "hash": "cd799f28f2077aebb7e6bc40aa5c12eb2cb8ea055a2d26ba10a666139593bfef",
-    "size": "595846",
-    "gen_time": "2025-11-24T13:36:07"
+    "size": "613617",
+    "gen_time": "2025-12-23T16:32:05"
   },
   "docs/coding/MySQL.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/MySQL.pdf",
@@ -420,15 +420,15 @@
       "/screenshot/code/image-20241008135010101.png"
     ],
     "hash": "57330713c093429b6ee47450dd68c52f38cbfbbc43d3f2d404e0e454c1ca1c8c",
-    "size": "2011189",
-    "gen_time": "2025-11-24T13:36:08"
+    "size": "2073424",
+    "gen_time": "2025-12-23T16:32:06"
   },
   "docs/coding/Pandas.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/Pandas.pdf",
     "images": [],
     "hash": "73ba1743b7670368942211da9b5056feb58498877fc8b756735a8a8ee9da34d7",
-    "size": "767823",
-    "gen_time": "2025-11-24T13:36:09"
+    "size": "773037",
+    "gen_time": "2025-12-23T16:32:07"
   },
   "docs/coding/Python.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/Python.pdf",
@@ -438,57 +438,57 @@
       "/screenshot/code/image-20241017202624486.png"
     ],
     "hash": "2d42c8ddf80a9b336720218e6f6c27b2288e5a62f5303a2cf5663b2f080a7ecf",
-    "size": "2842990",
-    "gen_time": "2025-11-24T13:36:10"
+    "size": "2877390",
+    "gen_time": "2025-12-23T16:32:09"
   },
   "docs/coding/Seaborn.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/Seaborn.pdf",
     "images": [],
     "hash": "f948a88770c48dcfe0e7cd113ad37357eefa64efdb3a140afc4f24f12b108646",
-    "size": "432802",
-    "gen_time": "2025-11-24T13:36:11"
+    "size": "417216",
+    "gen_time": "2025-12-23T16:32:09"
   },
   "docs/coding/bootstrap.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/bootstrap.pdf",
     "images": [],
     "hash": "90b78e9974f0af47c48a1e092e8a209655d09ac208b67b8de568fb69629a9273",
-    "size": "68211",
-    "gen_time": "2025-11-24T13:36:11"
+    "size": "68980",
+    "gen_time": "2025-12-23T16:32:10"
   },
   "docs/coding/git.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/git.pdf",
     "images": [],
     "hash": "eb141fa07918a0544e829269c44712eb47ff120029e463bb35ce807062b23e83",
-    "size": "535569",
-    "gen_time": "2025-11-24T13:36:11"
+    "size": "533148",
+    "gen_time": "2025-12-23T16:32:10"
   },
   "docs/coding/sklearn.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/sklearn.pdf",
     "images": [],
     "hash": "cf317775b90b1da88786cf1216b689710c33543a6fc7a5ff1fb5544d4b1bb6a7",
-    "size": "40178",
-    "gen_time": "2025-11-24T13:36:12"
+    "size": "42047",
+    "gen_time": "2025-12-23T16:32:10"
   },
   "docs/coding/个人收获.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/个人收获.pdf",
     "images": [],
     "hash": "a97694caa829b40326cf59c74ee69a5b3a5be2d8fc7c48271aeb10665611523c",
-    "size": "420542",
-    "gen_time": "2025-11-24T13:36:12"
+    "size": "422259",
+    "gen_time": "2025-12-23T16:32:11"
   },
   "docs/coding/入营任务.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/入营任务.pdf",
     "images": [],
     "hash": "78083ebd827a2ea5c7b1e08bf1ee4e4ad9c6c6d99c502dcdd1a1bc053ae81b1a",
-    "size": "430593",
-    "gen_time": "2025-11-24T13:36:13"
+    "size": "426507",
+    "gen_time": "2025-12-23T16:32:12"
   },
   "docs/coding/正则表达式.md": {
     "pdf": "docs/.vuepress/public/pdfs/coding/正则表达式.pdf",
     "images": [],
     "hash": "54c5520d52829e24559e6c796c4aff33bc48e46c4c5665b9a8c77ef8267c12f5",
-    "size": "384875",
-    "gen_time": "2025-11-24T13:36:13"
+    "size": "394054",
+    "gen_time": "2025-12-23T16:32:12"
   },
   "docs/dl/cv/CNN.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/CNN.pdf",
@@ -496,8 +496,8 @@
       "/screenshot/dl/image-20250417180348074.png"
     ],
     "hash": "8ec5e562105b3b5ce040dca91415b9955ac4a2cbcae24e4e8840a815ee136c26",
-    "size": "849513",
-    "gen_time": "2025-11-24T13:36:14"
+    "size": "848119",
+    "gen_time": "2025-12-23T16:32:13"
   },
   "docs/dl/cv/CV.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/CV.pdf",
@@ -526,8 +526,8 @@
       "/screenshot/dl/image-20250811175327478.png"
     ],
     "hash": "e220fed39ab4d96efa2db6e705d289612a4f4d0881df5111dde342f0c323a496",
-    "size": "4416977",
-    "gen_time": "2025-11-24T13:36:17"
+    "size": "4405830",
+    "gen_time": "2025-12-23T16:32:16"
   },
   "docs/dl/cv/DiffusionModel.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/DiffusionModel.pdf",
@@ -538,8 +538,8 @@
       "/screenshot/dl/image-20250511111842681.png"
     ],
     "hash": "185b80742a7a0e458ecfb88b7398371bdb4cae6a415bb4e0883948965bbe099f",
-    "size": "3156433",
-    "gen_time": "2025-11-24T13:36:20"
+    "size": "3156959",
+    "gen_time": "2025-12-23T16:32:19"
   },
   "docs/dl/cv/RNN.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/RNN.pdf",
@@ -548,8 +548,8 @@
       "/screenshot/dl/image-20250806101607590.png"
     ],
     "hash": "04ca2ca6bccbd40f92e7a06b1b125751a86a50765dd04ae1d8a48d0572372050",
-    "size": "1494072",
-    "gen_time": "2025-11-24T13:36:21"
+    "size": "1490178",
+    "gen_time": "2025-12-23T16:32:21"
   },
   "docs/dl/cv/VAE.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/VAE.pdf",
@@ -559,22 +559,22 @@
       "/screenshot/dl/image-20250502115738249.png"
     ],
     "hash": "031d6211bae0729e027b632bdfad0e242ce1965e0d0165df4922eec079ad9054",
-    "size": "1705995",
-    "gen_time": "2025-11-24T13:36:24"
+    "size": "1717795",
+    "gen_time": "2025-12-23T16:32:24"
   },
   "docs/dl/finetune/Finetune.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/finetune/Finetune.pdf",
     "images": [],
     "hash": "9898d48b137913a1b564dd37426f5204eb5e545699d72f4a8d7aa1cb3f287c27",
-    "size": "473172",
-    "gen_time": "2025-11-24T13:36:25"
+    "size": "469516",
+    "gen_time": "2025-12-23T16:32:25"
   },
   "docs/dl/llm/Bert.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/llm/Bert.pdf",
     "images": [],
     "hash": "1389dae3abeb14645631ec42a1dcae39e9d5a72cda59ea496296999aba8c8941",
-    "size": "480189",
-    "gen_time": "2025-11-24T13:36:26"
+    "size": "472780",
+    "gen_time": "2025-12-23T16:32:25"
   },
   "docs/dl/llm/LLM.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/llm/LLM.pdf",
@@ -618,8 +618,8 @@
       "/screenshot/dl/image-20250819132629103.png"
     ],
     "hash": "37ceac3e422f86f89f1d1d994276e56b1432329980c7384e3ae706c8c0e54a9a",
-    "size": "4307187",
-    "gen_time": "2025-11-24T13:36:30"
+    "size": "4349262",
+    "gen_time": "2025-12-23T16:32:29"
   },
   "docs/dl/llm/Transformer.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/llm/Transformer.pdf",
@@ -636,8 +636,8 @@
       "/screenshot/dl/image-20250702191137599.png"
     ],
     "hash": "5af19cce3d380f80873340d490894d94c4ce66cf380a8ead17b33c0406553e6f",
-    "size": "3309072",
-    "gen_time": "2025-11-24T13:36:33"
+    "size": "3305937",
+    "gen_time": "2025-12-23T16:32:33"
   },
   "docs/dl/llm/Word2Vec.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/llm/Word2Vec.pdf",
@@ -647,8 +647,8 @@
       "/screenshot/dl/image-20250705162047281.png"
     ],
     "hash": "bc68f21766e628878318f1ab884e1a7e54ee5cc49964fae1f8a8bb42529ec893",
-    "size": "1077015",
-    "gen_time": "2025-11-24T13:36:35"
+    "size": "1070522",
+    "gen_time": "2025-12-23T16:32:34"
   },
   "docs/dl/notes/Method.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/notes/Method.pdf",
@@ -657,22 +657,22 @@
       "/screenshot/dl/image-20250703160948495.png"
     ],
     "hash": "382dbb8b8c551c2d2d45a275785a1b6ad7e5ed4292e270741fd011caf80da339",
-    "size": "430740",
-    "gen_time": "2025-11-24T13:36:35"
+    "size": "429389",
+    "gen_time": "2025-12-23T16:32:35"
   },
   "docs/dl/notes/Package.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/notes/Package.pdf",
     "images": [],
     "hash": "ebfefd2fadfabadfdd9adaf1de108e8fa8b5fbaaee7180eb39ade7c142566774",
-    "size": "716835",
-    "gen_time": "2025-11-24T13:36:36"
+    "size": "663004",
+    "gen_time": "2025-12-23T16:32:36"
   },
   "docs/dl/notes/Production.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/notes/Production.pdf",
     "images": [],
     "hash": "eeaa1af7ad526ab55a8ba298bc0ff5c9287adf77461fac1b6980a70721ba8730",
-    "size": "620588",
-    "gen_time": "2025-11-24T13:36:36"
+    "size": "609881",
+    "gen_time": "2025-12-23T16:32:36"
   },
   "docs/dl/primer/DL.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/primer/DL.pdf",
@@ -680,15 +680,15 @@
       "/screenshot/dl/image-20250416233353334.png"
     ],
     "hash": "fcb593310dbb762cd46eb465322b7f34f474eea4aa431a8c08bc04319ecddd66",
-    "size": "1374913",
-    "gen_time": "2025-11-24T13:36:38"
+    "size": "1371023",
+    "gen_time": "2025-12-23T16:32:38"
   },
   "docs/dl/primer/GenerativeModels.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/primer/GenerativeModels.pdf",
     "images": [],
     "hash": "9800ab070a7844936116afeec62dfe54007033e7fe6bd81bbedd576eb1aa6a18",
-    "size": "310682",
-    "gen_time": "2025-11-24T13:36:39"
+    "size": "308144",
+    "gen_time": "2025-12-23T16:32:39"
   },
   "docs/dl/primer/ML.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/primer/ML.pdf",
@@ -740,15 +740,15 @@
       "/screenshot/dl/image-49.png"
     ],
     "hash": "162ccb6adde5473b0166a1ac6113df41cc211bfeced606579e0e494c97518ca2",
-    "size": "10213015",
-    "gen_time": "2025-12-21T09:14:26"
+    "size": "10221023",
+    "gen_time": "2025-12-23T16:32:43"
   },
   "docs/dl/pytorch/pytorch.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/pytorch/pytorch.pdf",
     "images": [],
     "hash": "a7531d9903f7f6920c85f86e309f6f8e1982f3b9e00f5c026d7634572a0f07f8",
-    "size": "1101227",
-    "gen_time": "2025-11-24T13:36:44"
+    "size": "1138748",
+    "gen_time": "2025-12-23T16:32:44"
   },
   "docs/dl/pytorch/pytorch1.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/pytorch/pytorch1.pdf",
@@ -757,8 +757,8 @@
       "/screenshot/dl/image-20250805130421265.png"
     ],
     "hash": "5d320e5f4be9d1395f31fc698e61bb7ad86184e15b5128ea0256beaed7ac5db5",
-    "size": "1947156",
-    "gen_time": "2025-11-24T13:36:46"
+    "size": "1826575",
+    "gen_time": "2025-12-23T16:32:45"
   },
   "docs/ds/Acwing.md": {
     "pdf": "docs/.vuepress/public/pdfs/ds/Acwing.pdf",
@@ -982,26 +982,19 @@
     "size": "61565",
     "gen_time": "2025-11-24T13:37:06"
   },
-  "docs/resource/tools.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/tools.pdf",
-    "images": [],
-    "hash": "7077c6dfd582e878e686b9c9e343e6e2544368ecc87105ff3b79345aa534b365",
-    "size": "83770",
-    "gen_time": "2025-12-23T14:30:44"
-  },
   "docs/golang/Bash.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Bash.pdf",
     "images": [],
     "hash": "a3b0a1073626c9b71d9655512f0f1e6681847a48b2fb9a6309dd5fcaaf325048",
-    "size": "1565820",
-    "gen_time": "2025-12-23T14:30:34"
+    "size": "1462158",
+    "gen_time": "2025-12-23T16:32:47"
   },
   "docs/golang/Gin.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gin.pdf",
     "images": [],
     "hash": "c73cdc52a34a7db92fecad4da93022c15b7daac59282658db357d52678454e4d",
-    "size": "1195470",
-    "gen_time": "2025-12-23T14:30:36"
+    "size": "1150343",
+    "gen_time": "2025-12-23T16:32:48"
   },
   "docs/golang/Go.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Go.pdf",
@@ -1020,14 +1013,14 @@
     ],
     "hash": "469e1877916067e18cc80f0a97e3c668c7fdaf954028ebca2dc7f5d57c64e4e1",
     "size": "4452954",
-    "gen_time": "2025-12-23T16:07:30"
+    "gen_time": "2025-12-23T16:32:50"
   },
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
     "images": [],
     "hash": "938d64f6808d034b247440c94d936b2b3c84d66dd7930ee99c12e3874615dcc9",
-    "size": "1597396",
-    "gen_time": "2025-12-23T14:30:39"
+    "size": "1598624",
+    "gen_time": "2025-12-23T16:32:51"
   },
   "docs/resource/coursenote/ai_application.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ai_application.pdf",

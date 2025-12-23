@@ -547,8 +547,8 @@ code:not([class]) {
     
     /* 尺寸与间距 */
     padding: 0.2em 0.4em !important;                  /* 内部填充 */
-    margin: 0 2px !important;                         /* 关键：增加左右外边距，防止代码贴着文字 */
-    border-radius: 3px !important;                    /* 关键：Typora 是 3px 小圆角，6px 太圆了 */
+    margin: 0 !important;                             /* Typora 默认没有 margin */
+    border-radius: 3px !important;                    /* 关键：Typora 是 3px 小圆角 */
     
     /* 字体设置 */
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;

@@ -8,7 +8,7 @@ timeline: true
 icon: logos:gin
 date: 2025-12-19
 ---
-n[本页PDF](/pdfs/golang/Bash.pdf)
+[本页PDF](/pdfs/golang/Bash.pdf)
 
 
 
@@ -513,6 +513,13 @@ $ printenv PATH
 $ echo $PATH
 ```
 
+**常见的环境变量**
+
+- `HOME`：用户的主目录
+- `PWD`：当前工作目录
+- `USER`：当前用户的用户名
+- `PATH`：由冒号分开的目录列表，当输入可执行程序名后，会搜索这个目录列表
+
 #### 自定义变量
 
 是用户在当前`Shell`里面自己定义的变量，一旦退出当前`Shell`，变量就不存在了
@@ -616,8 +623,6 @@ ${varname^^}
 ${varname,,}
 ```
 
-#### 搜索和替换
-
 
 
 ### 算术运算
@@ -649,9 +654,31 @@ $ echo $foo
 
 #### pushd，popd
 
+可以记忆多重目录，`pushd`和`popd`用来操作目录堆栈
+
+`pushd`：用于进入指定的目录，同时把进入的目录放入堆栈
+
+- 目录参数：`pushd`可以接受一个目录作为参数，把该目录放到堆栈顶部，并进入该目录
+
+```bash
+$ pushd dirname
+```
+
+`popd`：不带参数时为移除堆顶的顶部记录，并进入新的栈顶目录
+
+- `-n`：仅操作堆栈，不改变目录
+
+```bash
+$ popd
+```
+
+
+
 #### dirs
 
 可以显示目录堆栈的内容，一般用来查看`pushd`和`popd`操作后的结果
+
+- `-c`：清空目录栈
 
 ```bash
 $ dirs
@@ -693,6 +720,8 @@ $ history -c
 
 ### 脚本入门
 
+执行脚本时**会创建一个子`Shell`执行脚本**
+
 #### Shebang行
 
 脚本的第一行通常是指定解释器，即这个脚本通过什么解释器执行
@@ -703,5 +732,521 @@ $ history -c
 #!/bin/sh
 # 或者
 #!/bin/bash
+```
+
+#### 执行权限
+
+使用`chmod`命令修改权限，全称为`change mode`
+
+**权限表**
+
+|               | 读(r) | 写(w) | 执行(x) |
+| :-----------: | :---: | :---: | :-----: |
+|  **用户(u)**  |       |       |         |
+| **用户组(g)** |       |       |         |
+| **其他人(o)** |       |       |         |
+
+**正常写法**
+
+语法：用户+权限，如`u+r`，`o-w`，后面跟文件名
+
+```bash
+$ chmod u+x test.sh
+```
+
+**权限的数字写法**
+
+对于不同用户的权限设置可以抽象为三个数字`a b c`
+
+- `a`：用户
+- `b`：组
+- `c`：其他人
+
+而不同的权限可以抽象成三个数字，**在给不同用户进行权限设置的时候在这三个数字选几个加起来**
+
+- `r`（读）：4
+- `w`（写）：2
+- `x`（执行）：1
+
+举个例子
+
+- `755`：拥有者拥有`rwx`的权限，用户组和其他人拥有`r-x`的权限
+- `644`：拥有者拥有`rw-`的权限，用户组和其他人拥有`r--`的权限
+
+脚本的权限通常设为`755`（拥有者有所有权限，其他人有读和执行的权限）或者`700`（只有拥有者可以执行）
+
+```bash
+# 给所有用户执行权限
+$ chmod +x script.sh
+
+# 给所有用户读权限和执行权限
+$ chmod +rx script.sh
+# 或者
+$ chmod 755 script.sh
+
+# 只给脚本拥有者读权限和执行权限
+$ chmod u+rx script.sh
+```
+
+可以在主目录新建一个`~/bin`子目录，专门存放可执行脚本，然后把`~/bin`加入`$PATH`
+
+```bash
+$ export PATH=$PATH:~/bin
+```
+
+可以把上面一行写入`~/.bashrc`，因为每次开一个新的终端，系统都会自动加载`~/.bashrc`里面的配置，也就是每次都会更新上面这个环境变量，方便我们快速执行脚本
+
+立即重新加载配置
+
+```bash
+$ source ~/.bashrc
+```
+
+#### 脚本参数
+
+调用脚本的时候，脚本文件吗后面可以带有参数
+
+```bash
+$ script.sh word1 word2 word3
+```
+
+脚本文件内部，可以使用特殊变量，引用这些参数
+
+- `$0`：脚本文件名，即`script.sh`
+- `$1`~`$9`：对应脚本的第一个参数到第九个参数
+- `$#`：参数的总数
+- `$@`：全部的参数，参数之间使用空格分隔
+
+#### shift命令
+
+`shift`命令可以改变脚本参数，每次执行都会移除脚本当前的第一个参数（`$1`），使得后面的参数向前一位，即`$2`变成`$1`、`$3`变成`$2`、`$4`变成`$3`，以此类推
+
+同时它也可以接收一个整数作为参数，指定所要移除的参数个数，默认为`1`
+
+```bash
+$ shift 3
+```
+
+#### exit命令
+
+用于终止当前脚本执行
+
+- 退出值为0，成功
+
+```bash
+$ exit 0
+```
+
+- 退出值为1，失败
+
+```bash
+$ exit 1
+```
+
+#### source命令
+
+用于执行一个脚本，通常用于**重新加载一个配置文件**，也可以简化为一个`.`
+
+```bash
+$ source ~/.bashrc
+# 或者
+$ . ~/.bashrc
+```
+
+#### alias命令
+
+`alias`用来为一个命令指定别名
+
+- `NAME`是别名的名称，`DEFINITION`是别名对应的原始命令
+- 注意，**等号两侧不能有空格**
+
+```bash
+$ alias NAME=DEFINITION
+```
+
+为`grep`命令起一个`search`的别名
+
+```bash
+$ alias search=grep
+```
+
+直接调用`alias`命令可以显示所有别名
+
+```bash
+$ alias
+```
+
+`unalias`可以解除别名
+
+```bash
+$ unalias lt
+```
+
+### 条件判断
+
+使用`if`、`elif`、`else`，结构如下
+
+- `commands`为判断条件，可以用`test`命令
+- `if`和`then`写在同一行时，需要分号分隔
+- `if`可以接任意数量的命令，但是判断真伪只看最后一个命令
+
+```bash
+if commands; then
+  commands
+[elif commands; then
+  commands...]
+[else
+  commands]
+fi
+```
+
+#### test命令
+
+写法有三种形式，**第三种支持正则判断**，其它两种不支持
+
+- `expression`是一个表达式，表达式成功返回0，否则返回1
+- `[`和`]`与内部的表达式之间必须有空格
+
+```bash
+# 写法一
+test expression
+
+# 写法二
+[ expression ]
+
+# 写法三
+[[ expression ]]
+```
+
+**逻辑运算**
+
+- `AND`运算：符号`&&`，也可使用参数`-a`
+- `OR`运算：符号`||`，也可使用参数`-o`
+- `NOT`运算：符号`!`
+
+#### 常见判断
+
+判断文件状态
+
+- `[ -b file ]`：如果`file`存在并且是一个块（设备）文件，则为`true`
+- `[ -c file ]`：如果`file`存在并且是一个字符（设备）文件，则为`true`
+- `[ -d file ]`：如果`file`存在并且是一个目录，则为`true`
+- `[ -e file ]`：如果`file`存在，则为`true`
+- `[ -f file ]`：如果`file`存在并且是一个普通文件，则为`true`
+
+以下表达式用来判断字符串
+
+- `[ string ]`：如果`string`不为空（长度大于0），则判断为真
+- `[ -n string ]`：如果字符串`string`的长度大于零，则判断为真
+- `[ -z string ]`：如果字符串`string`的长度为零，则判断为真
+
+### 循环
+
+都支持`break`和`continue`
+
+#### while循环
+
+结构如下
+
+- `condition`也可以用`test`命令
+- `while`的条件部分可以执行任意数量的命令，但是执行结果的真伪只看最后一个命令的执行结果
+
+```bash
+while condition; do
+  commands
+done
+```
+
+#### until循环
+
+结构如下
+
+- 只要不符合判断条件就不断循环执行指定语句
+
+```bash
+until condition; do
+	commands
+done
+```
+
+#### for...in 循环
+
+用于遍历**列表**的每一项
+
+```bash
+for variable in list
+do
+	commands
+done
+```
+
+#### for循环
+
+结构如下
+
+- `expression1`用来初始化循环条件，`expression2`用来决定循环结束的条件，`expression3`在每次循环迭代的末尾执行，用于更新值
+- 循环条件放在**双重圆括号**之中，圆括号之中使用变量不用加上美元符号`$`
+
+```bash
+for (( expression1; expression2; expression3 )); do
+  commands
+done
+```
+
+### 函数
+
+优先级：别名 > 函数 > 脚本 > 外部命令
+
+**定义**：两种定义方法
+
+```bash
+# 第一种
+fn() {
+  # codes
+}
+
+# 第二种
+function fn() {
+  # codes
+}
+```
+
+调用时直接写函数名，**参数跟在函数后面**
+
+```bash
+hello() {
+  echo "Hello $1"
+}
+
+$ hello world
+Hello world
+```
+
+删除函数
+
+```bash
+$ unset -f functionName
+```
+
+查看当前`Shell`已定义的所有函数
+
+```bash
+$ declare -f
+```
+
+查看单个函数的定义
+
+```bash
+$ declare -f functionName
+```
+
+查看所有已经定义的函数名，不包括函数体
+
+```bash
+$ declare -F
+```
+
+#### 参数
+
+函数的参数变量，与脚本参数变量是一致的
+
+- `$1`~`$9`：函数的第一个到第9个的参数
+- `$0`：函数所在的脚本名
+- `$#`：函数的参数总数
+- `$@`：函数的全部参数，参数之间使用空格分隔
+
+- 如果函数的参数多于9个，那么第10个参数可以用`${10}`的形式引用
+
+#### 变量作用域
+
+**函数体内直接声明的变量，属于全局变量，整个脚本都可以读取**
+
+如果需要声明局部变量，需要使用`local`命令
+
+```bash
+fn () {
+  local foo
+  foo=1
+  echo "fn: foo = $foo"
+}
+```
+
+### 数组
+
+#### 创建数组
+
+采用**逐个赋值**的方法创建
+
+```bash
+ARRAY[INDEX]=value
+
+# 例子
+
+$ array[0]=val
+$ array[1]=val
+$ array[2]=val
+```
+
+采用**一次性赋值**的方式创建
+
+```bash
+ARRAY=(value1,value2,...,valueN)
+
+# 等同于
+
+ARRAY=(
+  value1
+  value2
+  value3
+)
+```
+
+定义数组的时候可以使用通配符
+
+```bash
+$ mp3s=( *.mp3 )
+```
+
+可以使用`declare`命令先声明数组
+
+```bash
+$ declare -a ARRAYNAME
+```
+
+#### 读取数组
+
+**读取数组指定位置的成员**
+
+```bash
+$ echo ${array[i]} # i是索引
+```
+
+**读取所有成员**
+
+`@`和`*`是数组的特殊索引，表示返回数组的所有成员
+
+- 使用这俩个特殊索引的时候**最好放在双引号里**
+
+```bash
+$ echo ${foo[@]}
+
+# 放在双引号里
+$ hobbies=( "${activities[@]}" )
+
+# 还可以添加成员
+$ hobbies=( "${activities[@]}" diving )
+```
+
+#### 数组长度
+
+使用下面两种语法
+
+```bash
+${#array[*]}
+${#array[@]}
+```
+
+#### 提取数组序号
+
+使用下面两种语法，可以返回数组的成员序号，即哪些位置是有值的
+
+```bash
+${!array[@]}
+${!array[*]}
+```
+
+#### 提取数组成员
+
+`${array[@]:position:length}`的语法可以提取数组成员
+
+```bash
+${array[@]:position:length}
+```
+
+#### 追加数组成员
+
+可以使用`+=`运算符
+
+```bash
+$ foo=(a b c)
+$ echo ${foo[@]}
+a b c
+
+$ foo+=(d e f)
+$ echo ${foo[@]}
+a b c d e f
+```
+
+#### 删除数组
+
+使用`unset`命令删除一个元素
+
+```bash
+$ foo=(a b c d e f)
+$ echo ${foo[@]}
+a b c d e f
+
+$ unset foo[2]
+$ echo ${foo[@]}
+a b d e f
+```
+
+使用`unset`命令删除整个数组
+
+```bash
+unset ArrayName
+```
+
+### set命令
+
+脚本会运行在子`Shell`中，而`set`命令用于改变子`Shell`环境的运行参数，保证脚本的安全性
+
+#### set -u
+
+脚本在头部加上它，遇到不存在的变量就会报错，并停止执行
+
+```bash
+set -u
+
+echo $a
+echo bar
+```
+
+#### set -x
+
+用来在运行结果之前，先输出执行的那一行命令，若要关闭命令输出可以使用`set +x`
+
+```bash
+set -x
+echo bar
+
+# 输出
+
++ echo bar
+bar
+```
+
+#### set -e
+
+只要脚本发生错误就终止执行，用`set +e`表示关闭这个功能
+
+```bash
+set -e
+
+foo
+echo bar
+
+# 会终止执行
+```
+
+#### set -n
+
+不运行命令，只检查语法是否正确
+
+```bash
+set -n
+
+foo
+echo bar
 ```
 

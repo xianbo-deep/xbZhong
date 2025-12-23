@@ -8,7 +8,7 @@ timeline: true
 icon: logos:gin
 date: 2025-12-10
 ---
-n[本页PDF](/pdfs/golang/Gin.pdf)
+[本页PDF](/pdfs/golang/Gin.pdf)
 
 
 ## HttpRouter

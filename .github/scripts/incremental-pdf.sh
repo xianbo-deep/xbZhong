@@ -93,24 +93,44 @@ while IFS= read -r -u9 file; do
     # ========================================================
     # 【核心转换】Markdown -> HTML -> PDF (Typora 完美复刻版)
     # ========================================================
+    
+    # --- 准备 Highlight.js (使用本地文件) ---
+    # 注入本地 CSS 和 JS
+    cat > highlight_header.html <<EOF
+<link rel="stylesheet" href="file://$STATIC_BASE_DIR/assets/highlight/styles/github.min.css">
+<script src="file://$STATIC_BASE_DIR/assets/highlight/highlight.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+});
+</script>
+<style>
+/* 强制背景透明，让 typora.css 控制背景 */
+.hljs { background: transparent !important; padding: 0 !important; }
+</style>
+EOF
+
     set +e
     
     # 1. 转 HTML (关键修正)
-    # --mathjax: 注入 MathJax CDN，让公式能渲染
-    # --highlight-style=github: 使用 Pandoc 内置的 GitHub 代码高亮配色
-    # -V: 注入字体设置
+    # --no-highlight: 禁用 Pandoc 自带高亮，交给 highlight.js
+    # --include-in-header: 注入 JS/CSS
     pandoc "$tmp_file" \
         -o "$html_file" \
         --standalone \
         --css="$CSS_FILE" \
         --resource-path="$STATIC_BASE_DIR" \
         --metadata pagetitle="$(basename "$file" .md)" \
-        --highlight-style=haddock \
+        --no-highlight \
+        --include-in-header="highlight_header.html" \
         --mathjax="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" \
         -V lang=zh-CN \
         -V mainfont="Noto Sans CJK SC"
 
     pandoc_exit_code=$?
+    rm highlight_header.html
 
     # 2. Chrome 打印
     if [ $pandoc_exit_code -eq 0 ]; then

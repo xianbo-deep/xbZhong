@@ -22,3 +22,5 @@ timeline: false
 [PDF2text](https://tools.pdf24.org/zh/pdf-to-txt)
 
 [随机字符串生成](https://www.jyshare.com/front-end/9111/)
+
+[highlight.js下载](https://highlightjs.org/download)

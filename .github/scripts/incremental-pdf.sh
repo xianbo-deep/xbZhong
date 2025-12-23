@@ -99,16 +99,37 @@ while IFS= read -r -u9 file; do
     cat > highlight_header.html <<EOF
 <link rel="stylesheet" href="file://$STATIC_BASE_DIR/assets/highlight/styles/github.min.css">
 <script src="file://$STATIC_BASE_DIR/assets/highlight/highlight.min.js"></script>
+<script src="file://$STATIC_BASE_DIR/assets/highlight/highlightjs-line-numbers.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', (event) => {
   document.querySelectorAll('pre code').forEach((el) => {
     hljs.highlightElement(el);
+    hljs.lineNumbersBlock(el); // 启用行号
   });
 });
 </script>
 <style>
 /* 强制背景透明，让 typora.css 控制背景 */
 .hljs { background: transparent !important; padding: 0 !important; }
+
+/* 行号样式调整 - 适配 Typora 风格 */
+.hljs-ln-numbers {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: right;
+    color: #ccc;
+    border-right: 1px solid #ccc;
+    vertical-align: top;
+    padding-right: 5px !important;
+    /* 确保行号宽度一致 */
+    min-width: 25px;
+}
+
+.hljs-ln-code {
+    padding-left: 10px !important;
+}
 </style>
 EOF
 

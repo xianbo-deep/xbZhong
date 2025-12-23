@@ -566,6 +566,27 @@ pre {
     overflow: hidden !important;
 }
 
+/* 
+   当启用行号插件时，highlightjs-line-numbers 会将代码包裹在 table 中。
+   我们需要确保这个 table 不受全局 table 样式的影响（如边框、背景色等）。
+*/
+pre table {
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    background-color: transparent !important;
+    border-collapse: collapse !important;
+}
+pre table tr {
+    border: none !important;
+    background-color: transparent !important;
+}
+pre table td {
+    border: none !important;
+    padding: 0 !important;
+}
+
 pre > code {
     /* ✅ 这里控制代码块字体大小，15px 足够清晰，觉得小就改 16px */
     font-size: 13px !important; 

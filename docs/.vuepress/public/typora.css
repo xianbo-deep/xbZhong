@@ -618,104 +618,36 @@ code span.an { color: #6e7781 !important; font-style: italic; }
 code span.cv { color: #6e7781 !important; font-style: italic; }
 code span.in { color: #6e7781 !important; font-style: italic; }
 
-/* ==========================================================================
-   Typora to Pandoc/Highlight.js Bridge (修复版)
-   ========================================================================== */
+/* ============================================================
+   Typora 补丁：只负责画“盒子”，颜色交给 highlight.js
+   ============================================================ */
 
-/* --- 1. 修复单行代码块 (Inline Code) --- */
-code:not([class]) {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
-    font-size: 85% !important;
-    background-color: rgba(27,31,35,.05) !important; /* GitHub 浅灰背景 */
-    padding: 0.2em 0.4em !important;
-    margin: 0 0.2em !important;
-    border-radius: 3px !important;
-    color: #24292e !important;
-    border: none !important;
-    vertical-align: middle;
-}
-
-/* --- 2. 修复多行代码块容器 (Code Fences) --- */
+/* 1. 让代码块像 Typora 一样有灰背景和边框 */
 div.sourceCode, pre {
-    background-color: #f6f8fa !important; /* Typora/GitHub 背景灰 */
-    border-radius: 3px !important;
-    
-    /* 修正点：正确的十六进制颜色 */
-    border: 1px solid #e1e4e8 !important; 
-    
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
-    font-size: 85% !important;
-    line-height: 1.45 !important;
-    
-    margin-bottom: 16px !important;
-    padding: 16px !important;
-    overflow: auto !important;
+    background-color: #f6f8fa !important;  /* Typora 的浅灰背景 */
+    border: 1px solid #e1e4e8 !important;  /* Typora 的细边框 */
+    border-radius: 3px !important;         /* 圆角 */
+    padding: 16px !important;              /* 内部留白 */
+    margin-bottom: 16px !important;        /* 外部间距 */
+    font-size: 85% !important;             /* 字号稍微小一点 */
+    line-height: 1.45 !important;          /* 行高 */
+    font-family: "JetBrains Mono", "Consolas", monospace !important; /* 强制等宽字体 */
 }
 
-/* 去掉 highlight.js 或 Pandoc 可能引入的内部背景 */
-div.sourceCode pre, 
-div.sourceCode code,
-pre.sourceCode code,
+/* 2. 修正 highlight.js 的背景冲突 */
+/* 必须把 highlight.js 自带的背景设为透明，否则会盖住我们上面的灰背景 */
 .hljs {
     background: transparent !important;
     padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
-    font-size: 100% !important;
 }
 
-/* --- 3. 字体颜色映射 (Color Mapping) --- */
-.hljs { color: #24292e !important; }
-
-/* 关键字 (红色) */
-.hljs-keyword, 
-.hljs-selector-tag, 
-.hljs-tag { 
-    color: #d73a49 !important; 
-}
-
-/* 字符串 (深蓝) */
-.hljs-string, 
-.hljs-doctag { 
-    color: #032f62 !important; 
-}
-
-/* 标题/函数名 (紫色) */
-.hljs-title, 
-.hljs-section, 
-.hljs-selector-id { 
-    color: #6f42c1 !important; 
-}
-
-/* 属性/变量 (橙色/深蓝) */
-.hljs-attr, 
-.hljs-attribute, 
-.hljs-variable, 
-.hljs-template-variable { 
-    color: #005cc5 !important; 
-}
-
-/* 注释 (灰色斜体) */
-.hljs-comment, 
-.hljs-quote { 
-    color: #6a737d !important; 
-    font-style: italic !important;
-}
-
-/* 数字/常量 (蓝色) */
-.hljs-literal, 
-.hljs-number { 
-    color: #005cc5 !important; 
-}
-
-/* 类型/类名 (橙色) */
-.hljs-type, 
-.hljs-built_in { 
-    color: #e36209 !important; 
-}
-
-/* 元数据/符号 (深灰) */
-.hljs-meta { 
-    color: #24292e !important; 
-    font-weight: bold !important;
+/* 3. 修复单行代码 (如 `git status`) */
+/* Highlight.js 不管这个，必须手动写 */
+code:not([class]) {
+    padding: 0.2em 0.4em !important;
+    margin: 0 0.2em !important;
+    font-size: 85% !important;
+    background-color: rgba(27,31,35,0.05) !important; /* 那个经典的小灰框 */
+    border-radius: 3px !important;
+    font-family: "JetBrains Mono", "Consolas", monospace !important;
 }

@@ -370,8 +370,8 @@
       "/screenshot/backend/image-20251008145844622.png"
     ],
     "hash": "9c09369155616e5333b1d388ac0347191050ed8dafe43cd043be9676590228ff",
-    "size": "8358109",
-    "gen_time": "2025-12-23T15:29:24"
+    "size": "8449002",
+    "gen_time": "2025-12-23T15:35:48"
   },
   "docs/backend/docker.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/docker.pdf",

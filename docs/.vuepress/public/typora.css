@@ -582,9 +582,32 @@ pre table tr {
     border: none !important;
     background-color: transparent !important;
 }
+/* 
+   重置代码块内表格的单元格样式 
+   注意：这里必须使用 !important 来覆盖全局 table td 的边框设置
+*/
 pre table td {
     border: none !important;
     padding: 0 !important;
+}
+
+/* --- 行号插件样式适配 (Typora 风格) --- */
+
+/* 行号列 */
+pre table td.hljs-ln-numbers {
+    -webkit-user-select: none;
+    user-select: none;
+    text-align: right;
+    color: #c0c0c0 !important; /* 浅灰色数字 */
+    border-right: 1px solid #e7eaed !important; /* 恢复右侧竖线 */
+    vertical-align: top;
+    padding-right: 10px !important;
+    width: 25px; /* 固定最小宽度 */
+}
+
+/* 代码列 */
+pre table td.hljs-ln-code {
+    padding-left: 15px !important; /* 代码与竖线的间距 */
 }
 
 pre > code {
@@ -608,17 +631,18 @@ pre > code {
    但因为我们引入了 highlight.js 的 github.min.css，所以这里不需要手动定义颜色了。
    我们可以删除下面这些旧的 Pandoc 样式，或者保留作为备用。
 */
-code span.kw { color: #cf222e !important; font-weight: bold; } /* 关键字 */
-code span.dt { color: #953800 !important; } /* 数据类型 */
-code span.dv { color: #0550ae !important; } /* 数字 */
+/*
+code span.kw { color: #cf222e !important; font-weight: bold; } 
+code span.dt { color: #953800 !important; } 
+code span.dv { color: #0550ae !important; } 
 code span.bn { color: #0550ae !important; } 
 code span.fl { color: #0550ae !important; } 
 code span.ch { color: #0a3069 !important; } 
-code span.st { color: #0a3069 !important; } /* 字符串 */
-code span.co { color: #6e7781 !important; font-style: italic; } /* 注释 */
+code span.st { color: #0a3069 !important; } 
+code span.co { color: #6e7781 !important; font-style: italic; } 
 code span.ot { color: #cf222e !important; } 
 code span.al { color: #cf222e !important; background-color: #ffebe9 !important; font-weight: bold; } 
-code span.fu { color: #8250df !important; } /* 函数 */
+code span.fu { color: #8250df !important; } 
 code span.re { color: #0550ae !important; } 
 code span.er { color: #cf222e !important; background-color: #ffebe9 !important; } 
 code span.wa { color: #953800 !important; font-weight: bold; }
@@ -638,7 +662,7 @@ code span.do { color: #6e7781 !important; font-style: italic; }
 code span.an { color: #6e7781 !important; font-style: italic; }
 code span.cv { color: #6e7781 !important; font-style: italic; }
 code span.in { color: #6e7781 !important; font-style: italic; }
-
+*/
 /* ============================================================
    Typora 补丁：只负责画“盒子”，颜色交给 highlight.js
    ============================================================ */

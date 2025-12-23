@@ -205,6 +205,12 @@ ol:last-child {
 ul {
     list-style-type: disc;
 }
+ul ul {
+    list-style-type: circle;
+}
+ul ul ul {
+    list-style-type: square;
+}
 ol {
     list-style-type: decimal;
 }
@@ -535,12 +541,22 @@ mjx-container {
 
 /* 针对：文本中间的 `git status` 这种小代码片段 */
 code:not([class]) {
-    background-color: rgba(27,31,35,0.05) !important; /* 浅灰背景 */
-    padding: 0.2em 0.4em !important;                  /* 小间距 */
-    border-radius: 6px !important;                    /* 圆角 */
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
-    font-size: 0.9em !important;                      /* 比正文稍小一点点，显得精致 */
-    color: #333 !important;
+    /* 核心样式：模拟 Typora/GitHub 风格 */
+    background-color: rgba(27,31,35,0.05) !important; /* 经典的浅灰背景 */
+    color: #24292e !important;                        /* GitHub 深灰色字体，比纯黑柔和 */
+    
+    /* 尺寸与间距 */
+    padding: 0.2em 0.4em !important;                  /* 内部填充 */
+    margin: 0 2px !important;                         /* 关键：增加左右外边距，防止代码贴着文字 */
+    border-radius: 3px !important;                    /* 关键：Typora 是 3px 小圆角，6px 太圆了 */
+    
+    /* 字体设置 */
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+    font-size: 85% !important;                        /* 关键：标准 Markdown 渲染通常是 85% 大小 */
+    
+    /* 细节优化 */
+    vertical-align: baseline !important;              /* 保持基线对齐 */
+    font-weight: normal !important;                   /* 防止某些正文加粗影响代码 */
 }
 
 

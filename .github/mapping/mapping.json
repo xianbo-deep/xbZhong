@@ -1012,8 +1012,8 @@
       "/screenshot/backend/image-20251015173810451.png"
     ],
     "hash": "469e1877916067e18cc80f0a97e3c668c7fdaf954028ebca2dc7f5d57c64e4e1",
-    "size": "4452954",
-    "gen_time": "2025-12-23T16:32:50"
+    "size": "4443002",
+    "gen_time": "2025-12-23T22:42:58"
   },
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
@@ -1035,5 +1035,12 @@
     "hash": "8099e97ca02002e861ad0cdf58bef2d286659c5bd467d1c539c2325b6a8dce11",
     "size": "930342",
     "gen_time": "2025-12-23T14:30:32"
+  },
+  "docs/resource/tools.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/tools.pdf",
+    "images": [],
+    "hash": "6490c8a9701f124caa18c77be6a32a67134fc1a92a86b63e9012ebb247714f6a",
+    "size": "83659",
+    "gen_time": "2025-12-23T22:42:59"
   }
 }

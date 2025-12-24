@@ -1012,8 +1012,8 @@
       "/screenshot/backend/image-20251015173810451.png"
     ],
     "hash": "469e1877916067e18cc80f0a97e3c668c7fdaf954028ebca2dc7f5d57c64e4e1",
-    "size": "4443002",
-    "gen_time": "2025-12-24T12:15:17"
+    "size": "4344816",
+    "gen_time": "2025-12-24T12:22:07"
   },
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",

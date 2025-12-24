@@ -546,9 +546,10 @@ code:not([class]) {
     color: #24292e !important;                        /* GitHub 深灰色字体，比纯黑柔和 */
     
     /* 尺寸与间距 */
-    padding: 2px 4px !important;                      /* 扁一点：减少垂直内边距 (Typora 风格) */
+    padding: 0.2em 0.4em !important;                  /* Typora 标准内边距 */
     margin: 0 !important;                             /* Typora 默认没有 margin */
     border-radius: 3px !important;                    /* 关键：Typora 是 3px 小圆角 */
+    border: none !important;                          /* 关键：移除可能存在的边框，使其变扁 */
     
     /* 字体设置 */
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
@@ -557,7 +558,7 @@ code:not([class]) {
     /* 细节优化 */
     vertical-align: baseline !important;              /* 保持基线对齐 */
     font-weight: normal !important;                   /* 防止某些正文加粗影响代码 */
-    line-height: inherit !important;                  /* 确保行高不被撑大，保持扁平 */
+    line-height: inherit !important;                  /* 确保行高不被撑大 */
 }
 
 

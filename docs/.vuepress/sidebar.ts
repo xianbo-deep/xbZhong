@@ -448,6 +448,10 @@ export default sidebar({
           text: "人工智能原理及其应用",
           link: "ai_application.md"
         },
+        {
+          text: "嵌入式系统原理及实验",
+          link: "embedding_system.md"
+        },
       ]
     },
   ],

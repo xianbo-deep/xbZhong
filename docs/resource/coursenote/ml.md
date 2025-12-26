@@ -556,6 +556,8 @@ $$
 
 ## 支持向量机
 
+
+
 定义在**特征空间上的间隔最大线性分类器**，还包括核函数，使它成为实质上的非线性分类器
 
 不同分类：
@@ -565,13 +567,282 @@ $$
 
 ### 线性可分支持向量机
 
+给定线性可分训练数据集，通过间隔最大化求得超平面以及分类决策函数
+
+$$
+f(x) = sign(w^* \cdot x + b^*)
+$$
+
+
+**函数间隔**（成比例改变$w$和$b$，超平面没改变，函数间隔却改变）
+
+超平面$(w,b)$关于样本点$(x_i,y_i)$的函数间隔为
+
+$$
+\hat{\gamma_i} = y_i(w \cdot x_i + b)
+$$
+
+超平面$(w,b)$关于训练数据集的函数间隔为$\hat{\gamma_i}$的最小值
+
+$$
+\hat{\gamma} = \min_{i=1,\cdots,N}\hat{\gamma_i}
+$$
+
+
+**几何间隔**（点到直线的距离）
+
+超平面$(w,b)$关于样本点$(x_i,y_i)$的几何间隔为
+
+$$
+\gamma_i = y_i(\frac{w}{||w||} \cdot x_i + \frac{b}{||w||})
+$$
+
+超平面$(w,b)$关于训练数据集的几何间隔为$\gamma_i$的最小值
+
+$$
+\gamma = \min_{i=1,\cdots,N}\gamma_i
+$$
+
+
+可得到对应关系
+
+$$
+\gamma_i = \frac{\hat{\gamma_i}}{||w||} \quad \gamma = \frac{\hat{\gamma}}{||w||}
+$$
+
+**核心**：正确划分训练数据集并且使得分离超平面的几何间隔最大
+
+学习的最优化问题：
+
+$$
+\max_{w,b}\gamma \\
+\operatorname{s.t.} \quad y_i(\frac{w}{||w||} \cdot x_i + \frac{b}{||w||}) \ge \gamma
+$$
+
+可等价为：
+
+$$
+\max_{w,b}\frac{\hat{\gamma}}{||w||}\\
+\operatorname{s.t.} \quad y_i(w \cdot x_i + b) \ge \hat{\gamma}
+$$
+
+取$\hat{\gamma} = 1$，最大化$\frac{1}{||w||}$和最小化$\frac{1}{2}||w||^2$等价
+
+$$
+\min_{w,b}\frac{1}{2}||w||^2 \\
+\operatorname{s.t.} \quad y_i(w \cdot x_i + b) - 1 \ge 0
+$$
+
+上述的最优化问题是一个凸优化问题，使用拉格朗日对偶法进行求解。求解对偶问题。
+
+
+构造拉格朗日函数
+
+$$
+L(w,b,\alpha) = \frac{1}{2}||w||^2 - \sum_{i=1}^N{\alpha_iy_i(w\cdot x_i + b)} + \sum_{i=1}^N{\alpha_i}
+$$
+
+$\alpha$为拉格朗日乘子向量，**有几个样本他就有几个维度**
+
+$$
+\alpha = (\alpha_1,\alpha_2,\cdots,\alpha_N)^T
+$$
+
+**原始问题**
+
+$$
+\min_{w,b}{\max_{\alpha}{L(w,b,\alpha)}}
+$$
+
+**对偶问题**
+
+$$
+\max_{\alpha}{\min_{w,b}{L(w,b,\alpha)}}
+$$
+
+
+对$L$求梯度
+
+$$
+\begin{aligned}
+\nabla_w{L(w,b,\alpha)} &= w - \sum_{i=1}^N{\alpha_iy_ix_i} = 0 \\
+\nabla_b{L(w,b,\alpha)} &= \sum_{i=1}^N{\alpha_iy_i} = 0 \\
+\end{aligned}
+$$
+
+带入原函数
+
+$$
+\begin{aligned}
+\theta(\alpha) &= L(w^{'},b^{'},\alpha^{'}) \\
+&= -\frac{1}{2}\sum_{i=1}^N{\sum_{j=1}^N{\alpha_i\alpha_jy_iy_j(x_i \cdot x_j)}} + \sum_{i=1}^N{\alpha_i} \\
+&\operatorname{s.t.} \quad \sum_{i=1}^N{\alpha_iy_i} = 0
+\end{aligned}
+$$
+
+
+问题求解到这里之后就无法进行人工求解了，需交由机器求解，接下来阐述一些概念性的东西
+
+**KKT条件**
+
+是为解决带有约束的优化问题而提出的一组规则。如果一个点是局部最优解，那么它必须满足这组规则。满足KKT条件的点就是最优解
+
+$$
+
+\begin{cases}
+\nabla_{\mathbf{x}} \mathcal{L}(\mathbf{x}^*, \boldsymbol{\lambda}^*, \boldsymbol{\nu}^*) = 0 & \text{【平稳性条件】} \\
+g_i(\mathbf{x}^*) \leq 0, \quad h_j(\mathbf{x}^*) = 0 & \text{【原始可行性条件】} \\
+\lambda_i^* \geq 0 & \text{【对偶可行性条件】} \\
+\lambda_i^* g_i(\mathbf{x}^*) = 0 & \text{【互补松弛条件】}
+\end{cases}
+
+$$
+
+其中：$g_i(\mathbf{x}^*)$是不等式约束，$h_j(\mathbf{x}^*)$是等式约束
+
+我们需要着重注意**互补松弛条件**
+
+在上面我们求解出来了$\theta(\alpha)$，接着我们要如何求解$w$和$b$呢？
+> 机器对$\theta(\alpha)$进行求解得到最后的$\alpha$
+>
+> $\alpha$是一个向量，我们要取里面不为0的$\alpha$对应的样本取去对$w$和$b$进行求解
+> > 这是因为当$\alpha_i$不为0，由互补松弛条件可知，对应的样本$x_i$满足$y_i(w \cdot x_i + b) - 1 = 0$，当我们有了这个条件，就可以很方便的求解出$w$和$b$
+> 
+> 由$y_i(w \cdot x_i + b) - 1 = 0$可以知道，在两边同乘$y_i$($y \in {-1,1}$)
+>
+> $$
+> (w \cdot x_i + b)y_i^2= y_i \\
+> b = y_i - w \cdot x_i
+> $$
+>
+> 那么$w$如何求解呢？
+> 
+> 由前面的梯度的条件可以知道
+> 
+> $$
+> w - \sum_{i=1}^N{\alpha_iy_ix_i} = 0 \\
+> w = \sum_{i=1}^N{\alpha_iy_ix_i} 
+> $$
+>
+> 也就是说，$\alpha_i$不为0的样本对最后的$w$起了贡献，也满足$y_i(w \cdot x_i + b) - 1 = 0$这个条件，从而可以计算出$w$和$b$
+
+
+到这里就结束了，理解互补松弛条件至关重要，在线性支持向量机中它仍旧起着至关重要的作用
 
 
 ### 线性支持向量机
 
+在训练数据有一些特异点，不能满足函数间隔大于等于1地约束条件，为了解决这个问题，给每个样本点引入了一个松弛变量$\xi_i \ge 0$，约束条件变为：
+
+$$
+y_i(w\cdot x_i + b) \ge 1 - \xi_i
+$$
+
+目标函数变为：
+
+$$
+\frac{1}{2}||w||^2 + C\sum_{i=1}^N{\xi_i}
+$$
+
+其中：$C (> 0)$为惩罚系数，$C$地选取会对模型有着不同的影响，具体看后面的复习章节
+
+还是使用拉格朗日乘子法
+
+$$
+\min_{w,b,\xi}\frac{1}{2}||w||^2 + C\sum_{i=1}^N{\xi_i} \\
+\operatorname{s.t.} \quad y_i(w\cdot x_i + b) \ge 1 - \xi_i \quad i = 1,2,\cdots,N \\
+\xi_i \ge 0 \quad i = 1,2,\cdots,N
+$$
+
+拉格朗日函数
+
+$$
+L(w,b,\xi,\alpha,\mu) = \frac{1}{2}||w||^2 + C\sum_{i=1}^N{\xi_i} + \\ \quad \quad \sum_{i=1}^N{\alpha_i(1-\xi_i-y_i(w\cdot x_i + b))} - \sum_{i=1}^N{\mu_i\xi_i}
+$$
+
+**原始问题**
+
+$$
+
+\min_{w,b,\xi}{\max_{\alpha,\mu}{L(w,b,\xi,\alpha,\mu)}}
+
+$$
+
+**对偶问题**
+
+$$
+\max_{\alpha,\mu}{\min_{w,b,\xi}{L(w,b,\xi,\alpha,\mu)}}
+$$
+
+求梯度
+
+$$
+\begin{aligned}
+\nabla_w{L(w,b,\alpha)} &= w - \sum_{i=1}^N{\alpha_iy_ix_i} = 0 \\
+\nabla_b{L(w,b,\alpha)} &= \sum_{i=1}^N{\alpha_iy_i} = 0 \\
+\nabla_{\xi}{L(w,b,\alpha)} &= C - \alpha_i - \mu_i = 0 
+\end{aligned}
+$$
+
+代入原函数
+
+$$
+\min_{w,b,\xi}{L(w,b,\xi,\alpha,\mu)} = -\frac{1}{2}\sum_{i=1}^N{\sum_{j=1}^N{\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)}} + \sum_{i=1}^N{\alpha_i} 
+$$
+
+
+对$\min_{w,b,\xi}{L(w,b,\xi,\alpha,\mu)}$求关于$\alpha$的极大
+
+$$
+\max_{\alpha} -\frac{1}{2}\sum_{i=1}^N{\sum_{j=1}^N{\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)}} + \sum_{i=1}^N{\alpha_i} \\
+
+\operatorname{s.t.} \quad \sum_{i=1}^N{\alpha_iy_i} = 0 \\
+C - \alpha_i - \mu_i = 0 \\
+\mu_i \ge 0 \\
+\alpha_i \ge 0
+$$
+
+最终的解为
+
+$$
+\alpha^* = [\alpha_1^*,\alpha_2^*,\cdots,\alpha_n^*]
+$$
+
+当$\alpha_i^* > 0$时，样本为支持向量
+
+若$\alpha_i < C$，那么$\xi_i = 0$（互补松弛条件） 
+
+若$\alpha_i = C$时：
+
+$$
+\begin{cases}
+0 < \xi_i < 1 \quad \text{分类正确} \\
+\xi_i  =  1 \quad \text{落在决策边界上} \\
+\xi_i > 1 \quad \text{被误分类}
+\end{cases}
+$$
+
+具体为什么，使用互补松弛条件推一下就可以知道了
+
 
 ### 非线性支持向量机
 
+究其本质，其实就是找到一个映射函数，把$x_i\cdot x_j$，也就是$x_i$和$x_j$的内积映射到一个高维空间在高维空间实现线性可分
+
+**正定核充要条件**
+
+$K(x,z)$为正定核函数的充要条件是$K(x,z)$对应的Gram矩阵
+
+$$
+K = 
+\begin{bmatrix}
+K(x_1,x_1) & \cdots & K(x_1,x_m) \\
+\vdots & \ddots & \vdots \\
+K(x_m,x_1) & \cdots & K(x_m,x_m)  
+\end{bmatrix}
+$$
+
+半正定（特征值$\ge 0$ ）
 
 ### 合页损失函数的推导
 
@@ -616,6 +887,65 @@ z , \quad z \ge 0 \\
 $$
 
 ## 提升方法
+
+可分为Boosting和Bagging
+
+- Boosting：串行学习，加权采样，加权投票，降低方差
+- Bagging：并行学习，Boostrap采用，平等投票，降低偏差
+
+### Adaboost
+
+使用的损失函数是指数损失，且使用了前向分布算法，属于加法模型。也就是说每次迭代，弱分类器会遍历每一个特征，寻找误差最小的特征进行样本的重新加权
+
+
+**算法流程**
+
+1. 初始化训练数据初始权重分布
+
+$$
+D_1 = (w_{11},\cdots,w_{1i},\cdots,w_{1n}) \quad w_{1i} = \frac{1}{N}
+$$
+
+2. 对弱分类器$G_m(x)$计算分类误差
+
+$$
+e_m = \sum_{i=1}^N{w_{mi}I(G_m(x_i) \neq y_i )}
+$$
+
+3. 计算弱分类器的权重系数
+
+$$
+\alpha_m = \frac{1}{2}\ln{\frac{1-e_m}{e_m}}
+$$
+
+4. 更新训练数据集权重分布
+
+$$
+D_{m + 1} = (w_{m+1,1},\cdots,w_{m + 1,N})
+$$
+
+$$
+w_{m+1,i} = \frac{w_{mi}}{z_m}e^{-\alpha_my_iG_m(x_i)}
+$$
+
+其中$z_m$是规范化因子
+
+$$
+z_m = \sum_{i=1}^N{w_{mi}}e^{-\alpha_my_iG_m(x_i)}
+$$
+
+
+5. 构造基本分类器的线性组合
+
+$$
+f(x) = \sum_{m=1}^{M}{\alpha_mG_m(x)} \\
+G(x) = sign(f(x))
+$$
+
+总的来说就是：给每个样本赋予一个初始权重，用m个弱分类器不断更新每个样本的权重，上一轮被分错的样本当前轮的权重会变大
+
+其它的不是考察重点，感兴趣看看课件吧
+
 
 
 ## EM算法
@@ -886,12 +1216,448 @@ $$
 **夹角余弦**
 
 $$
-S_{ij} = \frac{}{}
+S_{ij} = \frac{\sum_{k=1}^m{x_{ki}x_{kj}}}{[\sum_{k=1}^m{x_{ki}^2}\sum_{k=1}^m{x_{kj}^2}]^{\frac{1}{2}}}
 $$
+
+值越接近1，样本越相似；越接近0，越不相似
+
+**硬聚类**：一个样本只能属于一个类，类交集为空
+**软聚类**：一个样本可属于多个类，类交集不为空
+
+**类的均值、类中心**
+
+$$
+\bar{x_G} = \frac{1}{n_G}\sum_{i=1}^{n_G}{x_i}
+$$
+
+**类直径**：任意两样本之间的最大距离
+
+**类之间的距离**：
+
+- 最短距离（单连接）：两类样本之间最短距离
+- 最长距离（完全连接）：两类样本之间最长距离
+- 中心距离：类中心之间的距离
+- 平均距离：任意两样本之间距离的平均值
+
+### 层次聚类
+
+属于硬聚类
+
+- 聚合聚类（自下而上）：样本刚开始独占一类，不断合并
+- 分裂聚类（自上而下）：所有样本为一类，不断分裂
+
+**聚合聚类过程**
+
+1. 计算两两样本之间的欧氏距离，记作矩阵D
+2. 构造n个类，每个类只包含一个样本
+3. 合并类间距（可以选取不同的类间距离）最小的两类，构建一个新的类
+
+按照上述步骤不断迭代，生成层次聚类树，最后想要聚成几个类可以在这个聚类树里面找
+
+### k-means聚类
+
+属于硬聚类，容易陷入局部最优
+
+样本之间的距离采用**欧氏距离的平方**
+
+损失函数为样本与其所属类中心距离的总和
+
+$$
+C^* = \argmin_C{w(C)} = \argmin_C{\sum_{l=1}^k{\sum_{C(i) = l}{||x_i-\bar{x_l}||^2}}}
+$$
+
+**步骤**
+
+1. 初始化，$t=0$，随机选取$k$个样本点作为初始聚类中心
+
+$$
+m^{(0)} = (m_1^{(0)},\cdots,m_k^{(0)})
+$$
+
+2. 对样本聚类，计算每个样本到类中心的聚类，指派到最近的类中
+3. 计算新的类中心，计算各个类样本均值作为新的类中心
+4. 重复上述步骤直到满足停止条件
+
+时间复杂度为$O(nmk)$，$n$是样本个数，$m$是样本维度，$k$是类别个数
+
+### k初值选择
+
+可以使用kmeans++算法和肘部法则寻找最优k值
+
 
 ## SVD
 
+奇异值分解
+$$
+A_{m\times n} = U_{m\times m}\Sigma_{m\times n}V_{n\times n}^T
+$$
+
+其中：
+$$
+\Sigma = \operatorname{diag}(\sigma_1,\sigma_2,\cdots,\sigma_n) \\
+\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_{\rho} \ge 0 \quad \rho = \min{(m,n)}
+$$
+
+- $\sigma_i$为$A$的奇异值，是$AA^T$和$A^TA$特征值$(\ge 0)$的平方根
+- $A$的列向量为左奇异向量，是$AA^T$特征向量
+- $V$的列向量为右奇异向量，是$A^TA$特征向量
+- $A$不一定是方阵
+
+
+奇异值分解的性质：
+
+1. 奇异值唯一，$U$和$V$不唯一，奇异值分解不唯一
+2. $A$和$\Sigma$的秩相等，等于正奇异值$\sigma_i$的个数
+3. $A_{m\times n}$满足如下公式
+
+$$
+Av_j = \sigma_ju_j \quad A^Tu_j = \sigma_jv_j \quad A^Tu_j = 0 \quad Av_j = 0 
+$$
+
+$$
+1 \le j \le r \quad 1 \le j \le r \quad j \ge r + 1 \quad j\ge r + 1
+$$
+
+4. 前$r$个右奇异向量构成$R(A^T)$（$A^T$的列空间）的一组标准正交基，后$n-r$个右奇异向量构成$N(A)$（零空间）的一组标准正交基。前$r$个作奇异向量构成$R(A)$（$A$的列空间）的一组标准正交基，后$n-r$个右奇异向量构成$N(A^T)$标准正交基。
+
+
+
+
+### 紧奇异值分解
+
+$$
+A = U_{m \times r}\Sigma_{r \times r}V_{n \times r}^T \quad rank(A) = r < \min(m,n)
+$$
+
+其中：$U_{m \times r}$为$U$的前$r$列，$\Sigma_{r \times r}$为$\Sigma$的前$r$个对角线元素，$V_{n \times r}$为$V$的前$r$列
+
+且
+$$
+rank(\Sigma_{r \times r}) = rank(A)
+$$
+
+### 截断奇异值分解
+
+$\Sigma$比原矩阵低秩
+
+$$
+
+A \approx U_{m \times k}\Sigma_{k \times k}V_{n \times k}^T \quad rank(A) = r  \quad \text{且} \quad 0 < k < r
+
+$$
+
+其中：$U_{m \times k}$为$U$的前$k$列，$\Sigma_{k \times k}$为$\Sigma$的前$k$个对角线元素（**只取最大的前k个奇异值**），$V_{n \times k}$为$V$的前$k$列
+
+
+
+### 矩阵的最优近似
+
+**矩阵的外积展开式**
+
+$u_iv_i^T$矩阵的外积
+
+$$
+A = U\Sigma V^T = \sigma_1u_1v_1^T + \dots +  \sigma_nu_nv_n^T
+$$
+
+可简写成
+
+$$
+A = \sum_{k=1}^n{\sigma_ku_kv_k^T}
+$$
+
+其中$n$是矩阵的秩
+
+而
+$$
+A_k = \sum_{i=1}^k{\sigma_iu_iv_i^T} = U_k\Sigma_kV_k^T
+$$
+
+F范数
+
+$$
+||A||_F = (\sum_i{\sum_j{a_{ij}^2}})^{\frac{1}{2}} = \operatorname{tr}(A^TA)^{\frac{1}{2}}
+$$
+
+使用F范数计算低秩近似误差
+
+$$
+||A-A_k||_F^2 = \sigma_{k + 1}^2 + \sigma_{k+2}^2 + \dots + \sigma_r^2
+$$
+
+### SVD的几何解释
+从右到左看$A = U\Sigma V^T$，先$V^T$，再$\Sigma$，最后$U$
+
+- $V$的列向量构成$R^n$空间的一组标准正交基，表示$R^n$空间的正交坐标系的旋转或反射变换
+- $\Sigma$的对角线元素是一组非负实数，表示$R^n$空间中的原始正交坐标系坐标轴的$\sigma_1,\sigma_2,\cdots,\sigma_n$倍缩放变换
+- $U$的列向量构成$R^m$空间的一组标准正交基，表示$R^m$空间的正交坐标系的旋转或反射变换
+
+
+
 ## PCA
+
+是一种降维方法，利用正交变换把线性相关变量转换成少数几个由线性无关变量来表示数据
+
+
+
+首先定义$\vec{x} = (x_1,x_2,\cdots,x_m)^T$是m维随机变量，均值向量是$\mu$
+$$
+\mu = E(\vec{x}) = (\mu_1,\mu_2,\cdots,\mu_m)^T
+$$
+
+通过看上课的PPT可以知道协方差矩阵的定义
+
+$$
+\Sigma = \operatorname{Cov}(\vec{x},\vec{x}) = E[(\vec{x} - \vec{\mu})(\vec{x} - \vec{\mu})^T]
+$$
+
+然后定义一个线性变换，这个线性变换其实就是$\alpha_i$去乘以每个样本，得到一个新的坐标的一个维度
+
+> 这里为什么说是一个维度呢，因为你是根据这个线性变换求出来的其实是一个值，这个值就代表了变换后坐标的一个维度。也就是说你可以控制$y$的个数，如果你要降维，$y$的个数就不要超过原始样本维度。
+
+$$
+y_i = \alpha_i^T\vec{x} = \alpha_{1i}x_1 + \alpha_{2i}x_2 + \cdots + \alpha_{mi}x_m \\
+\alpha_i^T = (\alpha_{1i},\alpha_{2i},\cdots,\alpha_{mi})
+$$
+
+对于$y_i = \alpha_i^T\vec{x}$，若满足：
+
+- $\alpha_i^T$是单位向量，即$\alpha_i^T\alpha_i = 1$ 
+- $y_i$与$y_j$不相关，即$\operatorname{Cov}(y_i,y_j)=0$
+- $y_i$是与前面求出来的与$y_1$到$y_{i-1}$不相关的线性变换中方差最大的，也就是$y_i$的方差是小于$y_1,y_2,\cdots,y_{i-1}$的
+
+这个时候就可以称$y_1$到$y_m$是$x$的第一主成分到第m主成分
+
+
+由此可以得到求主成分的方法
+
+即已知$\vec{x} = (x_1,x_2,\cdots,x_m)^T$是m维随机变量，$\Sigma$是$x$的协方差矩阵，其特征值为$\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_m \ge 0$，对应的**单位特征向量**分别是$\alpha_1,\alpha_2,\cdots,\alpha_m$
+
+$x$的第k个主成分是
+
+$$
+y_i = \alpha_k^T\vec{x} = \alpha_{1k}x_1 + \alpha_{2k}x_2 + \cdots + \alpha_{mk}x_m
+$$
+
+方差为
+
+$$
+\operatorname{var}(y_k) = \alpha_k^T\Sigma \alpha_k = \lambda_k
+$$
+
+也就是协方差矩阵第k个特征值
+
+其性质有：
+
+1. $\operatorname{Cov}(\vec{y}) = \Lambda = \operatorname{diag}(\lambda_1,\cdots,\lambda_m)$
+2. $\vec{y}$的方差之和等于随机变量$x$的方差之和
+
+$$
+\sum_{i=1}^m{\lambda_i} = \sum_{i=1}^m{\sigma_{ii}}
+$$
+
+**因子负荷量**
+
+第$k$个主成分$y_k$与变量$x_i$的相关系数$\rho(y_k,x_i)$，表示 $y_k$与$x_i$的相关关系，要注意的是这里的$x_i$表示的是样本的第$i$个维度，而不是第$i$个样本
+
+$$
+\rho(y_k,x_i) = \frac{\sqrt{\lambda_k}\alpha_{ik}}{\sqrt{\sigma_{ii}}}
+$$
+
+其中：$\lambda_k$是$y_k$对应的特征值，$\alpha_{ik}$是主成分$y_k$对应的特征向量的第$i$个维度，$\sigma_{ii}$是$x_i$的方差
+
+
+固定第$k$个主成分$y_k$，有如下性质：
+
+$$
+\sum_{i=1}^m{\sigma_{ii}\rho(y_k,x_i)^2} = \sum_{i=1}^m{\lambda_k\alpha_{ik}^2} = \lambda_k\alpha_k^T\alpha_k = \lambda_k
+$$
+
+固定第$i$个维度$x_i$，有如下性质：
+
+$$
+\sum_{k=1}^m{\rho(y_k,x_i)^2} = 1
+$$
+
+
+在后面对规范化后的随机变量（方差变为1）进行上述计算时，$\sigma_{ii} = 1$
+
+**方差贡献率**
+
+用于选取主成分个数
+
+$$
+\eta_k = \frac{\lambda_k}{\sum_{i = 1}^m{\lambda_i}}
+$$
+
+
+### PCA步骤
+
+首先要确定样本是按行分布还是按列分布的，我这里默认样本按列分布，且使用特征值分解进行PCA求解（课本有使用奇异值分解求解PCA的步骤，由于不是考察重点，这里不再赘述）
+
+1. 规范化随机变量：具体说就是算出样本每一个维度的均值和样本方差，对其进行规范化
+
+
+$$
+\bar{x_i} = \frac{1}{n}\sum_{j=1}^n{x_{ij}} 
+$$
+
+$$
+s_{ii} = \frac{1}{n-1}\sum_{j=1}^n{(x_{ij} - \bar{x_i})^2}
+$$
+
+$$
+x_{ij} = \frac{x_{ij}-\bar{x_i}}{\sqrt{s_{ii}}}
+$$
+
+$$
+A \rightarrow B \quad \text{进行规范化}
+$$
+
+2. 规范化后求协方差矩阵（因为样本已经归一化，也可以叫做相关矩阵）
+
+$$
+R = \frac{1}{n - 1}BB^T \quad \text{样本按列分布} \\
+R = \frac{1}{n - 1}B^TB \quad \text{样本按行分布} 
+$$
+
+3. 求解相关矩阵的特征向量，求出主成分，并求出他们的因子负荷量，方差贡献率等，按照题目要求进行主成分个数的选取
+
+
+
+
+### PCA的一些证明
+
+**帮助加深理解**
+
+如何得到用$x$的协方差矩阵求主成分的结论
+
+> 可以转换为下面带约束的最优化问题
+> 
+> $$
+> \max_{\alpha_1}  \alpha_1^T \Sigma \alpha_1 \\
+> \operatorname{s.t.} \quad \alpha_1^T \alpha_1 = 1
+> $$
+>
+> 构建拉格朗日函数
+> 
+> $$
+> L(\alpha_1) = \alpha_1^T \Sigma \alpha_1 - \lambda_1(\alpha_1^T \alpha_1 - 1)
+> $$
+> 
+> 求导
+> 
+> $$
+> \nabla_{\alpha_1}L = 2\Sigma\alpha_1 - 2\lambda_1\alpha_1 = 0
+> $$
+>
+> 可得到
+> 
+> $$
+> \Sigma\alpha_1 = \lambda_1\alpha_1
+> $$
+>
+> $\alpha_1$是$\Sigma$的特征向量，又因为$\operatorname{var}(y_k) = \alpha_k^T\Sigma \alpha_k = \lambda_k$
+> 
+> 要使$\operatorname{var}(y_1)$最大，所以$\lambda_1$为$\Sigma$的最大特征值
+
+另一个例子
+> 
+> $$
+> \max_{\alpha_2}  \alpha_2^T \Sigma \alpha_2 \\
+> \operatorname{s.t.} \quad \alpha_2^T \alpha_2 = 1 \quad \alpha_1^T\alpha_2 = 0
+> $$
+>
+> 求拉格朗日函数
+> 
+> $$
+> L(\alpha_2) = \alpha_2^T\Sigma \alpha_2 + \lambda_2(1 - \alpha_2^T\alpha_2) + \beta_2\alpha_1^T\alpha_2
+> $$
+>
+> 求梯度
+> 
+> $$
+> \nabla_{\alpha_2}L = 2\Sigma\alpha_2 - 2\alpha_2\lambda_2 + \beta_2\alpha_1 = 0
+> $$
+>
+> 左乘$\alpha_1^T$
+> 
+> $$
+> 2\alpha_1^T\Sigma\alpha_2 - 2\alpha_1^T\alpha_2\lambda_2 + \beta_2\alpha_1^T\alpha_1 = \beta_2 =  0
+> $$
+>
+> 因此
+> 
+> $$
+> \Sigma\alpha_2 = \lambda_2\alpha_2
+> $$
+
+主成分方差的证明
+> 已知
+> 
+> $$
+> y_1 = \alpha_i^T \vec{x} \quad E(\vec{x}) = \mu = 0
+> $$
+> 
+> 计算协方差矩阵
+> 
+> $$
+> \Sigma = \operatorname{Cov}(\vec{x},\vec{x}) = E((\vec{x} - \mu) (\vec{x} - \mu)^T) = E(\vec{x}\vec{x}^T)
+> $$
+>
+> 计算主成分的均值
+>
+> $$
+> \operatorname{E}(y_i) = \alpha_i^TE(\vec{x}) = \alpha_i^T\mu
+> $$
+>
+> 计算主成分方差
+> 
+> $$
+> \begin{aligned}
+> \operatorname{var}(y_i) &= E[(y_i - E(y_i))^2] \\
+> &= E(y_i^2) - [E(y_i)]^2 \\ 
+> &= E(\alpha_i^T\vec{x}\vec{x}^T\alpha_i)\\
+> &= \alpha_i^T\Sigma\alpha_i
+> \end{aligned}
+> $$
+>
+> 主成分的协方差矩阵也可以算出来
+> 
+> $$
+> \begin{aligned}
+> \operatorname{Cov}(y_i,y_i) &= E(y_i y_i^T) \\
+> &= \operatorname{var}(y_i) \\ 
+> &= \alpha_i^T\Sigma\alpha_i
+> \end{aligned}
+> $$
+
+
+
+
+## 向量和矩阵求导
+
+对向量求导
+$$
+\begin{align}
+\frac{\partial{x^Ta}}{\partial{x}} &= a \\
+\frac{\partial{a^Tx}}{\partial{x}} &= a \\
+\frac{\partial{x^Tx}}{\partial{x}} &= 2x \\
+\frac{\partial{x^TBx}}{\partial{x}} &= (B+B^T)x \\
+\end{align}
+$$
+
+
+对矩阵求导
+$$
+\begin{align}
+\frac{\partial{a^TXb}}{\partial{X}} &= ab^T \\
+\frac{\partial{a^TX^Tb}}{\partial{X}} &= ba^T \\
+\frac{\partial{a^TX^Ta}}{\partial{X}} &= aa^T \\
+\frac{\partial{a^TXa}}{\partial{X}} &= aa^T \\
+\frac{\partial{a^TXX^Ta}}{\partial{X}} &= X(ab^T + ba^T) \\
+\end{align}
+$$
 
 ## PPT
 

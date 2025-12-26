@@ -971,9 +971,9 @@
       "/myMajor/note/image-20251216104253184.png",
       "/myMajor/note/image-20251216110606101.png"
     ],
-    "hash": "26f8342baff287c2ab5c644d23ea709fcd6585ea197f82d8f53e2ce08079f7f6",
-    "size": "1409718",
-    "gen_time": "2025-12-23T16:07:35"
+    "hash": "4fed63e2ca13b869e7293e8460a1a46efa664199542facbf1ad6e037a1a67e8b",
+    "size": "1450860",
+    "gen_time": "2025-12-26T09:10:14"
   },
   "docs/resource/minor.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/minor.pdf",
@@ -1025,9 +1025,9 @@
   "docs/resource/coursenote/ai_application.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ai_application.pdf",
     "images": [],
-    "hash": "101648c51b29d3cd0975ef45d599599a8dc5fd0d8e7ddab5322db6809fca4c48",
-    "size": "444547",
-    "gen_time": "2025-12-21T09:14:32"
+    "hash": "27ec8bd0471dff18c088cea902fe0c03d24b24127abf429ec1cda496c4c73218",
+    "size": "449865",
+    "gen_time": "2025-12-26T09:10:08"
   },
   "docs/.vuepress/public/assets/highlight/DIGESTS.md": {
     "pdf": "docs/.vuepress/public/pdfs/.vuepress/public/assets/highlight/DIGESTS.pdf",
@@ -1042,5 +1042,14 @@
     "hash": "6490c8a9701f124caa18c77be6a32a67134fc1a92a86b63e9012ebb247714f6a",
     "size": "83659",
     "gen_time": "2025-12-23T22:42:59"
+  },
+  "docs/resource/coursenote/embedding_system.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/embedding_system.pdf",
+    "images": [
+      "/myMajor/note/image-20251225155039424.png"
+    ],
+    "hash": "1f9f37cd76ff7ebb80ede60808ae790639b09dc452ff60da6b2ad93c4cc64b17",
+    "size": "736269",
+    "gen_time": "2025-12-26T09:10:09"
   }
 }

@@ -5,6 +5,9 @@ article: false
 timeline: false
 ---
 
+[本页PDF](/pdfs/resource/coursenote/embedding_system.pdf)
+
+
 ## 嵌入式系统概论
 
 ## Cortex-M3内核

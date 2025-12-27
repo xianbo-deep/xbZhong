@@ -452,6 +452,10 @@ export default sidebar({
           text: "嵌入式系统原理及实验",
           link: "embedding_system.md"
         },
+        {
+          text: "智能无人系统",
+          link: "ius.md"
+        },
       ]
     },
   ],

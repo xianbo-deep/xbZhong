@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="file://{{STATIC_BASE_DIR}}/assets/highlight/styles/github.min.css">
+<script src="file://{{STATIC_BASE_DIR}}/assets/highlight/highlight.min.js"></script>
+<script src="file://{{STATIC_BASE_DIR}}/assets/highlight/highlightjs-line-numbers.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  // 1. Highlight.js 代码高亮
+  document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+    hljs.lineNumbersBlock(el); // 启用行号
+  });
+
+  // 2. VuePress Tabs 渲染逻辑 (PDF 扁平化处理)
+  // 将 :::tabs 转换为带标题的顺序内容
+  var tabs = document.querySelectorAll(".tabs");
+  tabs.forEach(function(tab) {
+    var container = document.createElement("div");
+    container.className = "tabs-flattened";
+    
+    Array.from(tab.childNodes).forEach(function(node) {
+      if (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE) {
+        var text = node.textContent ? node.textContent.trim() : "";
+        // 匹配 @tab 或 @tab:active，后面跟着标题
+        var match = text.match(/^@tab(:active)?\s+(.*)/);
+        
+        if (match) {
+          var title = match[2];
+          var header = document.createElement("h3");
+          header.textContent = title;
+          // 样式美化：类似 VuePress 的绿色风格
+          header.style.marginTop = "1.5em";
+          header.style.marginBottom = "0.5em";
+          header.style.borderBottom = "2px solid #3eaf7c";
+          header.style.paddingBottom = "0.3em";
+          header.style.color = "#3eaf7c";
+          header.style.fontSize = "1.2em";
+          header.style.fontWeight = "bold";
+          
+          container.appendChild(header);
+          
+          // 如果节点是 P 标签且只包含 tab 定义，则跳过该节点
+          if (node.tagName === 'P' && node.textContent.trim() === match[0]) {
+            return;
+          }
+          // 如果是纯文本节点，且完全匹配，也跳过
+          if (node.nodeType === Node.TEXT_NODE) {
+            return;
+          }
+        }
+        // 其他内容直接追加
+        container.appendChild(node.cloneNode(true));
+      }
+    });
+    // 替换原有的 tabs 容器
+    tab.parentNode.replaceChild(container, tab);
+  });
+});
+</script>

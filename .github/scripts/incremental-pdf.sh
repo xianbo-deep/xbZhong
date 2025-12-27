@@ -89,30 +89,15 @@ while IFS= read -r -u9 file; do
     # --- 预处理 ---
     # 修复图片路径，使其指向本地绝对路径
     sed -E "s|!\[([^]]*)\]\(/|![\1]($STATIC_BASE_DIR/|g" "$file" > "$tmp_file"
-
-    # ========================================================
-    # 【核心转换】Markdown -> HTML -> PDF (Typora 完美复刻版)
-    # ========================================================
     
     # --- 准备 Highlight.js (使用本地文件) ---
     # 注入本地 CSS 和 JS
-    cat > highlight_header.html <<EOF
-<link rel="stylesheet" href="file://$STATIC_BASE_DIR/assets/highlight/styles/github.min.css">
-<script src="file://$STATIC_BASE_DIR/assets/highlight/highlight.min.js"></script>
-<script src="file://$STATIC_BASE_DIR/assets/highlight/highlightjs-line-numbers.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', (event) => {
-  document.querySelectorAll('pre code').forEach((el) => {
-    hljs.highlightElement(el);
-    hljs.lineNumbersBlock(el); // 启用行号
-  });
-});
-</script>
-EOF
+    # 使用 sed 替换模板中的变量
+    sed "s|{{STATIC_BASE_DIR}}|$STATIC_BASE_DIR|g" ".github/scripts/pdf-header-template.html" > highlight_header.html
 
     set +e
     
-    # 1. 转 HTML (关键修正)
+    # 1. 转 HTML
     # --no-highlight: 禁用 Pandoc 自带高亮，交给 highlight.js
     # --include-in-header: 注入 JS/CSS
     pandoc "$tmp_file" \

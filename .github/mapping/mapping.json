@@ -971,9 +971,9 @@
       "/myMajor/note/image-20251216104253184.png",
       "/myMajor/note/image-20251216110606101.png"
     ],
-    "hash": "4fed63e2ca13b869e7293e8460a1a46efa664199542facbf1ad6e037a1a67e8b",
-    "size": "1450860",
-    "gen_time": "2025-12-26T09:10:14"
+    "hash": "c2e8a92e8d6c7434be54432143d30e0e3e58a94c1a04754544bcb05a5b7bfb27",
+    "size": "1746606",
+    "gen_time": "2025-12-27T20:12:54"
   },
   "docs/resource/minor.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/minor.pdf",
@@ -985,9 +985,9 @@
   "docs/golang/Bash.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Bash.pdf",
     "images": [],
-    "hash": "a3b0a1073626c9b71d9655512f0f1e6681847a48b2fb9a6309dd5fcaaf325048",
-    "size": "1462158",
-    "gen_time": "2025-12-23T16:32:47"
+    "hash": "a37c52f60e9a340f5054d4e0c3a1ea9e40e45e0897cabc8369b59bb40b12dae4",
+    "size": "1483857",
+    "gen_time": "2025-12-27T20:12:44"
   },
   "docs/golang/Gin.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gin.pdf",
@@ -1046,10 +1046,27 @@
   "docs/resource/coursenote/embedding_system.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/embedding_system.pdf",
     "images": [
-      "/myMajor/note/image-20251225155039424.png"
+      "/myMajor/note/image-20251227145217619.png",
+      "/myMajor/note/image-20251227150106399.png",
+      "/myMajor/note/image-20251227152057974.png",
+      "/myMajor/note/image-20251227111953048.png",
+      "/myMajor/note/image-20251225155039424.png",
+      "/myMajor/note/image-20251227135918615.png"
     ],
-    "hash": "1f9f37cd76ff7ebb80ede60808ae790639b09dc452ff60da6b2ad93c4cc64b17",
-    "size": "736269",
-    "gen_time": "2025-12-26T09:10:09"
+    "hash": "ff059120dec0c1ca263a640b295b00d9e6f8a8cfbc60c593bb8a976c16431b8f",
+    "size": "1539382",
+    "gen_time": "2025-12-27T20:12:45"
+  },
+  "docs/resource/coursenote/ius.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ius.pdf",
+    "images": [
+      "/myMajor/note/image-20251227172443415.png",
+      "/myMajor/note/image-20251227190752317.png",
+      "/myMajor/note/image-20251227192504155.png",
+      "/myMajor/note/image-20251227193004965.png"
+    ],
+    "hash": "581fe795c040a36e4f3f20972e85ee4a91b34fcb6291719d1de20ecb1a18274c",
+    "size": "852506",
+    "gen_time": "2025-12-27T20:12:46"
   }
 }

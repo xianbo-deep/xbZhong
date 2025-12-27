@@ -101,6 +101,7 @@ while IFS= read -r -u9 file; do
     # --no-highlight: 禁用 Pandoc 自带高亮，交给 highlight.js
     # --include-in-header: 注入 JS/CSS
     pandoc "$tmp_file" \
+        -f markdown+fenced_divs \
         -o "$html_file" \
         --standalone \
         --css="$CSS_FILE" \

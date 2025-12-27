@@ -939,6 +939,27 @@ test expression
 - `[ string ]`：如果`string`不为空（长度大于0），则判断为真
 - `[ -n string ]`：如果字符串`string`的长度大于零，则判断为真
 - `[ -z string ]`：如果字符串`string`的长度为零，则判断为真
+- `[ string1 = string2 ]`：如果`string1`和`string2`相同，则判断为真
+- `[string1 '>' string2]`：按照字典序比较`string1`和`string2`
+  - 命令内部的`>`和`<`必须**要用引号引起来**
+
+整数判断，不能简单用`>`和`<`（会被误认为字符串比较）
+
+- `-eq`：判断是否相等
+- `-ne`：判断是否不相等
+- `le`：判断是否小于等于
+- `lt`：判断是否小于
+- `ge`：判断是否大于等于
+- `gt`：判读是否大于
+
+```bash
+if [integer1 -eq integer2]; then
+	echo "相等"
+	exit 1
+fi
+```
+
+
 
 ### 循环
 

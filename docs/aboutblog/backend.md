@@ -12,9 +12,24 @@ date: 2025-12-28
 
 考虑到目前只有统计的需求，选择用Go来开发这个功能。首先就是扩展方便，其次就是生态蛮丰富，框架也多，市面上免费的框架也原生支持Go，还有就是我最近刚学完Go，想借此巩固下。
 
-后端目前打算用Supbase的PostgreSQL作为数据库，Upstash的Redis用来做缓存，Vercel用来部署后端API，Cloudflare用来部署前端博客和管理域名。
+后端目前打算用腾讯云的VPS搭建，2GB的RAM和2核CPU，一年99，就是不知道会不会涨价，先用着吧
 
-- 当然后端API是绑了我域名的子域名，有点类似反向代理吧
-- Redis用来存一些缓存啥的，每个月50万次免费请求
-- PostgreSQL无限次请求，500MB的容量，还是很慷慨的
+### 配置
 
+由于内存只有可怜的2GB，我只能在这里面塞Redis、Nginx再跑一个go，还有个比较ex的事情是ip绑域名还要备案。。。。
+
+Redis是不对外暴露的，用Nginx作反代。
+
+因为目前数据量预估不是特别大，所以Redis内存上限我设置了256MB，内存淘汰策略对所有key用了LRU
+
+文件目录：`www/server/redis/redis.conf`
+
+```conf
+maxmemory 256mb
+protected-mode yes
+bind 127.0.0.1
+maxmemory-policy allkeys-lru
+```
+
+
+### 访客位置的获取

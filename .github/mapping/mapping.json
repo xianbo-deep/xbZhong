@@ -1053,20 +1053,37 @@
       "/myMajor/note/image-20251225155039424.png",
       "/myMajor/note/image-20251227135918615.png"
     ],
-    "hash": "ff059120dec0c1ca263a640b295b00d9e6f8a8cfbc60c593bb8a976c16431b8f",
-    "size": "1539382",
-    "gen_time": "2025-12-27T20:29:01"
+    "hash": "5bcf175c0ba644cef51bb3bb6889d9dcfb958ffd4394ec6d513a87c3df99ba02",
+    "size": "1582393",
+    "gen_time": "2025-12-31T09:12:42"
   },
   "docs/resource/coursenote/ius.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ius.pdf",
     "images": [
+      "/myMajor/note/image-20251228170237531.png",
+      "/myMajor/note/image-20251228170834832.png",
       "/myMajor/note/image-20251227172443415.png",
       "/myMajor/note/image-20251227190752317.png",
       "/myMajor/note/image-20251227192504155.png",
-      "/myMajor/note/image-20251227193004965.png"
+      "/myMajor/note/image-20251227193004965.png",
+      "/myMajor/note/image-20251228105923405.png",
+      "/myMajor/note/image-20251228113908819.png",
+      "/myMajor/note/image-20251228115308613.png",
+      "/myMajor/note/image-20251228115911196.png",
+      "/myMajor/note/image-20251228141725168.png",
+      "/myMajor/note/image-20251228142001443.png",
+      "/myMajor/note/image-20251228142335269.png",
+      "/myMajor/note/image-20251228142551173.png",
+      "/myMajor/note/image-20251228154027881.png",
+      "/myMajor/note/image-20251228160646491.png",
+      "/myMajor/note/image-20251228162910847.png",
+      "/myMajor/note/image-20251228165314172.png",
+      "/myMajor/note/image-20251228165528060.png",
+      "/myMajor/note/image-20251229100547138.png",
+      "/myMajor/note/image-20251229102812803.png"
     ],
-    "hash": "581fe795c040a36e4f3f20972e85ee4a91b34fcb6291719d1de20ecb1a18274c",
-    "size": "852506",
-    "gen_time": "2025-12-27T20:12:46"
+    "hash": "591b60e3658a3145401197e32b6948ebf47643b908b677ae79ea58d5f1f30956",
+    "size": "2757626",
+    "gen_time": "2025-12-31T09:12:44"
   }
 }

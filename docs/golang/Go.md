@@ -158,6 +158,7 @@ func main(){
     - `8` ： 八进制
     - `16` ： 十六进制
   - `bitSize`：目标整数位数
+- `strconv.Atoi`：直接转成`int`
 - `math.MaxInt64`：有符号最大值
 - `math.MinInt64`：有符号最小值
 - `变量一，变量二 = 变量二，变量一`：变量交换

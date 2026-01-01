@@ -9,3 +9,4 @@ docs/.vuepress/dist/
 .github/template/reaction_template.html
 psw.yml
 xbZhong.pem
+GeoIP.conf

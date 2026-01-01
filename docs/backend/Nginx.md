@@ -71,8 +71,6 @@ pid /run/nginx.pid;
 error_log /var/log/nginx/error.log warn;
 ```
 
-
-
 - **`events`：调整`Nginx`如何进行网络连接**
   - `worker_connections`：每个进程能处理的最大连接数
   - `epoll`：用`epoll`高效处理连接
@@ -154,6 +152,20 @@ location ~* \.(jpg|png)$ {
     root /data/media;
     expires 7d;
 }
+```
+
+- `proxy_set_header`：配置请求头信息
+  - `Host`：客户端原始请求域名
+  - `Referer`：Referer头
+  - `Cookie`：Cookie头
+  - `X-Real-IP`：客户端真实IP
+  - `X-Forwarded-For`：代理链
+
+```nginx
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
 ```
 
 **其它注意事项**

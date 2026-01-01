@@ -1029,13 +1029,6 @@
     "size": "449865",
     "gen_time": "2025-12-26T09:10:08"
   },
-  "docs/.vuepress/public/assets/highlight/DIGESTS.md": {
-    "pdf": "docs/.vuepress/public/pdfs/.vuepress/public/assets/highlight/DIGESTS.pdf",
-    "images": [],
-    "hash": "8099e97ca02002e861ad0cdf58bef2d286659c5bd467d1c539c2325b6a8dce11",
-    "size": "930342",
-    "gen_time": "2025-12-23T14:30:32"
-  },
   "docs/resource/tools.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/tools.pdf",
     "images": [],
@@ -1053,15 +1046,16 @@
       "/myMajor/note/image-20251225155039424.png",
       "/myMajor/note/image-20251227135918615.png"
     ],
-    "hash": "5bcf175c0ba644cef51bb3bb6889d9dcfb958ffd4394ec6d513a87c3df99ba02",
-    "size": "1582393",
-    "gen_time": "2025-12-31T09:12:42"
+    "hash": "3946f8eeadc3b33d0c75944c501a50ad07ad124c36251d9c6abbf86dce285dfe",
+    "size": "1584728",
+    "gen_time": "2026-01-01T09:18:13"
   },
   "docs/resource/coursenote/ius.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ius.pdf",
     "images": [
       "/myMajor/note/image-20251228170237531.png",
       "/myMajor/note/image-20251228170834832.png",
+      "/myMajor/note/image-20251231114107427.png",
       "/myMajor/note/image-20251227172443415.png",
       "/myMajor/note/image-20251227190752317.png",
       "/myMajor/note/image-20251227192504155.png",
@@ -1076,14 +1070,15 @@
       "/myMajor/note/image-20251228142551173.png",
       "/myMajor/note/image-20251228154027881.png",
       "/myMajor/note/image-20251228160646491.png",
+      "/myMajor/note/image-20251231105958440.png",
       "/myMajor/note/image-20251228162910847.png",
       "/myMajor/note/image-20251228165314172.png",
       "/myMajor/note/image-20251228165528060.png",
       "/myMajor/note/image-20251229100547138.png",
       "/myMajor/note/image-20251229102812803.png"
     ],
-    "hash": "591b60e3658a3145401197e32b6948ebf47643b908b677ae79ea58d5f1f30956",
-    "size": "2757626",
-    "gen_time": "2025-12-31T09:12:44"
+    "hash": "db48baad9494241e60b0bb53c6dc44dedb630a8489428bd2a92d8d53ea9ea6d3",
+    "size": "3088053",
+    "gen_time": "2026-01-01T09:18:15"
   }
 }

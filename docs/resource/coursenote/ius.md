@@ -1274,7 +1274,7 @@ $$
 tan(\delta) = \frac{L}{R}
 $$
 
-![](C:\Users\23967\AppData\Roaming\Typora\typora-user-images\image-20260101144021668.png)
+![](/myMajor/note/image-20260101144021668.png)
 
 使用正弦定理
 
@@ -1286,7 +1286,7 @@ $$
 \frac{l_d}{\sin{\alpha}} = 2R
 $$
 
-![](C:\Users\23967\AppData\Roaming\Typora\typora-user-images\image-20260101144042786.png)
+![](/myMajor/note/image-20260101144042786.png)
 
 
 上式也可表示为，$\kappa$是圆弧的曲率

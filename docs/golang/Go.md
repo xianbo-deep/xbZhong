@@ -162,6 +162,10 @@ func main(){
 - `math.MaxInt64`：有符号最大值
 - `math.MinInt64`：有符号最小值
 - `变量一，变量二 = 变量二，变量一`：变量交换
+- `time.Now()`：获取当前时间，返回类型为`time.Time`
+  - `.AddDate(year,month,day)`：在当前日期进行日期变换
+  - `.Formate()`：对日期进行格式化
+  - `.Unix()`：转换成秒级时间戳
 - Go内置了`Error`接口，实现类的时候若有要求可以直接实现`Error`接口
 
 **排序**

@@ -208,9 +208,9 @@
   "docs/backend/Nginx.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Nginx.pdf",
     "images": [],
-    "hash": "23ca5716a8504a89ef9ba61f880488e3aea475f78f94e322401c352ec6ba7c94",
-    "size": "835338",
-    "gen_time": "2025-12-23T16:31:47"
+    "hash": "4cde957bf0344ae7848e23a86f324f387bd80d3b9db0e7729f5043ef01fe3397",
+    "size": "850959",
+    "gen_time": "2026-01-06T09:11:38"
   },
   "docs/backend/RabbitMQ.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/RabbitMQ.pdf",
@@ -1011,9 +1011,9 @@
       "/screenshot/backend/image-20251015173754231.png",
       "/screenshot/backend/image-20251015173810451.png"
     ],
-    "hash": "469e1877916067e18cc80f0a97e3c668c7fdaf954028ebca2dc7f5d57c64e4e1",
-    "size": "4344816",
-    "gen_time": "2025-12-24T12:22:07"
+    "hash": "0e89e484208407c3ca78e788b0e40c2355b0016fffa9bbac50c8e3f6b511b6da",
+    "size": "4453005",
+    "gen_time": "2026-01-06T09:11:41"
   },
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
@@ -1024,10 +1024,13 @@
   },
   "docs/resource/coursenote/ai_application.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ai_application.pdf",
-    "images": [],
-    "hash": "27ec8bd0471dff18c088cea902fe0c03d24b24127abf429ec1cda496c4c73218",
-    "size": "449865",
-    "gen_time": "2025-12-26T09:10:08"
+    "images": [
+      "/myMajor/note/image-20260105155539029.png",
+      "/myMajor/note/image-20260103171611454.png"
+    ],
+    "hash": "24ea84795d0b5f62cf87f4478edcddb7a4ff85c41e5b927f8dd46b62ea93255f",
+    "size": "770845",
+    "gen_time": "2026-01-06T09:11:43"
   },
   "docs/resource/tools.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/tools.pdf",
@@ -1044,11 +1047,12 @@
       "/myMajor/note/image-20251227152057974.png",
       "/myMajor/note/image-20251227111953048.png",
       "/myMajor/note/image-20251225155039424.png",
-      "/myMajor/note/image-20251227135918615.png"
+      "/myMajor/note/image-20251227135918615.png",
+      "/myMajor/note/image-20251231155824137.png"
     ],
-    "hash": "3946f8eeadc3b33d0c75944c501a50ad07ad124c36251d9c6abbf86dce285dfe",
-    "size": "1584728",
-    "gen_time": "2026-01-01T09:18:13"
+    "hash": "1b67eb787f158d7046a96c206bebc8d7b02de1b8d30cf4a3e7844b8e1a62c17e",
+    "size": "1707648",
+    "gen_time": "2026-01-06T09:11:44"
   },
   "docs/resource/coursenote/ius.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ius.pdf",
@@ -1075,10 +1079,12 @@
       "/myMajor/note/image-20251228165314172.png",
       "/myMajor/note/image-20251228165528060.png",
       "/myMajor/note/image-20251229100547138.png",
-      "/myMajor/note/image-20251229102812803.png"
+      "/myMajor/note/image-20251229102812803.png",
+      "/myMajor/note/image-20260101144021668.png",
+      "/myMajor/note/image-20260101144042786.png"
     ],
-    "hash": "db48baad9494241e60b0bb53c6dc44dedb630a8489428bd2a92d8d53ea9ea6d3",
-    "size": "3088053",
-    "gen_time": "2026-01-01T09:18:15"
+    "hash": "b0c6a93ed7212248ba7841cf7925aba8a0d45df68e3f91667b2d869926cdc302",
+    "size": "3188895",
+    "gen_time": "2026-01-06T09:11:46"
   }
 }

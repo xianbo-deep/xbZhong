@@ -1241,7 +1241,12 @@ db.Model(&jack).Association("Houses").Clear()
 db.Model(&jack).Association("Houses").Unscoped().Delete(&houses)
 ```
 
+## 字段映射
 
+在对非model的结构体进行数据查询的时候，在查询取别名的时候要和字段一一对应，**因为Gorm会将结构体字段从驼峰转为蛇形**
+
+- `total_pv`对应结构体的`TotalPV`
+- `avg_latency`对应结构体的`AvgLatency`
 
 
 

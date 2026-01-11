@@ -1,0 +1,16 @@
+import comp from "E:/Myown/Blog/.temp/pages/backend/Kubernetes.html.vue"
+const data = JSON.parse("{\"path\":\"/backend/Kubernetes.html\",\"title\":\"Kubernetes\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"Kubernetes\",\"author\":\"xbZhong\",\"isOriginal\":true,\"article\":true,\"category\":\"backend\",\"timeline\":true,\"icon\":\"devicon:kubernetes\",\"date\":\"2025-10-18T00:00:00.000Z\",\"description\":\"本页PDF Kubernetes 文档 | Kubernetes 概念 Kubernetes是一个容器编排框架，提供了一个可弹性运行分布式系统的框架 它具有以下功能： 服务发现和负载均衡 存储编排 自动部署和回滚 自我修复 等等...... 架构 Kubernetes架构 典型的MASTER-WORKER架构 image-202510171500529...\",\"head\":[[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Kubernetes\\\",\\\"image\\\":[\\\"https://xbzhong.cn/screenshot/backend/image-20251017150052951.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018161042945.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018160307336.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018153922491.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018151215574.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018151814388.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018152403502.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018153151400.png\\\"],\\\"datePublished\\\":\\\"2025-10-18T00:00:00.000Z\\\",\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"xbZhong\\\"}]}\"],[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xbzhong.cn/backend/Kubernetes.html\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"阿b的博客\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Kubernetes\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"本页PDF Kubernetes 文档 | Kubernetes 概念 Kubernetes是一个容器编排框架，提供了一个可弹性运行分布式系统的框架 它具有以下功能： 服务发现和负载均衡 存储编排 自动部署和回滚 自我修复 等等...... 架构 Kubernetes架构 典型的MASTER-WORKER架构 image-202510171500529...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:image\",\"content\":\"https://xbzhong.cn/screenshot/backend/image-20251017150052951.png\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"xbZhong\"}],[\"meta\",{\"property\":\"article:published_time\",\"content\":\"2025-10-18T00:00:00.000Z\"}]]},\"readingTime\":{\"minutes\":4.16,\"words\":1247},\"filePathRelative\":\"backend/Kubernetes.md\",\"excerpt\":\"<p><a href=\\\"/pdfs/backend/Kubernetes.pdf\\\">本页PDF</a></p>\\n<p><a href=\\\"https://kubernetes.io/zh-cn/docs/home/\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\">Kubernetes 文档 | Kubernetes</a></p>\\n<h2>概念</h2>\\n<p>Kubernetes是一个容器编排框架，提供了一个<strong>可弹性运行分布式系统</strong>的框架</p>\\n<p>它具有以下功能：</p>\\n<ul>\\n<li><strong>服务发现和负载均衡</strong></li>\\n<li><strong>存储编排</strong></li>\\n<li><strong>自动部署和回滚</strong></li>\\n<li><strong>自我修复</strong></li>\\n<li><strong>等等......</strong></li>\\n</ul>\",\"autoDesc\":true}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

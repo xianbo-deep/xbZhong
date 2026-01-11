@@ -1,0 +1,47 @@
+<template><div><p><a href="/pdfs/resource/2.pdf">本页PDF</a></p>
+<h2 id="大二上" tabindex="-1"><a class="header-anchor" href="#大二上"><span>大二上</span></a></h2>
+<h3 id="现代电子技术与系统" tabindex="-1"><a class="header-anchor" href="#现代电子技术与系统"><span>现代电子技术与系统</span></a></h3>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%8E%B0%E4%BB%A3%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F/%E8%AF%BE%E4%BB%B6" target="_blank" rel="noopener noreferrer">课件</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%8E%B0%E4%BB%A3%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%8F%8A%E5%85%B6%E7%AD%94%E6%A1%88" target="_blank" rel="noopener noreferrer">电子书及其答案</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%8E%B0%E4%BB%A3%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F/%E5%AE%9E%E9%AA%8C/%E4%BB%BF%E7%9C%9F" target="_blank" rel="noopener noreferrer">仿真</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%8E%B0%E4%BB%A3%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F/%E5%AE%9E%E9%AA%8C/%E5%AE%9E%E9%AA%8C%E5%9B%BE%E7%89%87" target="_blank" rel="noopener noreferrer">实验图片</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%8E%B0%E4%BB%A3%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F/%E5%AE%9E%E9%AA%8C/%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%E6%A8%A1%E6%9D%BF" target="_blank" rel="noopener noreferrer">实验报告模板</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%8E%B0%E4%BB%A3%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F/%E5%AE%9E%E9%AA%8C/%E5%AE%9E%E9%AA%8C%E6%8C%87%E5%AF%BC%E4%B9%A6" target="_blank" rel="noopener noreferrer">实验指导书</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%8E%B0%E4%BB%A3%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F/%E5%AE%9E%E9%AA%8C/%E6%88%91%E7%9A%84%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A" target="_blank" rel="noopener noreferrer">我的实验报告</a></p>
+<h3 id="大学物理" tabindex="-1"><a class="header-anchor" href="#大学物理"><span>大学物理</span></a></h3>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/%E6%95%99%E6%9D%90" target="_blank" rel="noopener noreferrer">教材</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/%E4%B8%8B/%E4%BD%9C%E4%B8%9A%E6%9C%AC" target="_blank" rel="noopener noreferrer">作业本</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/%E4%B8%8B/%E8%AF%BE%E4%BB%B6" target="_blank" rel="noopener noreferrer">课件</a></p>
+<h3 id="算法与数据结构" tabindex="-1"><a class="header-anchor" href="#算法与数据结构"><span>算法与数据结构</span></a></h3>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%AE%9E%E9%AA%8C" target="_blank" rel="noopener noreferrer">实验</a></p>
+<h3 id="大学物理实验" tabindex="-1"><a class="header-anchor" href="#大学物理实验"><span>大学物理实验</span></a></h3>
+<p><a href="https://alist.xn--rhqr3ykwbm05aegjqxb.com/" target="_blank" rel="noopener noreferrer">请跳转至Alist获取</a></p>
+<h3 id="复变函数与积分变换" tabindex="-1"><a class="header-anchor" href="#复变函数与积分变换"><span>复变函数与积分变换</span></a></h3>
+<p><a href=""></a><br>
+<a href=""></a><br>
+<a href=""></a></p>
+<h2 id="大二下" tabindex="-1"><a class="header-anchor" href="#大二下"><span>大二下</span></a></h2>
+<h3 id="概率论与数理统计" tabindex="-1"><a class="header-anchor" href="#概率论与数理统计"><span>概率论与数理统计</span></a></h3>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%A6%82%E7%8E%87%E8%AE%BA%E4%B8%8E%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/%E7%94%B5%E5%AD%90%E4%B9%A6" target="_blank" rel="noopener noreferrer">电子书</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%A6%82%E7%8E%87%E8%AE%BA%E4%B8%8E%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/%E4%BD%9C%E4%B8%9A%E6%9C%AC/%E5%B8%B8%E8%A7%84%E7%8F%AD" target="_blank" rel="noopener noreferrer">常规班作业本</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%A6%82%E7%8E%87%E8%AE%BA%E4%B8%8E%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/%E8%AF%BE%E4%BB%B6/%E5%B8%B8%E8%A7%84%E7%8F%AD" target="_blank" rel="noopener noreferrer">常规班课件</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%A6%82%E7%8E%87%E8%AE%BA%E4%B8%8E%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/%E4%BD%9C%E4%B8%9A%E6%9C%AC/%E6%B7%B7%E5%90%88%E7%8F%AD" target="_blank" rel="noopener noreferrer">混合班作业本</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%A6%82%E7%8E%87%E8%AE%BA%E4%B8%8E%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/%E8%AF%BE%E4%BB%B6/%E6%B7%B7%E5%90%88%E7%8F%AD" target="_blank" rel="noopener noreferrer">混合班课件</a></p>
+<h3 id="人工智能数学基础" tabindex="-1"><a class="header-anchor" href="#人工智能数学基础"><span>人工智能数学基础</span></a></h3>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E5%A4%8D%E4%B9%A0%E9%A2%98%E5%BA%93" target="_blank" rel="noopener noreferrer">复习题库</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E8%AF%BE%E4%BB%B6" target="_blank" rel="noopener noreferrer">课件</a></p>
+<h3 id="自动控制原理" tabindex="-1"><a class="header-anchor" href="#自动控制原理"><span>自动控制原理</span></a></h3>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E8%87%AA%E5%8A%A8%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86/%E5%AE%9E%E9%AA%8C/%E8%AF%BE%E8%AE%BE" target="_blank" rel="noopener noreferrer">课设</a></p>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E8%87%AA%E5%8A%A8%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86/%E7%94%B5%E5%AD%90%E4%B9%A6" target="_blank" rel="noopener noreferrer">电子书</a></p>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E8%87%AA%E5%8A%A8%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86/%E8%AF%BE%E4%BB%B6" target="_blank" rel="noopener noreferrer">课件</a></p>
+<h3 id="大学物理实验-1" tabindex="-1"><a class="header-anchor" href="#大学物理实验-1"><span>大学物理实验</span></a></h3>
+<p><a href="https://alist.xn--rhqr3ykwbm05aegjqxb.com/" target="_blank" rel="noopener noreferrer">请跳转至Alist获取</a></p>
+<h3 id="机器人原理与设计" tabindex="-1"><a class="header-anchor" href="#机器人原理与设计"><span>机器人原理与设计</span></a></h3>
+<p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E8%AE%BE%E8%AE%A1/%E5%AE%9E%E9%AA%8C/%E8%B5%84%E6%96%99" target="_blank" rel="noopener noreferrer">实验资料</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E8%AE%BE%E8%AE%A1/%E7%94%B5%E5%AD%90%E4%B9%A6" target="_blank" rel="noopener noreferrer">电子书</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E8%AE%BE%E8%AE%A1/%E7%9C%9F%E9%A2%98%E7%AD%94%E6%A1%88" target="_blank" rel="noopener noreferrer">真题答案</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E8%AE%BE%E8%AE%A1/%E8%AF%BE%E4%BB%B6/2023%E5%B9%B4" target="_blank" rel="noopener noreferrer">2023年课件</a><br>
+<a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8E%9F%E7%90%86%E4%B8%8E%E8%AE%BE%E8%AE%A1/%E8%AF%BE%E4%BB%B6/2024%E5%B9%B4" target="_blank" rel="noopener noreferrer">2024年课件</a></p>
+</div></template>
+
+

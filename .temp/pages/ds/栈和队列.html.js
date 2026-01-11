@@ -1,0 +1,16 @@
+import comp from "E:/Myown/Blog/.temp/pages/ds/栈和队列.html.vue"
+const data = JSON.parse("{\"path\":\"/ds/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97.html\",\"title\":\"栈和队列\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"栈和队列\",\"author\":\"xbZhong\",\"isOriginal\":true,\"article\":false,\"category\":\"ds\",\"timeline\":true,\"icon\":\"mingcute:code-line\",\"description\":\"本页PDF 括号匹配 alt text 用栈来模拟括号匹配的过程 用栈是因为栈可以解决具有完全包含关系的问题 考研题 三元组最小距离 思路挺巧妙的 alt text 栈里面的数字是从小到大排列的 因此我们只需要找到三个数字中最小的那个 对于他来说，其它两个数字再取栈后面的数字，其距离会越来越大 因此我们找到三个数字中的最小数字，就说明当前答案已经是对于...\",\"head\":[[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"WebPage\\\",\\\"name\\\":\\\"栈和队列\\\",\\\"description\\\":\\\"本页PDF 括号匹配 alt text 用栈来模拟括号匹配的过程 用栈是因为栈可以解决具有完全包含关系的问题 考研题 三元组最小距离 思路挺巧妙的 alt text 栈里面的数字是从小到大排列的 因此我们只需要找到三个数字中最小的那个 对于他来说，其它两个数字再取栈后面的数字，其距离会越来越大 因此我们找到三个数字中的最小数字，就说明当前答案已经是对于...\\\"}\"],[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xbzhong.cn/ds/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97.html\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"阿b的博客\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"栈和队列\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"本页PDF 括号匹配 alt text 用栈来模拟括号匹配的过程 用栈是因为栈可以解决具有完全包含关系的问题 考研题 三元组最小距离 思路挺巧妙的 alt text 栈里面的数字是从小到大排列的 因此我们只需要找到三个数字中最小的那个 对于他来说，其它两个数字再取栈后面的数字，其距离会越来越大 因此我们找到三个数字中的最小数字，就说明当前答案已经是对于...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"website\"}],[\"meta\",{\"property\":\"og:image\",\"content\":\"https://xbzhong.cn/screenshot/ds/image-9.png\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"xbZhong\"}]]},\"readingTime\":{\"minutes\":7.83,\"words\":2350},\"filePathRelative\":\"ds/栈和队列.md\",\"excerpt\":\"<p><a href=\\\"/pdfs/ds/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97.pdf\\\">本页PDF</a></p>\\n<h2>括号匹配</h2>\\n<p><img src=\\\"/screenshot/ds/image-9.png\\\" alt=\\\"alt text\\\" loading=\\\"lazy\\\"><br>\\n<em><strong>用栈来模拟括号匹配的过程</strong></em><br>\\n<strong>用栈是因为栈可以解决具有完全包含关系的问题</strong></p>\\n<pre><code>#include&lt;bits/stdc++.h&gt;\\nusing namespace std;\\nint main()\\n{\\nint n;\\nint flag = 0;\\ncin &gt;&gt; n;\\nvector&lt;string&gt; temp[n] , s;\\nstring str;\\nstring target;\\nfor(int i = 0; i &lt; n; i++)\\n{\\n    cin &gt;&gt; str;\\n        temp[i] = str;\\n        str = NULL ;\\n}\\ncin &gt;&gt; target;\\nfor(int i = 0; i &lt; n; i++)\\n{\\n    if(temp[i] == target)\\n    {\\n        s.push_back(temp[i]);\\n        flag = 1;\\n        break;\\n    }\\n    if(temp[i] == \\\"return\\\")\\n    s.pop_back(temp[i]);\\n    else\\n    s.push_back(temp[i]);\\n}\\nif(flag)\\n{\\n    for(int i = 0; i &lt; s.size();i++)\\n    {\\n        if(i) cout &lt;&lt; \\\"-&gt;\\\"\\n            cout &lt;&lt; s[i];\\n    }\\n    cout &lt;&lt; endl;\\n    else\\n        {\\n            cout &lt;&lt; \\\"NOT REFERENCED\\\"\\n        }\\n}\\nreturn 0;\\n}\\n</code></pre>\",\"autoDesc\":true}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

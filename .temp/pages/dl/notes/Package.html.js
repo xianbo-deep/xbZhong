@@ -1,0 +1,16 @@
+import comp from "E:/Myown/Blog/.temp/pages/dl/notes/Package.html.vue"
+const data = JSON.parse("{\"path\":\"/dl/notes/Package.html\",\"title\":\"技巧杂记\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"技巧杂记\",\"description\":\"实习学到的.... 记录一些常用的微调库以及开源社区的使用方法\",\"author\":\"xbZhong\",\"isOriginal\":true,\"article\":true,\"category\":\"notes\",\"timeline\":true,\"icon\":\"material-symbols:note\",\"date\":\"2025-08-24T00:00:00.000Z\",\"head\":[[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"技巧杂记\\\",\\\"image\\\":[\\\"\\\"],\\\"datePublished\\\":\\\"2025-08-24T00:00:00.000Z\\\",\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"xbZhong\\\"}]}\"],[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xbzhong.cn/dl/notes/Package.html\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"阿b的博客\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"技巧杂记\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"实习学到的.... 记录一些常用的微调库以及开源社区的使用方法\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"xbZhong\"}],[\"meta\",{\"property\":\"article:published_time\",\"content\":\"2025-08-24T00:00:00.000Z\"}]]},\"readingTime\":{\"minutes\":4.8,\"words\":1440},\"filePathRelative\":\"dl/notes/Package.md\",\"excerpt\":\"<p><a href=\\\"/pdfs/dl/notes/Package.pdf\\\">本页PDF</a></p>\\n<p>如果碰到服务器无法访问外网情况，可设置环境变量</p>\\n<ul>\\n<li>\\n<p>在文件开始写入这两行代码，代表访问HG的镜像社区</p>\\n<div class=\\\"language-python line-numbers-mode\\\" data-highlighter=\\\"shiki\\\" data-ext=\\\"python\\\" style=\\\"--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34\\\"><pre class=\\\"shiki shiki-themes one-light one-dark-pro vp-code\\\"><code class=\\\"language-python\\\"><span class=\\\"line\\\"><span style=\\\"--shiki-light:#A626A4;--shiki-dark:#C678DD\\\">import</span><span style=\\\"--shiki-light:#383A42;--shiki-dark:#ABB2BF\\\"> os</span></span>\\n<span class=\\\"line\\\"><span style=\\\"--shiki-light:#383A42;--shiki-dark:#ABB2BF\\\">os.environ[</span><span style=\\\"--shiki-light:#50A14F;--shiki-dark:#98C379\\\">'HF_ENDPOINT'</span><span style=\\\"--shiki-light:#383A42;--shiki-dark:#ABB2BF\\\">] </span><span style=\\\"--shiki-light:#383A42;--shiki-dark:#56B6C2\\\">=</span><span style=\\\"--shiki-light:#50A14F;--shiki-dark:#98C379\\\"> 'https://hf-mirror.com'</span></span></code></pre>\\n<div class=\\\"line-numbers\\\" aria-hidden=\\\"true\\\" style=\\\"counter-reset:line-number 0\\\"><div class=\\\"line-number\\\"></div><div class=\\\"line-number\\\"></div></div></div></li>\\n<li>\\n<p>或者在终端输入 <code>export USE_MODELSCOPE_HUB=1</code>或者<code>export HF_ENDPOINT=https://hf-mirror.com</code></p>\\n</li>\\n</ul>\"}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

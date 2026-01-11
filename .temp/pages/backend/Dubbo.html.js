@@ -1,0 +1,16 @@
+import comp from "E:/Myown/Blog/.temp/pages/backend/Dubbo.html.vue"
+const data = JSON.parse("{\"path\":\"/backend/Dubbo.html\",\"title\":\"Dubbo\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"Dubbo\",\"author\":\"xbZhong\",\"isOriginal\":true,\"article\":true,\"category\":\"backend\",\"timeline\":true,\"icon\":\"devicon:apache\",\"date\":\"2025-10-18T00:00:00.000Z\",\"description\":\"本页PDF Dubbo中文文档 介绍 是一款基于**RPC**的服务开发框架，可以帮助解决如下微服务实践问题： 微服务编程范式和工具 高性能的RPC通信 微服务监控与治理 Dubbo对Spring Boot微服务框架都做了很好的适配 RPC 一种通信模型或设计思想 RPC 自身不规定具体实现方式，只是思想 核心：远程调用本地化 开发者无需显式处理网络通...\",\"head\":[[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Dubbo\\\",\\\"image\\\":[\\\"https://xbzhong.cn/screenshot/backend/image-20251016172737311.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018113705093.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018131411790.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018133145303.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018133818557.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251021113319445.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018141038253.png\\\",\\\"https://xbzhong.cn/screenshot/backend/image-20251018142537953.png\\\"],\\\"datePublished\\\":\\\"2025-10-18T00:00:00.000Z\\\",\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"xbZhong\\\"}]}\"],[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xbzhong.cn/backend/Dubbo.html\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"阿b的博客\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Dubbo\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"本页PDF Dubbo中文文档 介绍 是一款基于**RPC**的服务开发框架，可以帮助解决如下微服务实践问题： 微服务编程范式和工具 高性能的RPC通信 微服务监控与治理 Dubbo对Spring Boot微服务框架都做了很好的适配 RPC 一种通信模型或设计思想 RPC 自身不规定具体实现方式，只是思想 核心：远程调用本地化 开发者无需显式处理网络通...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:image\",\"content\":\"https://xbzhong.cn/screenshot/backend/image-20251016172737311.png\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"xbZhong\"}],[\"meta\",{\"property\":\"article:published_time\",\"content\":\"2025-10-18T00:00:00.000Z\"}]]},\"readingTime\":{\"minutes\":18.07,\"words\":5422},\"filePathRelative\":\"backend/Dubbo.md\",\"excerpt\":\"<p><a href=\\\"/pdfs/backend/Dubbo.pdf\\\">本页PDF</a></p>\\n<p><a href=\\\"https://cn.dubbo.apache.org/zh-cn/overview/what/\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\">Dubbo中文文档</a></p>\\n<h2>介绍</h2>\\n<p>是一款基于**<code>RPC</code>**的服务开发框架，可以帮助解决如下微服务实践问题：</p>\\n<ul>\\n<li>微服务<strong>编程范式和工具</strong></li>\\n<li>高性能的<strong>RPC通信</strong></li>\\n<li>微服务<strong>监控与治理</strong></li>\\n</ul>\",\"autoDesc\":true}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

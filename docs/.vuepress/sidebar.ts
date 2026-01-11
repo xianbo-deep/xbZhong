@@ -403,29 +403,31 @@ export default sidebar({
       
     },
   ],
+  "/resource/coursenote/freshman/":["README.md"],
+  "/resource/coursenote/sophomore/":["README.md"],
+  "/resource/coursenote/junior/":["README.md","ml.md","ai_application.md","embedding_system.md","ius.md"],
+  "/resource/coursenote/senior/":["README.md"],
+  "/resource/coursenote/":[
+    "README.md",
+    {
+      text:"大一",
+      link:"/resource/coursenote/freshman/",
+    },
+    {
+      text:"大二",
+      link:"/resource/coursenote/sophomore/",
+    },
+    {
+      text:"大三",
+      link:"/resource/coursenote/junior/",
+    },
+    {
+      text:"大四",
+      link:"/resource/coursenote/senior/",
+    }
+  ],
+  "/resource/data/":["README.md","1.md","2.md","3.md","4.md","minor.md"],
   "/resource/":[
-    {
-      text: "大一",
-      link: "1.md",
-      expanded: true
-    },
-    {
-      text: "大二",
-      link: "2.md",
-      expanded: true
-    },{
-      text: "大三",
-      link: "3.md",
-      expanded: true
-    },{
-      text: "大四",
-      link: "4.md",
-      expanded: true
-    },{
-      text: "专业选修",
-      link: "minor.md",
-      expanded: true
-    },
     {
       text: "工具箱",
       link: "tools.md",
@@ -433,30 +435,15 @@ export default sidebar({
     },
     {
       text: "课程笔记",
-      prefix: "coursenote/",
-      expanded: true,
-      children: [
-        {
-          text: "前言",
-          link: "README.md"
-        },
-        {
-          text: "模式识别与统计学习",
-          link: "ml.md"
-        },
-        {
-          text: "人工智能原理及其应用",
-          link: "ai_application.md"
-        },
-        {
-          text: "嵌入式系统原理及实验",
-          link: "embedding_system.md"
-        },
-        {
-          text: "智能无人系统",
-          link: "ius.md"
-        },
-      ]
+      link: "/resource/coursenote/",
+    },
+    {
+      text: "课程资料",
+      link: "/resource/data/"
+    },
+    {
+      text: "培养方案",
+      link: "/ZJ/"
     },
   ],
   "/jottings/":[

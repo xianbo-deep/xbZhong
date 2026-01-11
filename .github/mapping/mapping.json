@@ -1018,9 +1018,9 @@
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
     "images": [],
-    "hash": "938d64f6808d034b247440c94d936b2b3c84d66dd7930ee99c12e3874615dcc9",
-    "size": "1598624",
-    "gen_time": "2025-12-23T16:32:51"
+    "hash": "ddf9470f9b4b7af2494c7257a044fd57832bd51cf1c8b928d885f471038b98c4",
+    "size": "1606145",
+    "gen_time": "2026-01-11T09:18:59"
   },
   "docs/resource/coursenote/ai_application.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ai_application.pdf",
@@ -1050,9 +1050,9 @@
       "/myMajor/note/image-20251227135918615.png",
       "/myMajor/note/image-20251231155824137.png"
     ],
-    "hash": "1b67eb787f158d7046a96c206bebc8d7b02de1b8d30cf4a3e7844b8e1a62c17e",
-    "size": "1707648",
-    "gen_time": "2026-01-06T09:11:44"
+    "hash": "981d7ac03582534f467a0a044fc4e446f0ce70547d51b57d0366273c68da2a8a",
+    "size": "1735109",
+    "gen_time": "2026-01-11T09:19:00"
   },
   "docs/resource/coursenote/ius.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ius.pdf",
@@ -1083,8 +1083,8 @@
       "/myMajor/note/image-20260101144021668.png",
       "/myMajor/note/image-20260101144042786.png"
     ],
-    "hash": "b0c6a93ed7212248ba7841cf7925aba8a0d45df68e3f91667b2d869926cdc302",
-    "size": "3188895",
-    "gen_time": "2026-01-06T09:11:46"
+    "hash": "45def538029953ad7f09b12f3b2dd53bfff95448a22fba449def82d769c4a048",
+    "size": "3195261",
+    "gen_time": "2026-01-11T09:19:03"
   }
 }

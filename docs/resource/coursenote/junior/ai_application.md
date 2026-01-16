@@ -4,7 +4,9 @@ index: false
 article: false
 timeline: false
 ---
-[本页PDF](/pdfs/resource/coursenote/ai_application.pdf)
+
+[本页PDF](/pdfs/resource/coursenote/junior/ai_application.pdf)
+
 
 
 ## 人工智能简介

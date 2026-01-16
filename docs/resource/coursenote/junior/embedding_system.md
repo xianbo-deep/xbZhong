@@ -5,7 +5,9 @@ article: false
 timeline: false
 ---
 
-[本页PDF](/pdfs/resource/coursenote/embedding_system.pdf)
+[本页PDF](/pdfs/resource/coursenote/junior/embedding_system.pdf)
+
+
 
 
 ## 嵌入式系统概论

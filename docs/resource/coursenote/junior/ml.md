@@ -5,7 +5,9 @@ article: false
 timeline: false
 ---
 
-[本页PDF](/pdfs/resource/coursenote/ml.pdf)
+[本页PDF](/pdfs/resource/coursenote/junior/ml.pdf)
+
+
 
 以下笔记为个人理解，涵盖了这门课的学习重点，若和教材有出入请以教材为主
 

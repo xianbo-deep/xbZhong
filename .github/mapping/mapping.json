@@ -937,51 +937,6 @@
     "size": "1509910",
     "gen_time": "2025-11-24T13:37:02"
   },
-  "docs/resource/1.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/1.pdf",
-    "images": [],
-    "hash": "1556797abdfeca31fccec172c00ddb5c7a4907ca328c9326c9ee4b2200666404",
-    "size": "88664",
-    "gen_time": "2025-11-24T13:37:02"
-  },
-  "docs/resource/2.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/2.pdf",
-    "images": [],
-    "hash": "9856eb7d60ac3f3e168b25e47b24ebe37d2378d6ebce20dac92006b371fec945",
-    "size": "202028",
-    "gen_time": "2025-11-24T13:37:02"
-  },
-  "docs/resource/3.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/3.pdf",
-    "images": [],
-    "hash": "c07c9badd775ff0d071827edb7ac346e5a9c2866f5f1e36940de2ef0e1652ec0",
-    "size": "114574",
-    "gen_time": "2025-11-24T13:37:03"
-  },
-  "docs/resource/4.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/4.pdf",
-    "images": [],
-    "hash": "80e29f5178d3f85eb754ea6e41a489cc5a333ee43dedca48b2d241e9f98308d8",
-    "size": "18240",
-    "gen_time": "2025-11-24T13:37:03"
-  },
-  "docs/resource/coursenote/ml.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ml.pdf",
-    "images": [
-      "/myMajor/note/image-20251216104253184.png",
-      "/myMajor/note/image-20251216110606101.png"
-    ],
-    "hash": "c2e8a92e8d6c7434be54432143d30e0e3e58a94c1a04754544bcb05a5b7bfb27",
-    "size": "1746606",
-    "gen_time": "2025-12-27T20:12:54"
-  },
-  "docs/resource/minor.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/minor.pdf",
-    "images": [],
-    "hash": "8d3b17bc69d42eac9bc6d8e21f721c3acae56822c19f8112e4d63964bae642fa",
-    "size": "61565",
-    "gen_time": "2025-11-24T13:37:06"
-  },
   "docs/golang/Bash.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Bash.pdf",
     "images": [],
@@ -1022,16 +977,6 @@
     "size": "1606145",
     "gen_time": "2026-01-11T09:18:59"
   },
-  "docs/resource/coursenote/ai_application.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ai_application.pdf",
-    "images": [
-      "/myMajor/note/image-20260105155539029.png",
-      "/myMajor/note/image-20260103171611454.png"
-    ],
-    "hash": "24ea84795d0b5f62cf87f4478edcddb7a4ff85c41e5b927f8dd46b62ea93255f",
-    "size": "770845",
-    "gen_time": "2026-01-06T09:11:43"
-  },
   "docs/resource/tools.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/tools.pdf",
     "images": [],
@@ -1039,8 +984,18 @@
     "size": "83659",
     "gen_time": "2025-12-23T22:42:59"
   },
-  "docs/resource/coursenote/embedding_system.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/embedding_system.pdf",
+  "docs/resource/coursenote/junior/ai_application.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/ai_application.pdf",
+    "images": [
+      "/myMajor/note/image-20260105155539029.png",
+      "/myMajor/note/image-20260103171611454.png"
+    ],
+    "hash": "a0510b7b9db2db8225f189fbf1b3f3305aafd87056724209c1ea2ac14667a7be",
+    "size": "770845",
+    "gen_time": "2026-01-16T09:15:06"
+  },
+  "docs/resource/coursenote/junior/embedding_system.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/embedding_system.pdf",
     "images": [
       "/myMajor/note/image-20251227145217619.png",
       "/myMajor/note/image-20251227150106399.png",
@@ -1050,12 +1005,12 @@
       "/myMajor/note/image-20251227135918615.png",
       "/myMajor/note/image-20251231155824137.png"
     ],
-    "hash": "981d7ac03582534f467a0a044fc4e446f0ce70547d51b57d0366273c68da2a8a",
+    "hash": "cacf7295e56184b4d8e33aa26f3a705c9c9824a744eed027a1fb77e5a4238130",
     "size": "1735109",
-    "gen_time": "2026-01-11T09:19:00"
+    "gen_time": "2026-01-16T09:15:08"
   },
-  "docs/resource/coursenote/ius.md": {
-    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/ius.pdf",
+  "docs/resource/coursenote/junior/ius.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/ius.pdf",
     "images": [
       "/myMajor/note/image-20251228170237531.png",
       "/myMajor/note/image-20251228170834832.png",
@@ -1083,8 +1038,53 @@
       "/myMajor/note/image-20260101144021668.png",
       "/myMajor/note/image-20260101144042786.png"
     ],
-    "hash": "45def538029953ad7f09b12f3b2dd53bfff95448a22fba449def82d769c4a048",
+    "hash": "f7eea4f4c84da5105560280dd537e7e970d2061bff68997bc0d334e8e16d7031",
     "size": "3195261",
-    "gen_time": "2026-01-11T09:19:03"
+    "gen_time": "2026-01-16T09:15:10"
+  },
+  "docs/resource/coursenote/junior/ml.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/ml.pdf",
+    "images": [
+      "/myMajor/note/image-20251216104253184.png",
+      "/myMajor/note/image-20251216110606101.png"
+    ],
+    "hash": "4c44188c48b81352e6d36a278c2e081dc0babaf7e3f10f50ab1321a448e27e2c",
+    "size": "1746606",
+    "gen_time": "2026-01-16T09:15:18"
+  },
+  "docs/resource/data/1.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/data/1.pdf",
+    "images": [],
+    "hash": "1fa1bf7239e885d3da4902892d374c2e200f81e7d281b048a2386baaf31e8104",
+    "size": "90487",
+    "gen_time": "2026-01-16T09:15:18"
+  },
+  "docs/resource/data/2.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/data/2.pdf",
+    "images": [],
+    "hash": "8308ead196d37e316d0f5d3b02517d9be4c6764118d3a4ed9b654e5802d162bf",
+    "size": "203182",
+    "gen_time": "2026-01-16T09:15:19"
+  },
+  "docs/resource/data/3.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/data/3.pdf",
+    "images": [],
+    "hash": "9329c0df643765c2aef905a17a5612f92f4ebf7b5510faaf00926b5aa5d85de4",
+    "size": "115382",
+    "gen_time": "2026-01-16T09:15:19"
+  },
+  "docs/resource/data/4.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/data/4.pdf",
+    "images": [],
+    "hash": "46123f1497be1c23f6a54a3fbf8ea72e226da9d16763521725751b86ecba0ceb",
+    "size": "20107",
+    "gen_time": "2026-01-16T09:15:20"
+  },
+  "docs/resource/data/minor.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/data/minor.pdf",
+    "images": [],
+    "hash": "ed85493130d5bc3f3d05b4c1c57cf8e84fcce9156ef19e2389accb91aa1540dd",
+    "size": "65066",
+    "gen_time": "2026-01-16T09:15:20"
   }
 }

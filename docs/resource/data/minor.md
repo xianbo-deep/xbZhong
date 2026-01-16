@@ -5,7 +5,9 @@ article: false
 timeline: false
 ---
 
-[本页PDF](/pdfs/resource/minor.pdf)
+[本页PDF](/pdfs/resource/data/minor.pdf)
+
+
 
 
 ### 最优化方法

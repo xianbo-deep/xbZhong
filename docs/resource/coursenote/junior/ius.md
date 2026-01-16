@@ -5,7 +5,9 @@ article: false
 timeline: false
 ---
 
-[本页PDF](/pdfs/resource/coursenote/ius.pdf)
+[本页PDF](/pdfs/resource/coursenote/junior/ius.pdf)
+
+
 
 
 复习PPT东西这么多是要把我们撑死吗?

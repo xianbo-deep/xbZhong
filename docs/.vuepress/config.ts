@@ -5,7 +5,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import theme from "./theme.js";
 
 export default defineUserConfig({
-  base: "/",
+  base: (process.env.DOCS_BASE ?? '/') as '/' | `/${string}/`,
 
   lang: "zh-CN",
   title: "阿b的博客",

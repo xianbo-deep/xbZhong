@@ -29,3 +29,4 @@ projects:
 若顶级域名关闭，请使用下列链接进行访问（长期有效）
 
 - https://xbzhongblog.2396768163.workers.dev/
+- https://xianbo-deep.github.io/xbZhong/

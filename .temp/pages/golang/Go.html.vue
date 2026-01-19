@@ -1572,6 +1572,222 @@
 <li>罗列当前项目直接或间接的依赖所有模块的版本，保证今后项目依赖的版本不会被篡改</li>
 <li>会生成一个哈希值用来进行校验</li>
 </ul>
+<h2 id="其它补充知识点" tabindex="-1"><a class="header-anchor" href="#其它补充知识点"><span>其它补充知识点</span></a></h2>
+<h3 id="time" tabindex="-1"><a class="header-anchor" href="#time"><span>time</span></a></h3>
+<p><strong>三件套</strong></p>
+<ul>
+<li><code v-pre>time.Time</code>：某个具体时刻</li>
+<li><code v-pre>time.Duration</code>：时间长度，纳秒为单位的<code v-pre>int64</code></li>
+<li><code v-pre>time.Location</code>：时区</li>
+</ul>
+<p><strong>固定模板</strong></p>
+<div class="language-go line-numbers-mode" data-highlighter="shiki" data-ext="go" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-go"><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 秒级</span></span>
+<span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">2006</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">01</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">02</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 15</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">04</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">05</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 毫秒级</span></span>
+<span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">2006</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">01</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">02</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 15</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">04</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">05.000</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 天</span></span>
+<span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">2006</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">01</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">02</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 小时</span></span>
+<span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">2006</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">01</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">02</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 15</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 分钟</span></span>
+<span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">2006</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">01</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD">-</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">02</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 15</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">04</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// ISO8601，带时区</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">RFC3339</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><strong>常用方法</strong></p>
+<div class="language-go line-numbers-mode" data-highlighter="shiki" data-ext="go" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-go"><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 获取当前时间</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">now</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 进行格式化</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">now</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Format</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"2006-01-02"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 加减时间间隔</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">now</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Add</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">Duration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 按年月日添加</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">now</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">AddDate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">year</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">month</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">day</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 加载时区并对时间t进行转换</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">loc</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">_</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">LoadLocation</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"Asia/Shanghai"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">tLocal</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> t</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">In</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">loc</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 获取时间戳</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">tsSec</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Unix</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()      </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 秒</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">tsMs</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B">  :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">UnixMilli</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">() </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 毫秒</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">tsNs</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B">  :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">UnixNano</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()  </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 纳秒</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 时间戳转回Time</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">t</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Unix</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">tsSec</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)             </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 秒</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">t</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">UnixMilli</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">tsMs</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)            </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 毫秒</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">t</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Unix</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">tsNs</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)              </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 纳秒</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 计算时间差</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">start</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">cost</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Since</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">start</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)  </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 相当于time.Now().Sub(start)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 分桶对齐到整点整分</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">t</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Now</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">UTC</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">hourStart</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> t</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Truncate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">Hour</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)   </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 对齐到整小时</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">minStart</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B">  :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> t</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Truncate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">Minute</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">) </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 对齐到整分钟</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 时间先后判断</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">t</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">After</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">u</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)		</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// t 在 u 之后</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">t</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Before</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">u</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)		</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// t 在 u 之前</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 取年月日</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">y</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">m</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">d</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> t</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Date</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 取时分秒</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">h</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">min</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">sec</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> t</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Clock</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 取星期</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">wd</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> t</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Weekday</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">() </span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 解析字符串</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">t1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">err</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Parse</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"2006-01-02 15:04:05"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">s</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)  </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 默认按UTC解析</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">loc</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">_</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">LoadLocation</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"Asia/Shanghai"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">t2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">err</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> time</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">ParseInLocation</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"2006-01-02 15:04:05"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">s</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">loc</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)  </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 按时区进行解析</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="error-1" tabindex="-1"><a class="header-anchor" href="#error-1"><span>error</span></a></h3>
+<p>几个常见概念</p>
+<ul>
+<li><code v-pre>error</code>：GO内置的接口类型</li>
+<li><code v-pre>Error()</code>：<code v-pre>error</code>接口必须有的方法，返回的是字符串</li>
+<li><code v-pre>errors</code>：标注库中的<code v-pre>errors</code>包
+<ul>
+<li><code v-pre>errors.New()</code>：创建简单错误</li>
+<li><code v-pre>errors.Is(err,target)</code>：错误比较
+<ul>
+<li>是进行<strong>指针比较</strong>，会沿着错误链去寻找<code v-pre>target</code>，查看是否是同一个对象</li>
+<li>支持自定义方法</li>
+</ul>
+</li>
+<li><code v-pre>errors.As(err,&amp;target)</code>：错误的类型断言
+<ul>
+<li>会沿着错误链去寻找<code v-pre>target</code>，判断是不是同个类型</li>
+<li>然后将<code v-pre>err</code>的值赋给<code v-pre>target</code></li>
+</ul>
+</li>
+<li><code v-pre>errors.Unwrap()</code>：解包错误</li>
+</ul>
+</li>
+<li><code v-pre>fmt.Errorf()</code>：用格式化字符串创建一个<code v-pre>error</code>
+<ul>
+<li><code v-pre>%v</code>：把错误进行字符串拼接，不形成错误链</li>
+<li><code v-pre>%w</code>：对错误进行包裹，形成错误链</li>
+</ul>
+</li>
+</ul>
+<div class="language-go line-numbers-mode" data-highlighter="shiki" data-ext="go" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-go"><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 声明普通错误</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">err</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> fmt</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Errorf</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"invalid id: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">%d</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 对错误进行包裹</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">err</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> fmt</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Errorf</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"read file failed: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">%w</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">err0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 把err0.Error()拼进字符串</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">err</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> fmt</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Errorf</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"read file failed: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">%v</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">err0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ul>
+<li><code v-pre>.Err()</code>：<code v-pre>gorm</code>框架中使用，可以调用这个方法拿到一个<code v-pre>error</code></li>
+</ul>
+<h3 id="结构体标签-1" tabindex="-1"><a class="header-anchor" href="#结构体标签-1"><span>结构体标签</span></a></h3>
+<h4 id="json" tabindex="-1"><a class="header-anchor" href="#json"><span>JSON</span></a></h4>
+<p><strong>基本用法</strong></p>
+<div class="language-go line-numbers-mode" data-highlighter="shiki" data-ext="go" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-go"><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">type</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> User</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> struct</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    ID</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">   int</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    `json:"id"`</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    Name</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> string</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> `json:"name"`</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><strong>常用Tag</strong></p>
+<ul>
+<li>
+<p><code v-pre>omitempty</code>：空值就不输出，以下几种情况会被判定成空值</p>
+<ul>
+<li>数字0</li>
+<li>空字符串</li>
+<li><code v-pre>False</code></li>
+<li><code v-pre>nil</code></li>
+</ul>
+</li>
+<li>
+<p><code v-pre>-</code>：完全忽略字段，不参与JSON</p>
+</li>
+<li>
+<p><code v-pre>string</code>：整数、布尔转字符串</p>
+</li>
+</ul>
+<div class="language-go line-numbers-mode" data-highlighter="shiki" data-ext="go" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-go"><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ID</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">   int</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    `json:"id,string"`</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><h4 id="binding" tabindex="-1"><a class="header-anchor" href="#binding"><span>Binding</span></a></h4>
+<p>调用了<code v-pre>ShouldBind</code>方法校验就会生效</p>
+<p><strong>常用校验</strong></p>
+<ul>
+<li><code v-pre>required</code>：必须存在且非零值</li>
+<li><code v-pre>omitempty</code>：字段为空则跳过校验</li>
+<li>数值类
+<ul>
+<li><code v-pre>gt/lt</code>：<strong>大于/小于</strong>某个值</li>
+<li><code v-pre>gte/lte</code>：<strong>大于等于/小于等于</strong>某个值</li>
+<li><code v-pre>eq/ne</code>：<strong>等于/不等于</strong>某个值</li>
+<li><code v-pre>oneof</code>：枚举验证，值之间用空格隔开</li>
+</ul>
+</li>
+<li><code v-pre>email</code>：满足邮箱格式</li>
+<li><code v-pre>uuid</code>：满足<code v-pre>uuid</code>格式</li>
+<li><code v-pre>url</code>：满足<code v-pre>url</code>格式</li>
+<li>字符串类
+<ul>
+<li><code v-pre>min</code>：最小长度</li>
+<li><code v-pre>max</code>：最大长度</li>
+<li><code v-pre>len</code>：必须要为这个长度</li>
+</ul>
+</li>
+</ul>
+<h4 id="form" tabindex="-1"><a class="header-anchor" href="#form"><span>Form</span></a></h4>
+<p>Query/表单参数绑定，主要用于</p>
+<ul>
+<li><code v-pre>GET</code>：<code v-pre>?page=1&amp;pageSize=10</code></li>
+<li><code v-pre>POST</code>：表单提交</li>
+</ul>
+<p>常常和<code v-pre>binding</code>配合使用，<code v-pre>-</code>表示忽略</p>
+<h4 id="uri" tabindex="-1"><a class="header-anchor" href="#uri"><span>uri</span></a></h4>
+<p><strong>路径参数绑定</strong>，用于RESTful API</p>
+<p><strong>使用方法</strong>：<code v-pre>uri:&quot;param_name&quot;</code></p>
+<h4 id="header" tabindex="-1"><a class="header-anchor" href="#header"><span>header</span></a></h4>
+<p>绑定<strong>HTTP请求头</strong>到结构体</p>
+<p><strong>常用的header绑定</strong></p>
+<ul>
+<li>
+<p><code v-pre>Authorization</code>：标准token入口，不会自动去掉<code v-pre>Bearer</code></p>
+</li>
+<li>
+<p><code v-pre>Cookie</code>：session/jwt</p>
+</li>
+<li>
+<p><code v-pre>X-API-Key</code>：<code v-pre>API-Key</code>鉴权</p>
+</li>
+<li>
+<p><code v-pre>X-Request-Id</code>：请求唯一ID</p>
+</li>
+<li>
+<p><code v-pre>User-Agent</code>：浏览器/客户端信息</p>
+</li>
+<li>
+<p><code v-pre>Referer</code>：来源页面</p>
+</li>
+<li>
+<p><code v-pre>Origin</code>：跨域来源</p>
+</li>
+<li>
+<p><code v-pre>X-Forwarded-For</code>：反向代理转发的客户端IP，可能是列表</p>
+</li>
+<li>
+<p><code v-pre>X-Real-IP</code>：客户端真实IP</p>
+</li>
+<li>
+<p><code v-pre>Content-Type</code>：请求体类型</p>
+</li>
+</ul>
 </div></template>
 
 

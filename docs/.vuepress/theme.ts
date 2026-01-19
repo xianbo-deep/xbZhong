@@ -3,6 +3,8 @@ import { hopeTheme } from "vuepress-theme-hope";
 import navbar from "./navbar.js";
 import sidebar from "./sidebar.js";
 
+const year = new Date().getFullYear();
+
 export default hopeTheme({
   hostname: "https://xbzhong.cn",
   pure:true,
@@ -27,8 +29,9 @@ export default hopeTheme({
   sidebar,
 
   // 页脚
-  footer: "共同进步",
+  footer: `共同进步 | <a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2026006506号-1</a>`,
   displayFooter: true,
+  copyright:`Copyright © ${year} xbZhong`,
 
   // 博客相关
   blog: {

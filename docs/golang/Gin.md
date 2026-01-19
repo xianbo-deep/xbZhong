@@ -727,3 +727,57 @@ func main() {
 }
 ```
 
+### gin.Context
+
+在`gin`框架里面上下文是`gin.Context`
+
+- 里面包括了一个`context.Context`，**可以使用`c.Request.Context()`获取**
+- 通过`c.Request.Context()`获取的ctx创建了子ctx后，**若`gin.Context`结束，子ctx也会不可用**
+- 没有树结构的概念，是Gin框架封装的一个结构体
+
+**注意**：`gin.Context`上下文是会被**回收和复用**的，其内容在请求结束后就不再可靠，因此不要在异步任务中传入`gin.Context`
+
+### 上下文
+
+在标准库是`context.Context`，这里讨论`context.Context`
+
+- 生命周期是**一次HTTP请求**
+- 一次请求在一个`goroutine`处理，因此是支持并发的
+- 里面会封装所有的请求信息，能够获取请求信息，同时可以返回响应
+- 这个上下文可以传递进任何中间件，如果HTTP请求结束，中间件也会知晓
+
+**注意**：在goroutine中使用异步操作时，此时的上下文可能已经结束导致上下文被cancel，因此**不要在goroutine中直接传入上游传下来的ctx**
+
+#### 树结构
+
+可以看成父子结构，一个父`ctx`可以派生出很多子`ctx`
+
+- 子`ctx`可以继承父`ctx`的**取消信号、截止时间和`Value`**
+
+- 当父`ctx`被取消或者超时，子`ctx`也会被关闭
+- 子`ctx`的结束不影响父`ctx`
+
+```text
+root(ctx0)
+ ├─ ctx1 = WithTimeout(ctx0, 200ms)
+ │    ├─ ctx3 = WithValue(ctx1, "trace_id", "a1")
+ │    └─ ctx4 = WithCancel(ctx1)
+ └─ ctx2 = WithValue(ctx0, "user_id", 123)
+
+```
+
+#### 常用方法
+
+**创建ctx**
+
+- `context.Background()`：最为常用
+- `context.TODO()`：和`Background`一样，但在实际业务是**占位符**，表明**知道这里需要上下文，但暂时不知道怎么获取**，说明这里的上下文后续需要被替换
+  - 可能被替换成从上游业务传下来的ctx
+  - 可能被替换成子ctx
+
+**创建子ctx**（都需要传入**父ctx**）
+
+- `context.WithCancel(parent)`：创建一个可以手动取消的子ctx，需要手动调用`cancel()`函数，一般用`defer`
+- `context.WithTimeout(parent,d)`：创建一个`d`时间后自动超时的子ctx
+- `context.WithDeadline(parent,t)`：创建一个到某个时间点自动超时的子ctx
+- `context.WithValue(parent, key, val)`：在子ctx上挂一个值

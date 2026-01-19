@@ -670,6 +670,59 @@
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    log</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">Println</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"Server exiting"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></div></template>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="gin-context-1" tabindex="-1"><a class="header-anchor" href="#gin-context-1"><span>gin.Context</span></a></h3>
+<p>在<code v-pre>gin</code>框架里面上下文是<code v-pre>gin.Context</code></p>
+<ul>
+<li>里面包括了一个<code v-pre>context.Context</code>，<strong>可以使用<code v-pre>c.Request.Context()</code>获取</strong></li>
+<li>通过<code v-pre>c.Request.Context()</code>获取的ctx创建了子ctx后，<strong>若<code v-pre>gin.Context</code>结束，子ctx也会不可用</strong></li>
+<li>没有树结构的概念，是Gin框架封装的一个结构体</li>
+</ul>
+<p><strong>注意</strong>：<code v-pre>gin.Context</code>上下文是会被<strong>回收和复用</strong>的，其内容在请求结束后就不再可靠，因此不要在异步任务中传入<code v-pre>gin.Context</code></p>
+<h3 id="上下文" tabindex="-1"><a class="header-anchor" href="#上下文"><span>上下文</span></a></h3>
+<p>在标准库是<code v-pre>context.Context</code>，这里讨论<code v-pre>context.Context</code></p>
+<ul>
+<li>生命周期是<strong>一次HTTP请求</strong></li>
+<li>一次请求在一个<code v-pre>goroutine</code>处理，因此是支持并发的</li>
+<li>里面会封装所有的请求信息，能够获取请求信息，同时可以返回响应</li>
+<li>这个上下文可以传递进任何中间件，如果HTTP请求结束，中间件也会知晓</li>
+</ul>
+<p><strong>注意</strong>：在goroutine中使用异步操作时，此时的上下文可能已经结束导致上下文被cancel，因此<strong>不要在goroutine中直接传入上游传下来的ctx</strong></p>
+<h4 id="树结构" tabindex="-1"><a class="header-anchor" href="#树结构"><span>树结构</span></a></h4>
+<p>可以看成父子结构，一个父<code v-pre>ctx</code>可以派生出很多子<code v-pre>ctx</code></p>
+<ul>
+<li>
+<p>子<code v-pre>ctx</code>可以继承父<code v-pre>ctx</code>的<strong>取消信号、截止时间和<code v-pre>Value</code></strong></p>
+</li>
+<li>
+<p>当父<code v-pre>ctx</code>被取消或者超时，子<code v-pre>ctx</code>也会被关闭</p>
+</li>
+<li>
+<p>子<code v-pre>ctx</code>的结束不影响父<code v-pre>ctx</code></p>
+</li>
+</ul>
+<div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-text"><span class="line"><span>root(ctx0)</span></span>
+<span class="line"><span> ├─ ctx1 = WithTimeout(ctx0, 200ms)</span></span>
+<span class="line"><span> │    ├─ ctx3 = WithValue(ctx1, "trace_id", "a1")</span></span>
+<span class="line"><span> │    └─ ctx4 = WithCancel(ctx1)</span></span>
+<span class="line"><span> └─ ctx2 = WithValue(ctx0, "user_id", 123)</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="常用方法" tabindex="-1"><a class="header-anchor" href="#常用方法"><span>常用方法</span></a></h4>
+<p><strong>创建ctx</strong></p>
+<ul>
+<li><code v-pre>context.Background()</code>：最为常用</li>
+<li><code v-pre>context.TODO()</code>：和<code v-pre>Background</code>一样，但在实际业务是<strong>占位符</strong>，表明<strong>知道这里需要上下文，但暂时不知道怎么获取</strong>，说明这里的上下文后续需要被替换
+<ul>
+<li>可能被替换成从上游业务传下来的ctx</li>
+<li>可能被替换成子ctx</li>
+</ul>
+</li>
+</ul>
+<p><strong>创建子ctx</strong>（都需要传入<strong>父ctx</strong>）</p>
+<ul>
+<li><code v-pre>context.WithCancel(parent)</code>：创建一个可以手动取消的子ctx，需要手动调用<code v-pre>cancel()</code>函数，一般用<code v-pre>defer</code></li>
+<li><code v-pre>context.WithTimeout(parent,d)</code>：创建一个<code v-pre>d</code>时间后自动超时的子ctx</li>
+<li><code v-pre>context.WithDeadline(parent,t)</code>：创建一个到某个时间点自动超时的子ctx</li>
+<li><code v-pre>context.WithValue(parent, key, val)</code>：在子ctx上挂一个值</li>
+</ul>
+</div></template>
 
 

@@ -1575,3 +1575,217 @@ retract (                         // 撤回发布的版本（可选）
 
 - 罗列当前项目直接或间接的依赖所有模块的版本，保证今后项目依赖的版本不会被篡改
 - 会生成一个哈希值用来进行校验
+
+## 其它补充知识点
+
+### time
+
+**三件套**
+
+- `time.Time`：某个具体时刻
+- `time.Duration`：时间长度，纳秒为单位的`int64`
+- `time.Location`：时区
+
+**固定模板**
+
+```go
+// 秒级
+2006-01-02 15:04:05
+
+// 毫秒级
+2006-01-02 15:04:05.000
+
+// 天
+2006-01-02
+
+// 小时
+2006-01-02 15
+
+// 分钟
+2006-01-02 15:04
+
+// ISO8601，带时区
+time.RFC3339
+```
+
+**常用方法**
+
+```go
+// 获取当前时间
+now := time.Now()
+
+// 进行格式化
+now := time.Now().Format("2006-01-02")
+
+// 加减时间间隔
+now := time.Now().Add(time.Duration)
+
+// 按年月日添加
+now := time.Now().AddDate(year,month,day)
+
+// 加载时区并对时间t进行转换
+loc, _ := time.LoadLocation("Asia/Shanghai")
+tLocal := t.In(loc)
+
+// 获取时间戳
+tsSec := time.Now().Unix()      // 秒
+tsMs  := time.Now().UnixMilli() // 毫秒
+tsNs  := time.Now().UnixNano()  // 纳秒
+
+// 时间戳转回Time
+t := time.Unix(tsSec, 0)             // 秒
+t := time.UnixMilli(tsMs)            // 毫秒
+t := time.Unix(0, tsNs)              // 纳秒
+
+// 计算时间差
+start := time.Now()
+cost := time.Since(start)  // 相当于time.Now().Sub(start)
+
+// 分桶对齐到整点整分
+t := time.Now().UTC()
+hourStart := t.Truncate(time.Hour)   // 对齐到整小时
+minStart  := t.Truncate(time.Minute) // 对齐到整分钟
+
+// 时间先后判断
+t.After(u)		// t 在 u 之后
+t.Before(u)		// t 在 u 之前
+
+// 取年月日
+y, m, d := t.Date()
+
+// 取时分秒
+h, min, sec := t.Clock()
+
+// 取星期
+wd := t.Weekday() 
+
+// 解析字符串
+t1, err := time.Parse("2006-01-02 15:04:05", s)  // 默认按UTC解析
+loc, _ := time.LoadLocation("Asia/Shanghai")
+t2, err := time.ParseInLocation("2006-01-02 15:04:05", s, loc)  // 按时区进行解析
+```
+
+### error
+
+几个常见概念
+
+- `error`：GO内置的接口类型
+- `Error()`：`error`接口必须有的方法，返回的是字符串
+- `errors`：标注库中的`errors`包
+  - `errors.New()`：创建简单错误
+  - `errors.Is(err,target)`：错误比较
+    - 是进行**指针比较**，会沿着错误链去寻找`target`，查看是否是同一个对象
+    - 支持自定义方法
+  - `errors.As(err,&target)`：错误的类型断言
+    - 会沿着错误链去寻找`target`，判断是不是同个类型
+    - 然后将`err`的值赋给`target`
+  - `errors.Unwrap()`：解包错误
+- `fmt.Errorf()`：用格式化字符串创建一个`error`
+  - `%v`：把错误进行字符串拼接，不形成错误链
+  - `%w`：对错误进行包裹，形成错误链
+
+```go
+// 声明普通错误
+err := fmt.Errorf("invalid id: %d", id)
+
+// 对错误进行包裹
+err := fmt.Errorf("read file failed: %w", err0)
+
+// 把err0.Error()拼进字符串
+err := fmt.Errorf("read file failed: %v", err0) 
+
+```
+
+- `.Err()`：`gorm`框架中使用，可以调用这个方法拿到一个`error`
+
+### 结构体标签
+
+#### JSON
+
+**基本用法**
+
+```go
+type User struct {
+    ID   int    `json:"id"`
+    Name string `json:"name"`
+}
+```
+
+**常用Tag**
+
+- `omitempty`：空值就不输出，以下几种情况会被判定成空值
+  - 数字0
+  - 空字符串
+  - `False`
+  - `nil`
+
+- `-`：完全忽略字段，不参与JSON
+- `string`：整数、布尔转字符串
+
+```go
+ID   int    `json:"id,string"`
+```
+
+#### Binding
+
+调用了`ShouldBind`方法校验就会生效
+
+**常用校验**
+
+- `required`：必须存在且非零值
+- `omitempty`：字段为空则跳过校验
+- 数值类
+  - `gt/lt`：**大于/小于**某个值
+  - `gte/lte`：**大于等于/小于等于**某个值
+  - `eq/ne`：**等于/不等于**某个值
+  - `oneof`：枚举验证，值之间用空格隔开
+- `email`：满足邮箱格式
+- `uuid`：满足`uuid`格式
+- `url`：满足`url`格式
+- 字符串类
+  - `min`：最小长度
+  - `max`：最大长度
+  - `len`：必须要为这个长度
+
+#### Form
+
+Query/表单参数绑定，主要用于
+
+- `GET`：`?page=1&pageSize=10`
+- `POST`：表单提交
+
+常常和`binding`配合使用，`-`表示忽略
+
+#### uri
+
+**路径参数绑定**，用于RESTful API
+
+**使用方法**：`uri:"param_name"`
+
+#### header
+
+绑定**HTTP请求头**到结构体
+
+**常用的header绑定**
+
+- `Authorization`：标准token入口，不会自动去掉`Bearer`
+
+- `Cookie`：session/jwt
+
+- `X-API-Key`：`API-Key`鉴权
+
+- `X-Request-Id`：请求唯一ID
+
+- `User-Agent`：浏览器/客户端信息
+
+- `Referer`：来源页面
+
+- `Origin`：跨域来源
+
+- `X-Forwarded-For`：反向代理转发的客户端IP，可能是列表
+
+- `X-Real-IP`：客户端真实IP
+
+- `Content-Type`：请求体类型
+
+  

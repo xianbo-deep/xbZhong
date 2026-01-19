@@ -1,4 +1,4 @@
-<template><div><p><a href="/pdfs/resource/1.pdf">本页PDF</a></p>
+<template><div><p><a href="/pdfs/resource/data/1.pdf">本页PDF</a></p>
 <h2 id="大一上" tabindex="-1"><a class="header-anchor" href="#大一上"><span>大一上</span></a></h2>
 <h3 id="线性代数" tabindex="-1"><a class="header-anchor" href="#线性代数"><span>线性代数</span></a></h3>
 <p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/%E8%AF%BE%E4%BB%B6" target="_blank" rel="noopener noreferrer">课件</a></p>

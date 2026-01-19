@@ -1,4 +1,4 @@
-<template><div><p><a href="/pdfs/resource/minor.pdf">本页PDF</a></p>
+<template><div><p><a href="/pdfs/resource/data/minor.pdf">本页PDF</a></p>
 <h3 id="最优化方法" tabindex="-1"><a class="header-anchor" href="#最优化方法"><span>最优化方法</span></a></h3>
 <p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E4%B8%93%E4%B8%9A%E9%80%89%E4%BF%AE/%E6%9C%80%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95" target="_blank" rel="noopener noreferrer">课件</a></p>
 <h3 id="大数据与云计算" tabindex="-1"><a class="header-anchor" href="#大数据与云计算"><span>大数据与云计算</span></a></h3>

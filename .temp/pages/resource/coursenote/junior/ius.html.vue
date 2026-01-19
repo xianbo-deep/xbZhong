@@ -1,4 +1,4 @@
-<template><div><p><a href="/pdfs/resource/coursenote/ius.pdf">本页PDF</a></p>
+<template><div><p><a href="/pdfs/resource/coursenote/junior/ius.pdf">本页PDF</a></p>
 <p>复习PPT东西这么多是要把我们撑死吗?</p>
 <h2 id="第一章和第七章" tabindex="-1"><a class="header-anchor" href="#第一章和第七章"><span>第一章和第七章</span></a></h2>
 <h3 id="自动驾驶分级标准" tabindex="-1"><a class="header-anchor" href="#自动驾驶分级标准"><span>自动驾驶分级标准</span></a></h3>

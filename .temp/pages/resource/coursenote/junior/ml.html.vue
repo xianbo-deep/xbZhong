@@ -1,4 +1,4 @@
-<template><div><p><a href="/pdfs/resource/coursenote/ml.pdf">本页PDF</a></p>
+<template><div><p><a href="/pdfs/resource/coursenote/junior/ml.pdf">本页PDF</a></p>
 <p>以下笔记为个人理解，涵盖了这门课的学习重点，若和教材有出入请以教材为主</p>
 <p>从EM算法开始属于无监督学习</p>
 <h2 id="统计学习概论" tabindex="-1"><a class="header-anchor" href="#统计学习概论"><span>统计学习概论</span></a></h2>

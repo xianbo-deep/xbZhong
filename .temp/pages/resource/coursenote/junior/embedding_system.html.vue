@@ -1,4 +1,4 @@
-<template><div><p><a href="/pdfs/resource/coursenote/embedding_system.pdf">本页PDF</a></p>
+<template><div><p><a href="/pdfs/resource/coursenote/junior/embedding_system.pdf">本页PDF</a></p>
 <h2 id="嵌入式系统概论" tabindex="-1"><a class="header-anchor" href="#嵌入式系统概论"><span>嵌入式系统概论</span></a></h2>
 <p><strong>嵌入式系统</strong></p>
 <ul>

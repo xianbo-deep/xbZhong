@@ -1,4 +1,4 @@
-<template><div><p><a href="/pdfs/resource/coursenote/ai_application.pdf">本页PDF</a></p>
+<template><div><p><a href="/pdfs/resource/coursenote/junior/ai_application.pdf">本页PDF</a></p>
 <h2 id="人工智能简介" tabindex="-1"><a class="header-anchor" href="#人工智能简介"><span>人工智能简介</span></a></h2>
 <p><strong>从工业1.0到工业4.0</strong></p>
 <table>

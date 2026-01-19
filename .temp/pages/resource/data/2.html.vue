@@ -1,4 +1,4 @@
-<template><div><p><a href="/pdfs/resource/2.pdf">本页PDF</a></p>
+<template><div><p><a href="/pdfs/resource/data/2.pdf">本页PDF</a></p>
 <h2 id="大二上" tabindex="-1"><a class="header-anchor" href="#大二上"><span>大二上</span></a></h2>
 <h3 id="现代电子技术与系统" tabindex="-1"><a class="header-anchor" href="#现代电子技术与系统"><span>现代电子技术与系统</span></a></h3>
 <p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E7%8E%B0%E4%BB%A3%E7%94%B5%E5%AD%90%E6%8A%80%E6%9C%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F/%E8%AF%BE%E4%BB%B6" target="_blank" rel="noopener noreferrer">课件</a><br>

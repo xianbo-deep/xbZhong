@@ -1,4 +1,4 @@
-<template><div><p><a href="/pdfs/resource/3.pdf">本页PDF</a></p>
+<template><div><p><a href="/pdfs/resource/data/3.pdf">本页PDF</a></p>
 <h2 id="大三上" tabindex="-1"><a class="header-anchor" href="#大三上"><span>大三上</span></a></h2>
 <h3 id="模式识别与统计学习" tabindex="-1"><a class="header-anchor" href="#模式识别与统计学习"><span>模式识别与统计学习</span></a></h3>
 <p><a href="https://github.com/xianbo-deep/MyMajorFiles/tree/main/%E6%A8%A1%E5%BC%8F%E8%AF%86%E5%88%AB%E4%B8%8E%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E8%AF%BE%E4%BB%B6" target="_blank" rel="noopener noreferrer">课件</a><br>

@@ -1,0 +1,715 @@
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/* open-sans-regular - latin-ext_latin */
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Open Sans Regular'), local('OpenSans-Regular'), url('./github/open-sans-v17-latin-ext_latin-regular.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* open-sans-italic - latin-ext_latin */
+  @font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: normal;
+    src: local('Open Sans Italic'), local('OpenSans-Italic'), url('./github/open-sans-v17-latin-ext_latin-italic.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* open-sans-700 - latin-ext_latin */
+  @font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url('./github/open-sans-v17-latin-ext_latin-700.woff2') format('woff2'); 
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* open-sans-700italic - latin-ext_latin */
+  @font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: bold;
+    src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url('./github/open-sans-v17-latin-ext_latin-700italic.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', 'SF Pro', sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+		max-width: 1024px;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	#write {
+		max-width: 1200px;
+	}
+}
+
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+
+/*@media print {
+    .typora-export h1,
+    .typora-export h2 {
+        border-bottom: none;
+        padding-bottom: initial;
+    }
+
+    .typora-export h1::after,
+    .typora-export h2::after {
+        content: "";
+        display: block;
+        height: 100px;
+        margin-top: -96px;
+        border-top: 1px solid #eee;
+    }
+}*/
+
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+
+/* 修复无序列表在表格或特殊布局中被忽略的问题 */
+ul {
+    list-style-type: disc;
+}
+ul ul {
+    list-style-type: circle;
+}
+ul ul ul {
+    list-style-type: square;
+}
+ol {
+    list-style-type: decimal;
+}
+
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+    /* 修复表格渲染问题：确保边框合并，防止双线或间隙 */
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%; /* 可选：让表格撑满宽度 */
+    overflow: auto; /* 防止表格溢出 */
+    display: block; /* 允许横向滚动，防止撑破布局 */
+}
+table tr {
+    border-top: 1px solid #dfe2e5; /* 修改为 border-top，更符合 GitHub 风格 */
+    margin: 0;
+    padding: 0;
+    background-color: white; /* 确保背景色 */
+}
+table tr:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+/* 移除 thead 的背景色设置，通常只给偶数行加背景 */
+/* thead { background-color: #f8f8f8; } */
+
+table th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table th:first-child,
+table td:first-child {
+    margin-top: 0;
+}
+table th:last-child,
+table td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+code {
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    pre {
+        page-break-inside: avoid;
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.mac-os #write{
+    caret-color: AccentColor;
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+/*.html-for-mac {
+    --item-hover-bg-color: #E6F0FE;
+}*/
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+    opacity: 0.4;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+.menu-item-container a.menu-style-btn {
+    background-color: #f5f8fa;
+    background-image: linear-gradient( 180deg , hsla(0, 0%, 100%, 0.8), hsla(0, 0%, 100%, 0)); 
+}
+
+
+
+
+/* 强制使用 Docker 内置中文字体 */
+body {
+    font-family: "Noto Sans CJK SC", sans-serif !important;
+}
+/* 修复图片爆炸，限制在页面内 */
+img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    margin: 1em auto;
+}
+/* 修复数学公式溢出 */
+mjx-container {
+    max-width: 100% !important;
+    overflow-x: auto;
+}
+/* 打印优化 */
+@media print {
+    a[href]:after { content: none !important; }
+}
+
+/* 目标：复刻 Typora .md-fences 的样式 */
+div.sourceCode, pre.sourceCode, pre {
+    /* Typora Github 主题的标准背景色 */
+    background-color: #f8f8f8 !important; 
+    /* Typora 的浅灰色边框 */
+    border: 1px solid #e7eaed !important;
+    /* 圆角 */
+    border-radius: 3px !important;
+    /* 内部留白 */
+    padding: 10px 12px !important;
+    /* 底部间距 */
+    margin-bottom: 15px !important;
+    margin-top: 15px !important;
+    
+    /* 强制取消首行缩进 (解决代码错位/歪斜的核心) */
+    text-indent: 0 !important;
+    
+    /* 确保盒子宽度正常 */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* 针对所有代码相关元素 */
+code, kbd, pre, samp, .sourceCode, span.sourceCode {
+    /* 1. 字体栈：优先使用等宽字体，最后兜底 monospace */
+    font-family: "Noto Sans Mono CJK SC", "Consolas", "Courier New", monospace !important;
+    
+    /* 2. 字号调整 (Typora 默认是 0.9em) */
+    font-size: 0.9em !important;
+    
+    /* 3. 解决错位：禁止连字，设置制表符宽度 */
+    font-variant-ligatures: none !important;
+    tab-size: 4 !important;
+    
+    /* 4. 解决背景色斑驳问题 */
+    background-color: transparent !important;
+    color: #333 !important; /* 默认代码颜色，会被高亮覆盖 */
+}
+
+
+/* 让长代码自动换行，防止冲出 PDF 页面边界 */
+pre.sourceCode {
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+}
+
+
+/* 这一步是为了防止 Pandoc 的 pygments 样式给每一行加背景导致白色间隙 */
+pre > code {
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+}
+
+
+
+/* --- 1. 全局字体与环境修正 --- */
+body {
+    font-family: "Open Sans", "Noto Sans CJK SC", sans-serif !important;
+}
+img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    margin: 1em auto;
+}
+mjx-container {
+    max-width: 100% !important;
+    overflow-x: auto;
+}
+@media print {
+    a[href]:after { content: none !important; }
+}
+
+
+/* 针对：文本中间的 `git status` 这种小代码片段 */
+code:not([class]) {
+    /* 核心样式：模拟 Typora/GitHub 风格 */
+    background-color: rgba(27,31,35,0.05) !important; /* 经典的浅灰背景 */
+    color: #24292e !important;                        /* GitHub 深灰色字体，比纯黑柔和 */
+    
+    /* 尺寸与间距 */
+    padding: 2px 4px !important;                      /* 扁一点：减少垂直内边距 (Typora 风格) */
+    margin: 0 !important;                             /* Typora 默认没有 margin */
+    border-radius: 3px !important;                    /* 关键：Typora 是 3px 小圆角 */
+    
+    /* 字体设置 */
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+    font-size: 85% !important;                        /* 关键：标准 Markdown 渲染通常是 85% 大小 */
+    
+    /* 细节优化 */
+    vertical-align: baseline !important;              /* 保持基线对齐 */
+    font-weight: normal !important;                   /* 防止某些正文加粗影响代码 */
+    line-height: inherit !important;                  /* 确保行高不被撑大，保持扁平 */
+}
+
+
+/* 针对：```java 这种大段代码块 */
+/* 
+   注意：当使用 highlight.js 时，Pandoc 不会生成 div.sourceCode 容器，
+   而是生成 <pre><code class="language-xxx">...</code></pre>。
+   因此我们需要调整选择器来匹配 highlight.js 的结构。
+*/
+pre {
+    background-color: #f6f8fa !important;  /* 统一的大灰背景 */
+    border: 1px solid #d0d7de !important;  /* 统一的边框 */
+    border-radius: 6px !important;
+    
+    padding: 16px !important;
+    margin: 16px 0 !important;
+    
+    page-break-inside: avoid; /* 打印时不切断 */
+    
+    /* ✅ 强制换行，防止代码冲出 PDF 页面 */
+    white-space: pre-wrap !important; 
+    word-break: break-all !important;
+    overflow: hidden !important;
+}
+
+/* 
+   当启用行号插件时，highlightjs-line-numbers 会将代码包裹在 table 中。
+   我们需要确保这个 table 不受全局 table 样式的影响（如边框、背景色等）。
+*/
+pre table {
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    background-color: transparent !important;
+    border-collapse: collapse !important;
+}
+pre table tr {
+    border: none !important;
+    background-color: transparent !important;
+}
+/* 
+   重置代码块内表格的单元格样式 
+   注意：这里必须使用 !important 来覆盖全局 table td 的边框设置
+*/
+pre table td {
+    border: none !important;
+    padding: 0 !important;
+}
+
+/* --- 行号插件样式适配 (Typora 风格) --- */
+
+/* 行号列 */
+pre table td.hljs-ln-numbers {
+    -webkit-user-select: none;
+    user-select: none;
+    text-align: right;
+    color: #c0c0c0 !important; /* 浅灰色数字 */
+    border-right: 1px solid #e7eaed !important; /* 恢复右侧竖线 */
+    vertical-align: top;
+    padding-right: 10px !important;
+    width: 25px; /* 固定最小宽度 */
+}
+
+/* 代码列 */
+pre table td.hljs-ln-code {
+    padding-left: 15px !important; /* 代码与竖线的间距 */
+}
+
+pre > code {
+    /* ✅ 这里控制代码块字体大小，15px 足够清晰，觉得小就改 16px */
+    font-size: 13px !important; 
+    line-height: 1.6 !important;
+    
+    /* 强制使用等宽字体 */
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace, "Noto Sans CJK SC" !important;
+    
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    color: inherit !important;
+}
+
+/* --- 6. 语法高亮 (GitHub Light 风格) --- */
+/* 
+   由于使用了 highlight.js，这里的 Pandoc 默认类名 (span.kw, span.dt 等) 将不再生效。
+   highlight.js 会使用 .hljs-keyword, .hljs-string 等类名。
+   但因为我们引入了 highlight.js 的 github.min.css，所以这里不需要手动定义颜色了。
+   我们可以删除下面这些旧的 Pandoc 样式，或者保留作为备用。
+*/
+/*
+code span.kw { color: #cf222e !important; font-weight: bold; } 
+code span.dt { color: #953800 !important; } 
+code span.dv { color: #0550ae !important; } 
+code span.bn { color: #0550ae !important; } 
+code span.fl { color: #0550ae !important; } 
+code span.ch { color: #0a3069 !important; } 
+code span.st { color: #0a3069 !important; } 
+code span.co { color: #6e7781 !important; font-style: italic; } 
+code span.ot { color: #cf222e !important; } 
+code span.al { color: #cf222e !important; background-color: #ffebe9 !important; font-weight: bold; } 
+code span.fu { color: #8250df !important; } 
+code span.re { color: #0550ae !important; } 
+code span.er { color: #cf222e !important; background-color: #ffebe9 !important; } 
+code span.wa { color: #953800 !important; font-weight: bold; }
+code span.cn { color: #0550ae !important; }
+code span.sc { color: #0550ae !important; }
+code span.vs { color: #0a3069 !important; }
+code span.ss { color: #0a3069 !important; }
+code span.im { color: #8250df !important; }
+code span.va { color: #953800 !important; }
+code span.cf { color: #cf222e !important; font-weight: bold; }
+code span.op { color: #cf222e !important; }
+code span.bu { color: #8250df !important; }
+code span.ex { color: #8250df !important; }
+code span.pp { color: #cf222e !important; }
+code span.at { color: #953800 !important; }
+code span.do { color: #6e7781 !important; font-style: italic; }
+code span.an { color: #6e7781 !important; font-style: italic; }
+code span.cv { color: #6e7781 !important; font-style: italic; }
+code span.in { color: #6e7781 !important; font-style: italic; }
+*/
+/* ============================================================
+   Typora 补丁：只负责画“盒子”，颜色交给 highlight.js
+   ============================================================ */
+
+/* 1. 让代码块像 Typora 一样有灰背景和边框 */
+div.sourceCode, pre {
+    background-color: #f6f8fa !important;  /* Typora 的浅灰背景 */
+    border: 1px solid #e1e4e8 !important;  /* Typora 的细边框 */
+    border-radius: 3px !important;         /* 圆角 */
+    padding: 16px !important;              /* 内部留白 */
+    margin-bottom: 16px !important;        /* 外部间距 */
+    font-size: 85% !important;             /* 字号稍微小一点 */
+    line-height: 1.45 !important;          /* 行高 */
+    font-family: "JetBrains Mono", "Consolas", monospace !important; /* 强制等宽字体 */
+}
+
+/* 2. 修正 highlight.js 的背景冲突 */
+/* 必须把 highlight.js 自带的背景设为透明，否则会盖住我们上面的灰背景 */
+.hljs {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* 3. 修复单行代码 (如 `git status`) */
+/* Highlight.js 不管这个，必须手动写 */
+code:not([class]) {
+    padding: 0.2em 0.4em !important;
+    margin: 0 0.2em !important;
+    font-size: 85% !important;
+    background-color: rgba(27,31,35,0.05) !important; /* 那个经典的小灰框 */
+    border-radius: 3px !important;
+    font-family: "JetBrains Mono", "Consolas", monospace !important;
+}

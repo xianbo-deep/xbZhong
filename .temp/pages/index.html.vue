@@ -3,6 +3,7 @@
 <p>若顶级域名关闭，请使用下列链接进行访问（长期有效）</p>
 <ul>
 <li><a href="https://xbzhongblog.2396768163.workers.dev/" target="_blank" rel="noopener noreferrer">https://xbzhongblog.2396768163.workers.dev/</a></li>
+<li><a href="https://xianbo-deep.github.io/xbZhong/" target="_blank" rel="noopener noreferrer">https://xianbo-deep.github.io/xbZhong/</a></li>
 </ul>
 </div></template>
 

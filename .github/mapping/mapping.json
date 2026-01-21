@@ -947,9 +947,9 @@
   "docs/golang/Gin.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gin.pdf",
     "images": [],
-    "hash": "c73cdc52a34a7db92fecad4da93022c15b7daac59282658db357d52678454e4d",
-    "size": "1150343",
-    "gen_time": "2025-12-23T16:32:48"
+    "hash": "536e6ec958f37e2a97ac134502bc3ebdaaa5ee5f906adf89ca292989b2614b45",
+    "size": "1253101",
+    "gen_time": "2026-01-21T09:14:12"
   },
   "docs/golang/Go.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Go.pdf",
@@ -966,9 +966,9 @@
       "/screenshot/backend/image-20251015173754231.png",
       "/screenshot/backend/image-20251015173810451.png"
     ],
-    "hash": "0e89e484208407c3ca78e788b0e40c2355b0016fffa9bbac50c8e3f6b511b6da",
-    "size": "4453005",
-    "gen_time": "2026-01-06T09:11:41"
+    "hash": "f12cf720761c549297389830cc836ef7008306f85428f3a16e00fcd4afc2bfab",
+    "size": "4657288",
+    "gen_time": "2026-01-21T09:14:14"
   },
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",

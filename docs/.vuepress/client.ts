@@ -74,6 +74,7 @@ export default defineClientConfig({
     });
 
     router.afterEach((to) => {
+      if (typeof window === "undefined") return;
       // ------ 首屏 ------
       if (!firstReported) {
         firstReported = true;

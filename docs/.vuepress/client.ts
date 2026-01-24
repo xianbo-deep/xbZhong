@@ -73,7 +73,7 @@ export default defineClientConfig({
       start = performance.now();
     });
 
-    router.afterEach((to) => {
+    router.afterEach((to, from) => {
       if (typeof window === "undefined") return;
       // ------ 首屏 ------
       if (!firstReported) {
@@ -99,6 +99,8 @@ export default defineClientConfig({
       }
 
       // ------ SPA 跳转 ------
+      if (to.path === from.path) return;
+
       const latency = start ? Math.round(performance.now() - start) : 0;
 
       // 逻辑 status：路由是否命中（不是 HTTP status，但可用）

@@ -72,10 +72,10 @@ const handleSubscribe = async (subscribe: number) => {
        messageType.value = 'success';
        if (subscribe === 1) email.value = '';
     } else {
-       message.value = data.msg || data.message || (subscribe === 1 ? '订阅失败，请稍后重试。' : '取消订阅失败，请稍后重试。');
-       // 单独处理重复订阅的情况
-       if (data.code === 1005 && data.error) {
-         message.value = data.error;
+       if (data.code === 1005) {
+          message.value = subscribe === 1 ? '您已订阅，请勿重复操作。' : '您尚未订阅，无需取消。';
+       } else {
+          message.value = subscribe === 1 ? '订阅失败，请稍后重试。' : '取消订阅失败，请稍后重试。';
        }
        messageType.value = 'error';
     }
@@ -203,8 +203,8 @@ input:focus {
 }
 
 .message.success {
-  background-color: rgba(41, 67, 125, 0.1);
-  color: #29437d;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #059669;
 }
 
 .message.error {

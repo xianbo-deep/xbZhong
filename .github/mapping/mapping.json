@@ -1086,5 +1086,19 @@
     "hash": "ed85493130d5bc3f3d05b4c1c57cf8e84fcce9156ef19e2389accb91aa1540dd",
     "size": "65066",
     "gen_time": "2026-01-16T09:15:20"
+  },
+  "docs/golang/DB.md": {
+    "pdf": "docs/.vuepress/public/pdfs/golang/DB.pdf",
+    "images": [
+      "/screenshot/backend/image-20260117170137026.png",
+      "/screenshot/backend/image-20260117171642309.png",
+      "/screenshot/backend/image-20260117192823578.png",
+      "/screenshot/backend/image-20260116134036265.png",
+      "/screenshot/backend/image-20260116134013876.png",
+      "/screenshot/backend/image-20260116134539535.png"
+    ],
+    "hash": "d26fd5f2daca4f9cfebaa3cb97c412e3d96ac223f24f9fc119c41c93dfcab722",
+    "size": "2947829",
+    "gen_time": "2026-01-26T09:18:37"
   }
 }

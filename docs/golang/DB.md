@@ -1,3 +1,5 @@
+[本页PDF](/pdfs/golang/DB.pdf)
+
 ## DB的查漏补缺
 
 ### MySQL体系结构

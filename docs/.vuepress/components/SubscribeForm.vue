@@ -67,12 +67,16 @@ const handleSubscribe = async (subscribe: number) => {
 
     // 适配常见的 API 返回格式，如果不成功则视为失败
     // 请根据实际 API 返回调整判断逻辑
-    if (data.code === 200 || data.success === true || data.msg === '操作成功') {
+    if (data.code === 200 || data.code === 0 || data.success === true || data.msg === '操作成功') {
        message.value = subscribe === 1 ? '订阅成功！感谢您的关注。' : '已成功取消订阅。';
        messageType.value = 'success';
        if (subscribe === 1) email.value = '';
     } else {
        message.value = data.msg || data.message || (subscribe === 1 ? '订阅失败，请稍后重试。' : '取消订阅失败，请稍后重试。');
+       // 单独处理重复订阅的情况
+       if (data.code === 1005 && data.error) {
+         message.value = data.error;
+       }
        messageType.value = 'error';
     }
 

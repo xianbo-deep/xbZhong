@@ -1392,7 +1392,20 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="channel" tabindex="-1"><a class="header-anchor" href="#channel"><span>Channel</span></a></h3>
-<p><strong>常见方法</strong></p>
+<p><strong>常见类型</strong></p>
+<ul>
+<li>双向<code v-pre>channel</code></li>
+</ul>
+<div class="language-go line-numbers-mode" data-highlighter="shiki" data-ext="go" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-go"><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ch</span><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B"> :=</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> make</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">chan</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> int</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><ul>
+<li>只发送<code v-pre>channel</code></li>
+</ul>
+<div class="language-go line-numbers-mode" data-highlighter="shiki" data-ext="go" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-go"><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">var</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> out</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> chan</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;-</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> int</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><ul>
+<li>只接收<code v-pre>channel</code></li>
+</ul>
+<div class="language-go line-numbers-mode" data-highlighter="shiki" data-ext="go" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-go"><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">var</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> in</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> &#x3C;-</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> chan</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> int</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div><p><strong>常见方法</strong></p>
 <ul>
 <li>
 <p><code v-pre>c:=make(chan int)</code>：<strong>创建</strong>channel，传递的数据类型是<code v-pre>int</code></p>
@@ -1786,6 +1799,78 @@
 </li>
 <li>
 <p><code v-pre>Content-Type</code>：请求体类型</p>
+</li>
+</ul>
+<h3 id="类型断言与类型转换" tabindex="-1"><a class="header-anchor" href="#类型断言与类型转换"><span>类型断言与类型转换</span></a></h3>
+<p><strong>类型断言</strong></p>
+<p>从接口值把里面真实的具体类型拿出来</p>
+<p>接口值（<code v-pre>interface</code>/<code v-pre>any</code>）包括了</p>
+<ul>
+<li><strong>动态类型</strong>，会随着装进去的值的变化而变化</li>
+<li><strong>动态值</strong></li>
+</ul>
+<p>语法：<code v-pre>x.(T)</code></p>
+<ul>
+<li>
+<p><code v-pre>x</code>必须是接口类型（<code v-pre>interface</code>或<code v-pre>any</code>或其它接口），判断它里面的<strong>动态类型</strong>是不是<code v-pre>T</code></p>
+</li>
+<li>
+<p>两种方法</p>
+<ul>
+<li><code v-pre>v := x.(T)</code>：失败会panic</li>
+<li><code v-pre>v,ok := x.(T)</code>：安全写法，转换失败<code v-pre>ok</code>为<code v-pre>false</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>类型转换</strong></p>
+<p>把一个值变成另一种具体类型</p>
+<p>语法：<code v-pre>T(x)</code></p>
+<ul>
+<li><code v-pre>x</code>本身是具体类型，要转换成另一个具体类型</li>
+</ul>
+<h3 id="strings" tabindex="-1"><a class="header-anchor" href="#strings"><span>strings</span></a></h3>
+<p>一个处理字符串的包</p>
+<p><strong>常用方法</strong></p>
+<ul>
+<li><code v-pre>strings.Contains(s,substr)</code>：判断<code v-pre>s</code>是否包含子串<code v-pre>substr</code></li>
+<li><code v-pre>strings.HasPrefix(s,prefix)/strings.HasSuffix(s,suffix)</code>：判断前缀/后缀</li>
+<li><code v-pre>strings.Split(s,seq)</code>：用分隔符把字符串切成切片</li>
+<li><code v-pre>strings.Join(elems,seq)</code>：将切片用分隔符<code v-pre>seq</code>拼接成字符串</li>
+<li><code v-pre>strings.TrimSpace(s)</code>：去除首尾的空白字符</li>
+<li><code v-pre>strings.ToUpeer(s)/ToLower(s)</code>：大小写转换</li>
+</ul>
+<p><strong>注意</strong></p>
+<ul>
+<li><code v-pre>len(str)</code>返回的是<strong>字符串的字节数，不是字符数</strong></li>
+</ul>
+<h4 id="strings-builder" tabindex="-1"><a class="header-anchor" href="#strings-builder"><span>strings.Builder</span></a></h4>
+<p><strong>特点</strong>：底层直接操作<code v-pre>[]byte</code>缓冲区，避免频繁内存分配和<code v-pre>GC</code></p>
+<p>比正常的<code v-pre>+</code>快</p>
+<ul>
+<li>正常的<code v-pre>+</code>，每次都会创建一个新的字符串对象，重新分配内存并拷贝数据，效率很低</li>
+<li><code v-pre>strings.Builder</code>底层维护一个<code v-pre>[]byte</code>，只有在需要扩容时才分配内存</li>
+<li>将<code v-pre>[]byte</code>转换成<code v-pre>string</code>时，使用了**<code v-pre>unsafe</code>指针转换进行零拷贝**
+<ul>
+<li><strong>零拷贝</strong>：直接让<code v-pre>String</code>指向<code v-pre>Slice</code>（<code v-pre>[]byte</code>）现有的<code v-pre>Data</code>内存</li>
+</ul>
+</li>
+</ul>
+<p><strong>常用方法</strong></p>
+<ul>
+<li>
+<p><code v-pre>Builder.Grow(n)</code>：预先申请<code v-pre>n</code>个字节内存</p>
+</li>
+<li>
+<p><code v-pre>Builder.WriteString(s string)</code>：把字符串拼接到末尾</p>
+</li>
+<li>
+<p><code v-pre>Builder.WriteByte(c byte)/WriteRune(r rune)</code>：拼接单个字符</p>
+</li>
+<li>
+<p><code v-pre>Builder.String()</code>：将<code v-pre>[]byte</code>转换成<code v-pre>string</code></p>
+</li>
+<li>
+<p><code v-pre>Builder.Reset()</code>：清空内容，长度置零，但保留已分配的内存</p>
 </li>
 </ul>
 </div></template>

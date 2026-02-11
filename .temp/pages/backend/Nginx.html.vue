@@ -54,7 +54,7 @@
 <div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ul>
 <li><strong><code v-pre>http</code>：定义网站相关的全局配置</strong>
 <ul>
-<li><code v-pre>include</code>：加载其它配置文件</li>
+<li><code v-pre>include</code>：加载其它配置文件，可以是<strong>站点的配置文件</strong></li>
 <li><code v-pre>default_type</code>：默认响应类型
 <ul>
 <li>如果<code v-pre>Nginx</code>无法识别客户端请求的文件类型，就会<strong>使用默认响应类型进行返回</strong></li>

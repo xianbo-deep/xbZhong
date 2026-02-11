@@ -30,3 +30,4 @@ projects:
 
 - https://xbzhongblog.2396768163.workers.dev/
 - https://xianbo-deep.github.io/xbZhong/
+- https://blog.xbzhong.cn/

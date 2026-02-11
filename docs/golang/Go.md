@@ -1403,6 +1403,26 @@ func main(){
 ```
 
 ### Channel
+**常见类型**
+
+- 双向`channel`
+
+```go
+ch := make(chan int)
+```
+
+- 只发送`channel`
+
+```go
+var out chan<- int
+```
+
+- 只接收`channel`
+
+```go
+var in <- chan int
+```
+
 
 **常见方法**
 
@@ -1788,4 +1808,66 @@ Query/表单参数绑定，主要用于
 
 - `Content-Type`：请求体类型
 
-  
+### 类型断言与类型转换
+
+**类型断言**
+
+从接口值把里面真实的具体类型拿出来
+
+接口值（`interface`/`any`）包括了
+
+- **动态类型**，会随着装进去的值的变化而变化
+- **动态值**
+
+语法：`x.(T)`
+
+- `x`必须是接口类型（`interface`或`any`或其它接口），判断它里面的**动态类型**是不是`T`
+
+- 两种方法
+  - `v := x.(T)`：失败会panic
+  - `v,ok := x.(T)`：安全写法，转换失败`ok`为`false`
+
+**类型转换**
+
+把一个值变成另一种具体类型
+
+语法：`T(x)`
+
+- `x`本身是具体类型，要转换成另一个具体类型
+
+### strings
+
+一个处理字符串的包
+
+**常用方法**
+
+- `strings.Contains(s,substr)`：判断`s`是否包含子串`substr`
+- `strings.HasPrefix(s,prefix)/strings.HasSuffix(s,suffix)`：判断前缀/后缀
+- `strings.Split(s,seq)`：用分隔符把字符串切成切片
+- `strings.Join(elems,seq)`：将切片用分隔符`seq`拼接成字符串
+- `strings.TrimSpace(s)`：去除首尾的空白字符
+- `strings.ToUpeer(s)/ToLower(s)`：大小写转换
+
+**注意**
+
+- `len(str)`返回的是**字符串的字节数，不是字符数**
+
+#### strings.Builder
+
+**特点**：底层直接操作`[]byte`缓冲区，避免频繁内存分配和`GC`
+
+比正常的`+`快
+
+- 正常的`+`，每次都会创建一个新的字符串对象，重新分配内存并拷贝数据，效率很低
+- `strings.Builder`底层维护一个`[]byte`，只有在需要扩容时才分配内存
+- 将`[]byte`转换成`string`时，使用了**`unsafe`指针转换进行零拷贝**
+  - **零拷贝**：直接让`String`指向`Slice`（`[]byte`）现有的`Data`内存
+
+**常用方法**
+
+- `Builder.Grow(n)`：预先申请`n`个字节内存
+- `Builder.WriteString(s string)`：把字符串拼接到末尾
+- `Builder.WriteByte(c byte)/WriteRune(r rune)`：拼接单个字符
+
+- `Builder.String()`：将`[]byte`转换成`string`
+- `Builder.Reset()`：清空内容，长度置零，但保留已分配的内存

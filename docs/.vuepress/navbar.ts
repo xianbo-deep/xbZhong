@@ -11,6 +11,11 @@ export default navbar([
   "/jottings/",
   "/resource/",
   "/aboutblog/",
+  {
+     text: "订阅",
+     icon: "envelope",
+     link: "/subscribe/"
+  },
   // {
   //   text: "资料库",
   //   icon: "heroicons:paper-clip-16-solid",

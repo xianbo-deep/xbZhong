@@ -1,4 +1,4 @@
 User-agent:*
 Disallow:
 
-Sitemap: https://xbzhong.cn/xbZhong/sitemap.xml
+Sitemap: https://xbzhong.cn/sitemap.xml

@@ -1,4 +1,5 @@
-<template><div><h2 id="db的查漏补缺" tabindex="-1"><a class="header-anchor" href="#db的查漏补缺"><span>DB的查漏补缺</span></a></h2>
+<template><div><p><a href="/pdfs/golang/DB.pdf">本页PDF</a></p>
+<h2 id="db的查漏补缺" tabindex="-1"><a class="header-anchor" href="#db的查漏补缺"><span>DB的查漏补缺</span></a></h2>
 <h3 id="mysql体系结构" tabindex="-1"><a class="header-anchor" href="#mysql体系结构"><span>MySQL体系结构</span></a></h3>
 <p><strong>MySQL服务端</strong></p>
 <ul>

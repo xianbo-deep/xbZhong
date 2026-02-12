@@ -1,25 +1,54 @@
 <template>
   <div class="subscribe-container">
     <div class="subscribe-card">
-      <h2 class="title">邮件订阅</h2>
+      <h2 class="title">{{ mode === 1 ? '邮件订阅' : '取消订阅' }}</h2>
       <p class="subtitle">获取最新文章更新通知，不错过任何精彩内容。</p>
       
+      <div class="mode-switch">
+        <button 
+          :class="['mode-btn', { active: mode === 1 }]" 
+          @click="setMode(1)"
+        >
+          订阅
+        </button>
+        <button 
+          :class="['mode-btn', { active: mode === 0 }]" 
+          @click="setMode(0)"
+        >
+          退订
+        </button>
+      </div>
+
       <div class="input-group">
         <input 
           v-model="email" 
           type="email" 
           placeholder="请输入您的邮箱地址" 
           :disabled="loading"
-          @keyup.enter="handleSubscribe(1)"
         />
       </div>
 
-      <div class="action-buttons">
-        <button class="btn btn-primary" :disabled="loading" @click="handleSubscribe(1)">
-          {{ loading ? '处理中...' : '立即订阅' }}
+      <div class="input-group verify-group">
+        <input 
+          v-model="verifyCode" 
+          type="text" 
+          placeholder="验证码" 
+          :disabled="loading"
+          class="verify-input"
+          @keyup.enter="handleSubmit"
+        />
+        <button 
+            class="btn btn-verify" 
+            :disabled="loading || countdown > 0" 
+            @click="handleGetVerifyCode"
+        >
+          {{ countdown > 0 ? `${countdown}s` : '获取验证码' }}
         </button>
-        <button class="btn btn-secondary" :disabled="loading" @click="handleSubscribe(0)">
-          {{ loading ? '处理中...' : '取消订阅' }}
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary btn-block" :disabled="loading" @click="handleSubmit">
+          {{ loading ? '处理中...' : (mode === 1 ? '立即订阅' : '取消订阅') }}
         </button>
       </div>
 
@@ -31,63 +60,135 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onUnmounted } from 'vue';
 
 const email = ref('');
+const verifyCode = ref('');
+const mode = ref(1); // 1: Subscribe, 0: Unsubscribe
+const countdown = ref(0);
 const loading = ref(false);
 const message = ref('');
 const messageType = ref('info'); // 'success', 'error', 'info'
+let timer: any = null;
 
 const validateEmail = (email: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
-const handleSubscribe = async (subscribe: number) => {
-  if (!email.value) {
-    message.value = '请输入邮箱地址';
-    messageType.value = 'error';
-    return;
-  }
-  
-  if (!validateEmail(email.value)) {
-    message.value = '请输入有效的邮箱地址';
-    messageType.value = 'error';
-    return;
-  }
+const setMode = (newMode: number) => {
+    mode.value = newMode;
+    message.value = '';
+};
 
-  loading.value = true;
-  message.value = '';
-
-  try {
-    const response = await fetch(`https://api.xbzhong.cn/blog/subscribe?email=${encodeURIComponent(email.value)}&subscribe=${subscribe}`, {
-      method: 'GET',
-    });
-
-    const data = await response.json();
-
-    // 适配常见的 API 返回格式，如果不成功则视为失败
-    // 请根据实际 API 返回调整判断逻辑
-    if (data.code === 200 || data.code === 0 || data.success === true || data.msg === '操作成功') {
-       message.value = subscribe === 1 ? '订阅成功！感谢您的关注。' : '已成功取消订阅。';
-       messageType.value = 'success';
-       if (subscribe === 1) email.value = '';
-    } else {
-       if (data.code === 1005) {
-          message.value = subscribe === 1 ? '您已订阅，请勿重复操作。' : '您尚未订阅，无需取消。';
-       } else {
-          message.value = subscribe === 1 ? '订阅失败，请稍后重试。' : '取消订阅失败，请稍后重试。';
-       }
-       messageType.value = 'error';
+const handleGetVerifyCode = async () => {
+    if (!email.value) {
+        message.value = '请输入邮箱地址';
+        messageType.value = 'error';
+        return;
+    }
+    
+    if (!validateEmail(email.value)) {
+        message.value = '请输入有效的邮箱地址';
+        messageType.value = 'error';
+        return;
     }
 
-  } catch (error) {
-    console.error(error);
-    message.value = '网络请求失败，请检查您的网络连接。';
-    messageType.value = 'error';
-  } finally {
-    loading.value = false;
-  }
+    loading.value = true;
+    message.value = '';
+
+    try {
+        const response = await fetch(`https://api.xbzhong.cn/blog/verify?email=${encodeURIComponent(email.value)}&subscribe=${mode.value}`, {
+            method: 'GET'
+        });
+        const data = await response.json();
+        
+        if (data.code === 200 || data.code === 0 || data.success === true || data.msg === '操作成功') {
+            message.value = '验证码已发送到您的邮箱，5分钟内有效。';
+            messageType.value = 'success';
+            startCountdown();
+        } else {
+            message.value = data.msg || '获取验证码失败，请稍后重试。';
+            messageType.value = 'error';
+        }
+    } catch (error) {
+        console.error(error);
+        message.value = '网络请求失败，请检查您的网络连接。';
+        messageType.value = 'error';
+    } finally {
+        loading.value = false;
+    }
+}
+
+const startCountdown = () => {
+    countdown.value = 60;
+    timer = setInterval(() => {
+        countdown.value--;
+        if (countdown.value <= 0) {
+            clearInterval(timer);
+        }
+    }, 1000);
+}
+
+const handleSubmit = async () => {
+    if (!email.value) {
+        message.value = '请输入邮箱地址';
+        messageType.value = 'error';
+        return;
+    }
+    
+    if (!validateEmail(email.value)) {
+        message.value = '请输入有效的邮箱地址';
+        messageType.value = 'error';
+        return;
+    }
+
+    if (!verifyCode.value) {
+        message.value = '请输入验证码';
+        messageType.value = 'error';
+        return;
+    }
+
+    loading.value = true;
+    message.value = '';
+
+    try {
+        const response = await fetch(`https://api.xbzhong.cn/blog/subscribe?email=${encodeURIComponent(email.value)}&subscribe=${mode.value}&vc=${encodeURIComponent(verifyCode.value)}`, {
+            method: 'GET',
+        });
+
+        const data = await response.json();
+
+        if (data.code === 200 || data.code === 0 || data.success === true || data.msg === '操作成功') {
+           message.value = mode.value === 1 ? '订阅成功！感谢您的关注。' : '已成功取消订阅。';
+           messageType.value = 'success';
+           if (mode.value === 1) {
+               email.value = '';
+               verifyCode.value = '';
+           } else {
+               email.value = '';
+               verifyCode.value = '';
+           }
+        } else {
+           if (data.code === 1005) {
+              message.value = mode.value === 1 ? '您已订阅，请勿重复操作。' : '您尚未订阅，无需取消。';
+           } else {
+              message.value = data.msg || (mode.value === 1 ? '订阅失败，请稍后重试。' : '取消订阅失败，请稍后重试。');
+           }
+           messageType.value = 'error';
+        }
+
+    } catch (error) {
+        console.error(error);
+        message.value = '网络请求失败，请检查您的网络连接。';
+        messageType.value = 'error';
+    } finally {
+        loading.value = false;
+    }
 };
+
+onUnmounted(() => {
+    if (timer) clearInterval(timer);
+});
 </script>
 
 <style scoped>
@@ -127,8 +228,34 @@ const handleSubscribe = async (subscribe: number) => {
 
 .subtitle {
   color: var(--text-color-light, #666);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-size: 1rem;
+}
+
+.mode-switch {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color, #e2e8f0);
+}
+
+.mode-btn {
+    background: none;
+    border: none;
+    padding: 0.8rem 2rem;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-color-light, #666);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all 0.3s;
+}
+
+.mode-btn.active {
+    color: #29437d;
+    border-bottom-color: #29437d;
+    font-weight: 600;
 }
 
 .input-group {
@@ -152,10 +279,36 @@ input:focus {
   border-color: #29437d;
 }
 
+.verify-group {
+    display: flex;
+    gap: 10px;
+}
+
+.verify-input {
+    flex: 1;
+}
+
+.btn-verify {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid var(--border-color, #e2e8f0);
+    background-color: transparent;
+    color: var(--text-color, #333);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    min-width: 120px;
+}
+
+.btn-verify:not(:disabled):hover {
+    border-color: #29437d;
+    color: #29437d;
+}
+
 .action-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
+  margin-top: 2rem;
 }
 
 .btn {
@@ -184,15 +337,8 @@ input:focus {
   transform: translateY(-1px);
 }
 
-.btn-secondary {
-  background-color: transparent;
-  border: 2px solid var(--border-color, #e2e8f0);
-  color: var(--text-color-light, #666);
-}
-
-.btn-secondary:not(:disabled):hover {
-  border-color: #666;
-  color: var(--text-color, #333);
+.btn-block {
+    width: 100%;
 }
 
 .message {

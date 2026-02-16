@@ -462,5 +462,11 @@ export default sidebar({
       link: "game.md",
       expanded: true
     }
+  ],
+  "/aboutblog/":[
+    {
+      text: "开发日志",
+      link: "logs.md"
+    }
   ]
 });

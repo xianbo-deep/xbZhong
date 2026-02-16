@@ -208,9 +208,9 @@
   "docs/backend/Nginx.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Nginx.pdf",
     "images": [],
-    "hash": "4cde957bf0344ae7848e23a86f324f387bd80d3b9db0e7729f5043ef01fe3397",
-    "size": "850959",
-    "gen_time": "2026-01-06T09:11:38"
+    "hash": "250bd9881006e9d56d704f9d1ce6d8376e789d4d1ac48d374e270d8ed1227721",
+    "size": "852515",
+    "gen_time": "2026-02-16T09:27:37"
   },
   "docs/backend/RabbitMQ.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/RabbitMQ.pdf",
@@ -966,9 +966,9 @@
       "/screenshot/backend/image-20251015173754231.png",
       "/screenshot/backend/image-20251015173810451.png"
     ],
-    "hash": "f12cf720761c549297389830cc836ef7008306f85428f3a16e00fcd4afc2bfab",
-    "size": "4657288",
-    "gen_time": "2026-01-21T09:14:14"
+    "hash": "b4a2e039c473e6c2d8cfa65e2c2e757ca24279778bf0b18218be357e4cbfef4f",
+    "size": "4741939",
+    "gen_time": "2026-02-16T09:27:41"
   },
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
@@ -990,9 +990,9 @@
       "/myMajor/note/image-20260105155539029.png",
       "/myMajor/note/image-20260103171611454.png"
     ],
-    "hash": "a0510b7b9db2db8225f189fbf1b3f3305aafd87056724209c1ea2ac14667a7be",
-    "size": "770845",
-    "gen_time": "2026-01-16T09:15:06"
+    "hash": "9137a96fd2ba0bbbc302f823273d47770719fc52ea139e79780389714f0a20f5",
+    "size": "770858",
+    "gen_time": "2026-02-16T09:27:42"
   },
   "docs/resource/coursenote/junior/embedding_system.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/embedding_system.pdf",

@@ -221,6 +221,12 @@ export default sidebar({
       link: "Bash.md",
       expanded: true, 
     },
+    {
+      text:"DB",
+      icon:"material-symbols:database",
+      link:"DB.md",
+      expanded:true,
+    },
   ],
   "/ds/":[
      {

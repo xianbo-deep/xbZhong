@@ -1097,8 +1097,15 @@
       "/screenshot/backend/image-20260116134013876.png",
       "/screenshot/backend/image-20260116134539535.png"
     ],
-    "hash": "d26fd5f2daca4f9cfebaa3cb97c412e3d96ac223f24f9fc119c41c93dfcab722",
-    "size": "2947829",
-    "gen_time": "2026-01-26T09:18:37"
+    "hash": "3c1a86f6482427cb4ddb76651fee0517b5f7a9d03abe07441f3c3ecfadf5953b",
+    "size": "2966772",
+    "gen_time": "2026-02-21T09:21:59"
+  },
+  "docs/golang/stdlib.md": {
+    "pdf": "docs/.vuepress/public/pdfs/golang/stdlib.pdf",
+    "images": [],
+    "hash": "ed3b2fdfb0a7c5dc5bcfe5577b4862388e6fcbe0f82bbace6a1cf38a5519934b",
+    "size": "2118147",
+    "gen_time": "2026-02-21T09:22:01"
   }
 }

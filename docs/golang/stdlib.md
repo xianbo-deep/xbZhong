@@ -8,6 +8,9 @@ icon: devicon:go
 date: 2025-02-20
 ---
 
+[本页PDF](/pdfs/golang/stdlib.pdf)
+
+
 ## 标准库
 
 ### net/http

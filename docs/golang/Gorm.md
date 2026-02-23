@@ -1250,3 +1250,8 @@ db.Model(&jack).Association("Houses").Unscoped().Delete(&houses)
 
 
 
+## 独立会话
+
+当在一段代码中要执行两次查询时，为了防止不同查询条件造成对话环境污染，可以使用`gorm.DB.Session(&gorm.Session{})`方法创建一个**干净的克隆对话**
+
+- 因为每个`gorm.DB`实例都是一个带有状态的指针，复用的话会导致查询条件等被污染

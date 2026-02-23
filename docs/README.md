@@ -19,6 +19,10 @@ projects:
     name: 常见卷积神经网络的实现
     desc: 源代码都在这
     link: https://github.com/xianbo-deep/Model
+  - icon: folder-open
+    name: 本博客后端
+    desc: 使用Golang搭建的博客后端
+    link: https://github.com/xianbo-deep/BLOG-BACKEND
 ---
 
 

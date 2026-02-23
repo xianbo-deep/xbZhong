@@ -151,4 +151,47 @@ GPT给了死链检测的一个好思路
 
   - 使用完毕后进行销毁，不污染裸仓库
 
-    
+## 2026.02.22
+
+今天主要是修Bug，后端返回的信息是这样
+
+```json
+"devices": [
+            {
+                "device": "desktop",
+                "percent": 68
+            },
+            {
+                "device": "desktop",
+                "percent": 29
+            },
+            {
+                "device": "mobile",
+                "percent": 2
+            }
+        ]
+```
+
+非常奇怪，看了代码之后才发现是数据库实例混用导致不同的查询被污染
+
+
+
+先后执行以下两段代码，会导致第二次查询的`group`携带了第一次查询的`country`
+
+```go
+err := db.Select("country,count(*) as count").
+		Group("country").
+		Order("count desc").
+		Limit(3).
+		Scan(&countries).Error
+
+err = db.Select("device, count(*) as count").
+		Group("device").
+		Order("count desc").
+		Limit(3).
+		Scan(&devices).Error
+```
+
+
+
+**解决办法**：使用`.Session(&gorm.Session{})`开启一个干净的克隆对话

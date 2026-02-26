@@ -973,9 +973,9 @@
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
     "images": [],
-    "hash": "ddf9470f9b4b7af2494c7257a044fd57832bd51cf1c8b928d885f471038b98c4",
-    "size": "1606145",
-    "gen_time": "2026-01-11T09:18:59"
+    "hash": "82e295ca6613bc64ca3b24c0f5ee937174d7773fe1057819c7d0fc04bef3f1d1",
+    "size": "1626700",
+    "gen_time": "2026-02-26T09:26:47"
   },
   "docs/resource/tools.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/tools.pdf",

@@ -222,6 +222,12 @@ export default sidebar({
       expanded: true, 
     },
     {
+      text: "标准库及框架",
+      icon: "devicon:go",
+      link: "stdlib.md",
+      expanded: true, 
+    },
+    {
       text:"DB",
       icon:"material-symbols:database",
       link:"DB.md",

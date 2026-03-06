@@ -1226,6 +1226,8 @@ func DoFiledAndMethod(input interface{}) {
 
 - 使用`.Field().Tag.Get("标签的key")`获得字段标签
 - `.Elem()`方法用于**获取指针、数组、切片、映射、通道或接口所指向的元素的类型**
+- `.Kind()`方法**用于获取一个值的底层类型种类**
+  - 可以统一处理所有类型的数据，如`reflect.Int8`、`reflect.Bool`等
 
 ```go
 type resume struct{
@@ -1871,3 +1873,36 @@ Query/表单参数绑定，主要用于
 
 - `Builder.String()`：将`[]byte`转换成`string`
 - `Builder.Reset()`：清空内容，长度置零，但保留已分配的内存
+
+
+### 匿名字段
+
+### 空结构体
+
+`struct{}`
+
+- 零内存占用
+- 所有空结构体的值都是相等的，且共享**同一内存地址**
+
+- 无字段，不能存储数据
+
+### make
+
+**创建切片**
+
+`make([]T,length,capacity)`
+
+- `length`为当前切片使用的大小，`capacity`为底层数组总大小
+
+**创建map**
+
+`make(map[K]V, capacity)`
+
+- `capacity`为容量，空间不够会扩容
+
+**创建通道**
+
+`make(chan T, capacity)`
+
+- 无`capacity`为无缓冲通道，否则为有缓冲通道
+- **不会自动扩容**

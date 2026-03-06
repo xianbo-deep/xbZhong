@@ -146,7 +146,6 @@ GPT给了死链检测的一个好思路
   - `git clone -mirror`或者`git clone --bare`
   - 省空间，体积小
   - 后续使用`fetch`解码出所需要的`md`文件
-
 - `Git Wokrtree`：基于同一个本地`git`仓库，检出多个不同的分支放在不同文件夹
 
   - 使用完毕后进行销毁，不污染裸仓库
@@ -195,3 +194,13 @@ err = db.Select("device, count(*) as count").
 
 
 **解决办法**：使用`.Session(&gorm.Session{})`开启一个干净的克隆对话
+
+## 2026.02.23
+
+解决了管理页面的bug，引入ip2region来解析国内ip的真实地址，让ip解析的准确率大幅提升，国外IP依旧使用GeoLite
+
+后续可能考虑引入消息队列解决github webhook重试、失败的问题
+
+## 2026.03.04
+
+修复评论区周报结构体定义的Bug，纯粹是忘记了Github的GraphQL咋写了，看了日志才发现这个Bug已经跑了两个星期

@@ -24,7 +24,7 @@ projects:
     desc: 使用Golang搭建的博客后端
     link: https://github.com/xianbo-deep/BLOG-BACKEND
   - icon: folder-open
-    name: Fune
+    name: Fuse
     desc: 多协议轻量级服务器框架
     link: https://github.com/xianbo-deep/Fuse
 ---

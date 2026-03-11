@@ -15,18 +15,22 @@ projects:
   #   name: 项目名称
   #   desc: 项目详细描述
   #   link: https://你的项目链接
-  - icon: folder-open
+  - icon: simple-icons:cnn
     name: 常见卷积神经网络的实现
     desc: 源代码都在这
     link: https://github.com/xianbo-deep/Model
-  - icon: folder-open
+  - icon: icon-park:computer
     name: 本博客后端
     desc: 使用Golang搭建的博客后端
     link: https://github.com/xianbo-deep/BLOG-BACKEND
-  - icon: folder-open
+  - icon: devicon:go
     name: Fuse
     desc: 多协议轻量级服务器框架
     link: https://github.com/xianbo-deep/Fuse
+  - icon: teenyicons:doc-outline
+    name: Fuse API 文档
+    desc: 基于 pkgsite 生成
+    link: https://fuse.xbzhong.cn
 ---
 
 

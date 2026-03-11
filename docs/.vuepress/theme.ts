@@ -36,7 +36,7 @@ export default hopeTheme({
   // 博客相关
   blog: {
     name: "土豆",
-    description: "花梨27级本科生",
+    description: "花梨27届本科生",
     intro: "/me/intro.html",
     timeline: "悟已往之不谏",
     medias: {

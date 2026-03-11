@@ -5,6 +5,9 @@ article: false
 timeline: false
 ---
 
+[本页PDF](/pdfs/resource/coursenote/junior/brain_computer_interaction.pdf)
+
+
 ## 第1、2章
 
 脑机接口：BCI

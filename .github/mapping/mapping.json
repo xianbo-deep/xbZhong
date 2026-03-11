@@ -34,9 +34,9 @@
       "/screenshot/backend/image-20251016121348576.png",
       "/screenshot/backend/image-20251016122723629.png"
     ],
-    "hash": "22c60d9b6db47dedcc1a550c71c98b795889114c58b5412036aeba4d4defe93c",
-    "size": "13298729",
-    "gen_time": "2025-12-23T16:31:33"
+    "hash": "2fab25c1ba00ab1671b754413a738c4ed51b017513d57ef5a448ff34f2584856",
+    "size": "13359292",
+    "gen_time": "2026-03-11T09:21:50"
   },
   "docs/backend/Dubbo.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Dubbo.pdf",
@@ -966,9 +966,9 @@
       "/screenshot/backend/image-20251015173754231.png",
       "/screenshot/backend/image-20251015173810451.png"
     ],
-    "hash": "b4a2e039c473e6c2d8cfa65e2c2e757ca24279778bf0b18218be357e4cbfef4f",
-    "size": "4741939",
-    "gen_time": "2026-02-16T09:27:41"
+    "hash": "62b602099b2b8f6cea11e173b15bc60ba877e4173e5bd1d8b90b870153fd4d85",
+    "size": "4764061",
+    "gen_time": "2026-03-11T09:21:54"
   },
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
@@ -1104,8 +1104,15 @@
   "docs/golang/stdlib.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/stdlib.pdf",
     "images": [],
-    "hash": "ed3b2fdfb0a7c5dc5bcfe5577b4862388e6fcbe0f82bbace6a1cf38a5519934b",
-    "size": "2118147",
-    "gen_time": "2026-02-21T09:22:01"
+    "hash": "4affd7a10eeae6b388ce451ddf1283f9850d0037749c026ce388116ba371b279",
+    "size": "2185507",
+    "gen_time": "2026-03-11T09:21:55"
+  },
+  "docs/resource/coursenote/junior/brain_computer_interaction.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/brain_computer_interaction.pdf",
+    "images": [],
+    "hash": "39d2ae36c525c4011553daa9e444ee611f0aaae0b2109cb5a250adb83aafa515",
+    "size": "182972",
+    "gen_time": "2026-03-11T09:21:55"
   }
 }

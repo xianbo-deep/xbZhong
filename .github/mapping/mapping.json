@@ -766,9 +766,9 @@
       "/screenshot/ds/image-20250703102140742.png",
       "/screenshot/ds/image-20250714111902028.png"
     ],
-    "hash": "a344345bec7a3f3a72ff751f24a6edeb568845f01247f7b9f1e4b87a3cfe8677",
-    "size": "3615550",
-    "gen_time": "2025-11-24T13:36:48"
+    "hash": "530ead6fd38b26f869a94051dd7d75dfe6b1f9ec08c0a13a33c1798b3b554d47",
+    "size": "2889280",
+    "gen_time": "2026-03-16T09:50:04"
   },
   "docs/ds/STL.md": {
     "pdf": "docs/.vuepress/public/pdfs/ds/STL.pdf",
@@ -1111,8 +1111,15 @@
   "docs/resource/coursenote/junior/brain_computer_interaction.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/brain_computer_interaction.pdf",
     "images": [],
-    "hash": "39d2ae36c525c4011553daa9e444ee611f0aaae0b2109cb5a250adb83aafa515",
-    "size": "182972",
-    "gen_time": "2026-03-11T09:21:55"
+    "hash": "ab5a25a794d66e7df1e06ba1a6f67ac2ee4ff3ac2a2b9364a6857f633d44be50",
+    "size": "202644",
+    "gen_time": "2026-03-16T09:50:05"
+  },
+  "docs/resource/coursenote/junior/nndl.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/nndl.pdf",
+    "images": [],
+    "hash": "c20be7358a072c476abebbc151d9e618c4d253b1408fd4b904d0ad9ef68d7080",
+    "size": "482298",
+    "gen_time": "2026-03-16T09:50:05"
   }
 }

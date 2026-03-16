@@ -5,6 +5,9 @@ article: false
 timeline: false
 ---
 
+[本页PDF](/pdfs/resource/coursenote/junior/nndl.pdf)
+
+
 
 ## 机器学习
 

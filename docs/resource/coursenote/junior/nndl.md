@@ -294,7 +294,7 @@ $$
 
 - 结构：
 
-![](/myMajor/noteimage-20260326112221506.png)
+![](/myMajor/note/image-20260326112221506.png)
 
 - 目标函数：最小化KL散度
 

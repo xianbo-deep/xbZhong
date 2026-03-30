@@ -37,7 +37,7 @@ export default hopeTheme({
   blog: {
     name: "土豆",
     description: "花梨27届本科生",
-    intro: "/me/intro.html",
+    intro: "/me/",
     timeline: "悟已往之不谏",
     medias: {
         GitHub: "https://github.com/xianbo-deep",

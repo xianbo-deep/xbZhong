@@ -2,6 +2,7 @@ import { navbar } from "vuepress-theme-hope";
 
 export default navbar([
   "/",
+  "/me/",
   "/ZJ/",
   "/dl/",
   "/ds/",

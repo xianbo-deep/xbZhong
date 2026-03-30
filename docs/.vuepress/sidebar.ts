@@ -196,6 +196,18 @@ export default sidebar({
       
     },
   ],
+  "/me/":[
+    {
+      text: "Leetcode",
+      icon: "devicon:leetcode",
+      link: "leetcode.md",
+    },
+    {
+      text: "面试",
+      icon: "streamline-freehand:job-choose-candidate",
+      link: "interview.md",
+    },
+  ],
   "/golang/":[
     {
       text: "Go",

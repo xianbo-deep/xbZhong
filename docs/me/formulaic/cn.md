@@ -1,15 +1,11 @@
 ---
-title: 计网常见协议
-author: xbZhong
+title: 计网
 isOriginal: true
 article: true
-category: backend
 timeline: true
 icon: streamline:network-solid
-date: 2025-10-16
+date: 2026-04-01
 ---
-
-[本页PDF](/pdfs/backend/CN.pdf)
 
 ## 计网常见知识
 
@@ -142,7 +138,7 @@ date: 2025-10-16
 
 - 不靠丢包来判断网络拥堵情况
 - 靠实时估算网络能提供的**最大带宽（BtlBw）**和**最小往返时延（RTprop）**来控制发送速率
-- $发送速率 \approx BtlBw \times RTprop$
+- $\text{发送速率} \approx BtlBw \times RTprop$
 
 ### UDP
 

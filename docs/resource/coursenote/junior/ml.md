@@ -242,7 +242,7 @@ $$
 
 先来认识几个概率
 $$
-\underbrace{P(Y = y| X = x)}_{后验概率} = \frac{\underbrace{P(X = x|Y = y)}_{似然概率}\underbrace{P(Y = y)}_{先验概率}}{\underbrace{P(X = x)}_{证据概率}}
+\underbrace{P(Y = y| X = x)}_{\text{后验概率}} = \frac{\underbrace{P(X = x|Y = y)}_{\text{似然概率}}\underbrace{P(Y = y)}_{\text{先验概率}}}{\underbrace{P(X = x)}_{\text{证据概率}}}
 $$
 
 **条件独立性假设**：假设特征之间是相互独立的 
@@ -986,14 +986,14 @@ $$
 $$
 \begin{aligned}
 \log{\sum_{Z}{q(Z)\frac{P(Y,Z|\theta)}{q(Z)}}} &\ge \sum_{Z}q(Z)\log{\frac{P(Y,Z|\theta)}{q(Z)}} \\
-&=  \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)}
+&=  \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)}
 \end{aligned}
 $$
 
 记上式为：
 $$
 \begin{aligned}
-\mathcal{L}(q,\theta) = \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)}
+\mathcal{L}(q,\theta) = \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)}
 \end{aligned}
 $$
 
@@ -1005,7 +1005,7 @@ $$
 因此有
 $$
 \begin{aligned}
-\mathcal{L}(q,\theta) &= \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)} \\
+\mathcal{L}(q,\theta) &= \sum_{Z}q(Z)\log{P(Y,Z|\theta)} -  \sum_{Z}q(Z)\log{q(Z)} \\
 &= \sum_{Z}q(Z)\log{P(Z|Y,\theta)P(Y|\theta)} - \sum_{Z}q(Z)\log{q(Z)} \\
 &= \sum_{Z}q(Z)(\log{P(Z|Y,\theta)}+\log{P(Y|\theta)}) - \log{q(Z)} \\
 &= \log{P(Y|\theta)}\sum_{Z}q(Z) + \sum_{Z}q(Z)\log{\frac{P(Z|Y,\theta)}{q(Z)}} \\
@@ -1016,7 +1016,7 @@ $$
 最终等式
 $$
 \begin{aligned}
-\log{P(Y|\theta)} &=  KL(q(Z)||P(Z|Y,\theta)) + \mathcal{L}(q,\theta)\\
+\log{P(Y|\theta)} &=  KL(q(Z)||P(Z|Y,\theta)) + \mathcal{L}(q,\theta)\\
 \end{aligned}
 $$
 且
@@ -1126,7 +1126,7 @@ $$
 有
 $$
 \begin{aligned} 
-\prod_{j = 1}^{N}{\prod_{k=1}^{K}{[\alpha_{k}\phi(y_i|\theta_k)]^{\gamma_{jk}}}}  &= \prod_{k = 1}^K{\alpha_k^{n_k}}\prod_{j=1}^N[\phi(y_j|\theta_k)]^{\gamma_{jk}}
+\prod_{j = 1}^{N}{\prod_{k=1}^{K}{[\alpha_{k}\phi(y_i|\theta_k)]^{\gamma_{jk}}}}  &= \prod_{k = 1}^K{\alpha_k^{n_k}}\prod_{j=1}^N[\phi(y_j|\theta_k)]^{\gamma_{jk}}
 \end{aligned} 
 $$
 

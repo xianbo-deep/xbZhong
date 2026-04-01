@@ -7,7 +7,7 @@ timeline: true
 icon: material-symbols:database
 date: 2025-02-20
 ---
-[本页PDF](/pdfs/golang/DB.pdf)
+
 
 ## DB的查漏补缺
 

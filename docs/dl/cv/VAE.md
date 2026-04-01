@@ -116,7 +116,7 @@ date: 2025-06-20
 > \begin{aligned}
 > \mathcal{L}(q,\theta) &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x,z)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}] \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x)}+\ln{p_{\theta}(z|x)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}] \\
-> &=  \underbrace{\mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x)}]}_{\text{与z无关，期望符号可以直接去掉}}+\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(z|x)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}] \\
+> &=  \underbrace{\mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x)}]}_{\text{与z无关，期望符号可以直接去掉}}+\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(z|x)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}] \\
 > &= \underbrace{\ln{p_{\theta}(x)}}_{\text{观察数据对数似然/证据}}+\underbrace{\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(z|x)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z|x)}]}_{\text{KL散度}} \\
 > &= \underbrace{\ell(\theta;x)}_{\text{观察数据对数似然/证据}}-\underbrace{KL(q_{\phi}(z|x)||p_{\theta}(z|x))}_{\text{KL散度}}
 > \end{aligned}
@@ -132,7 +132,7 @@ date: 2025-06-20
 > \begin{aligned}
 > \mathcal{L}(q,\theta) &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p_{\theta}(x,z)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}] \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[\ln{p(z)}+\ln{p_{\theta}(x|z)}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}] \\
-> &=  \mathbb{E}_{z \sim q_{\phi}}[\ln{p(z)}]+\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}] \\
+> &=  \mathbb{E}_{z \sim q_{\phi}}[\ln{p(z)}]+\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}] \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}]+\underbrace{\mathbb{E}_{z \sim q_{\phi}}[{\ln{p(z)}}] - \mathbb{E}_{z \sim q_{\phi}}[\ln{q_{\phi}(z)}]}_{\text{KL散度}} \\
 > &= \mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}] - \underbrace{KL(q_{\phi}(z|x)||p(z))}_{q_{\phi}(z)\text{和先验}p(z)\text{的KL散度}}
 > \end{aligned}
@@ -149,13 +149,13 @@ date: 2025-06-20
 >
 > #### 疑难杂点
 >
-> | 分布              | 含义             | 是否学习                 | 网络对应 |
+> | 分布              | 含义             | 是否学习                 | 网络对应 |
 > | ----------------- | ---------------- | ------------------------ | -------- |
-> | $p(z)$            | 潜变量的先验分布 | 否，通常固定为N(0,I)     | 无       |
-> | $q_{\phi}(z|x)$   | 近似后验分布     | 是，学习参数$\phi$       | 编码器   |
-> | $p_{\theta}(x|z)$ | 条件生成分布     | 是，学习参数$\theta$     | 解码器   |
-> | $p_{\theta}(z|x)$ | 真实后验分布     | 理论上是，但难以直接计算 | 无       |
-> | $p_{\theta}(x)$   | 数据的边缘分布   | 理论上是，但难以直接优化 | 整个VAE  |
+> | $p(z)$            | 潜变量的先验分布 | 否，通常固定为N(0,I)     | 无       |
+> | $q_{\phi}(z|x)$   | 近似后验分布     | 是，学习参数$\phi$       | 编码器   |
+> | $p_{\theta}(x|z)$ | 条件生成分布     | 是，学习参数$\theta$     | 解码器   |
+> | $p_{\theta}(z|x)$ | 真实后验分布     | 理论上是，但难以直接计算 | 无       |
+> | $p_{\theta}(x)$   | 数据的边缘分布   | 理论上是，但难以直接优化 | 整个VAE  |
 >
 > - $p(z)$ 是未看见任何数据之前对 $z$ 的**假设分布**，通常是正态分布
 > - $p(z|x)$ 是看到数据之后 $z$ 的分布，为**真实后验**
@@ -229,7 +229,7 @@ $$
 $$
 \begin{aligned}
 \mathcal{L}(q,\theta) 
-&= \underbrace{\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}]}_{对应解码过程} - \underbrace{KL(q_{\phi}(z|x)||p(z))}_{对应编码过程} \\
+&= \underbrace{\mathbb{E}_{z \sim q_{\phi}}[{\ln{p_{\theta}(x|z)}}]}_{\text{对应解码过程}} - \underbrace{KL(q_{\phi}(z|x)||p(z))}_{\text{对应编码过程}} \\
 &= \frac{1}{L}\sum_{l=1}^L[\ln{p_{\theta}(x|z^{(l)})}] - KL(\mathcal{N}(\mu_z,\Sigma_z)||\mathcal{N}(0,I)) \\
 &\propto \frac{1}{L}\sum_{l=1}^L[-\frac{1}{2}(x-\mu_x)^T(x-\mu_x)] - [\frac{1}{2}(\text{tr}(\Sigma_z)+\mu_z^T\mu_z-k-\log{\det(\Sigma_z)})]\\
 & \propto -\frac{1}{L}\sum_{l=1}^L[(x-\mu_x)^T(x-\mu_x)] - [(\text{tr}(\Sigma_z)+\mu_z^T\mu_z-k-\log{\det(\Sigma_z)})]\\
@@ -247,7 +247,7 @@ z^{(l)} &= \mu_z + \sqrt{\Sigma_z} \odot \epsilon,
 $$
 由于我们是通过极大化 $\mathcal{L}(q,\theta)$ 进行参数求解，其中有一些参数项可以去掉，最后可以等价于同时极小化下面两项
 $$
-\frac{1}{L}\sum_{l=1}^L[\underbrace{(x-\mu_x)^T(x-\mu_x)}_{均方误差}]
+\frac{1}{L}\sum_{l=1}^L[\underbrace{(x-\mu_x)^T(x-\mu_x)}_{\text{均方误差}}]
 $$
 和
 $$

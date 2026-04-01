@@ -99,13 +99,6 @@ export default sidebar({
       
     },
     {
-      text: "CN",
-      icon: "streamline:network-solid",
-      link: "CN.md",
-      expanded: true,
-      
-    },
-    {
       text: "常见锁",
       icon: "material-symbols:lock-outline",
       link: "Lock.md",
@@ -196,6 +189,7 @@ export default sidebar({
       
     },
   ],
+  "/me/formulaic/":["go.md","db.md","cn.md","os.md"],
   "/me/":[
     {
       text: "Leetcode",
@@ -206,6 +200,10 @@ export default sidebar({
       text: "面试",
       icon: "streamline-freehand:job-choose-candidate",
       link: "interview.md",
+    },
+    {
+      text: "八股",
+      link: "/me/formulaic/go.md",
     },
   ],
   "/golang/":[
@@ -238,12 +236,6 @@ export default sidebar({
       icon: "devicon:go",
       link: "stdlib.md",
       expanded: true, 
-    },
-    {
-      text:"DB",
-      icon:"material-symbols:database",
-      link:"DB.md",
-      expanded:true,
     },
   ],
   "/ds/":[

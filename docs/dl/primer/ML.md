@@ -521,4 +521,4 @@ $$
 
 * 我们在常规的梯度下降中加入一个超参数$\beta$，这个值一般取0.9
 * 我们在这里使用指数加权平均，这个方法可以让之前的梯度占取一部分的权重，并且离该点越近权重越大，使得当前的下降方向不完全由当前梯度决定，使得震荡不那么剧烈。并且在陷入鞍点的时候，之前的梯度的累加可以帮助其不陷入鞍点
-* $$v_t = \beta v_{t-1} + (1 - \beta)\frac{\partial J}{\partial w} \\ w = w - \alpha v_t\\(\alpha 为\text{学习率})$$
+* $$v_t = \beta v_{t-1} + (1 - \beta)\frac{\partial J}{\partial w} \\ w = w - \alpha v_t\\(\alpha \text{为}\text{学习率})$$

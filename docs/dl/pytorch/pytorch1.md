@@ -217,7 +217,7 @@ $$
   - weight_decay（L2 正则化，默认 0
 
 $$
-v_t = \beta v_{t-1} + （1-\beta) \frac{\partial 	J}{\partial w} \\ w = w - \alpha v_t
+v_t = \beta v_{t-1} + (1-\beta) \frac{\partial 	J}{\partial w} \\ w = w - \alpha v_t
 $$
 
 
@@ -277,7 +277,7 @@ $$
 
 
 $$
-v_t = \beta v_{t-1} + （1-\beta) (\frac{\partial J}{\partial w})^2 \\ w = w - \alpha \frac{\frac{\partial J}{\partial w}}{\sqrt{v_t + \epsilon}} 
+v_t = \beta v_{t-1} + (1-\beta) (\frac{\partial J}{\partial w})^2 \\ w = w - \alpha \frac{\frac{\partial J}{\partial w}}{\sqrt{v_t + \epsilon}} 
 $$
 
 

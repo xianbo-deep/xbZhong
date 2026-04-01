@@ -90,7 +90,7 @@ date: 2024-01-18
   - 根据$z = \large ln\frac{P(x|C_1)P(C_1)}{P(x|C_2)P(C_2)}$，经过数学推导得：
     - $w^T = (\mu^1 - \mu^2)\Sigma^{-1}$
     - $b = -\frac{1}{2}(\mu^1)^T(\Sigma^1)^{-1}\mu^1+\frac{1}{2}(\mu^2)^T(\Sigma^2)^{-1}\mu^2+ln\frac{N_1}{N_2}$
-      - 其中$\mu^1、\mu^2、\Sigma^1、\Sigma^2、N_1、N_2$分别是训练集一和训练集二的均值，协方差矩阵和样本数量，其中$\Sigma^1 = \Sigma^2 = \Sigma$
+      - 其中$\mu^1,\mu^2,\Sigma^1,\Sigma^2,N_1,N_2$分别是训练集一和训练集二的均值，协方差矩阵和样本数量，其中$\Sigma^1 = \Sigma^2 = \Sigma$
 
 ## Logistic Regression
 

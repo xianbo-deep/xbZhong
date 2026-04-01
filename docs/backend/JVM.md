@@ -90,7 +90,7 @@ public class Person implements java.io.Serializable{
   - 软件是使用文件的**头几个字节**去校验文件类型的
   - Java字节码的头几个字节是`CAFFBABE`
 - **主副版本号：​​​​**判断当前字节码的版本和运行时的JDK是否兼容
-  - 计算方式：$大版本号=主版本号-44$
+  - 计算方式：$\text{大版本号}=\text{主版本号}-44$
 
 #### 常量池
 

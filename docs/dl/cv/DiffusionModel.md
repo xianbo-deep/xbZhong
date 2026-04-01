@@ -129,7 +129,7 @@ date: 2025-07-08
 >\\
 >&= \sqrt{\alpha_t}(\sqrt{\alpha_{t-1}}x_{t-2} + \sqrt{1-\alpha_{t-1}}\epsilon_{t-1}) + \sqrt{1-\alpha_t}\epsilon_t\\
 >&= \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} + \underbrace{\sqrt{\alpha_t-\alpha_t\alpha_{t-1}}\epsilon_{t-1}+ \sqrt{1-\alpha_t}\epsilon_t}_{\text{两个相互独立的0均值的高斯分布相加}}\\
->&=  \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} + \underbrace{\sqrt{\sqrt{\alpha_t-\alpha_t\alpha_{t-1}}^2+ \sqrt{1-\alpha_t}^2}\epsilon}_{\text{用一个新的高斯分布代替}} \\
+>&=  \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} + \underbrace{\sqrt{\sqrt{\alpha_t-\alpha_t\alpha_{t-1}}^2+ \sqrt{1-\alpha_t}^2}\epsilon}_{\text{用一个新的高斯分布代替}} \\
 >&= \sqrt{\alpha_t\alpha_{t-1}}x_{t-2} +{\sqrt{1 - \alpha_t\alpha_{t-1}}\epsilon} \\
 >&= \sqrt{\prod_{i=1}^t{\alpha_i}}x_0 + \sqrt{1 -\prod_{i=1}^t{\alpha_i}}\epsilon \\
 >& = \sqrt{\overline{\alpha_t}}x_0 + \sqrt{1 -\overline{\alpha_t}}\epsilon ,\overline{\alpha_t} = \prod_{i=1}^t{\alpha_i},\epsilon\sim \mathcal{N}(0,I) \\
@@ -175,8 +175,8 @@ date: 2025-07-08
 >&= \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_T)p_{\theta}(x_0|x_1)\prod_{t=2}^Tp_{\theta}(x_{t-1}|x_{t})}{q(x_{T}|x_{T-1})\prod_{t=1}^{T-1} q(x_t|x_{t-1})}}]\\
 >&=\mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_T)p_{\theta}(x_0|x_1)\prod_{t= 1}^{T - 1}p_{\theta}(x_{t}|x_{t+1})}{q(x_{T}|x_{T-1})\prod_{t=1}^{T-1} q(x_t|x_{t-1})}}]\\
 >&=\mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_T)p_{\theta}(x_0|x_1)}{q(x_{T}|x_{T-1})}}] + \mathbb{E}_{q(x_{1:T}|x_0)}[\ln\prod_{t=1}^{T - 1}{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}]\\
->&= \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \mathbb{E}_{q(x_{1:T}|x_0)}[{\sum_{t=1}^{T-1}{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}}]\\
->&= \mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]\\
+>&= \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{1:T}|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \mathbb{E}_{q(x_{1:T}|x_0)}[{\sum_{t=1}^{T-1}{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}}]\\
+>&= \mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}] + \mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] +  \sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]\\
 >&= \underbrace{\mathbb{E}_{q(x_{1}|x_0)}[\ln{p_{\theta}(x_0|x_1)}]}_{\text{重建项}} - \underbrace{\mathbb{E}_{q(x_{T - 1},x_T|x_0)}[\ln{\frac{p(x_{T})}{q(x_{T}|x_{T-1})}}] }_{\text{先验匹配项}} - \underbrace{\sum_{t=1}^{T-1}\mathbb{E}_{q(x_{t-1},x_{t},x_{t+1}|x_0)}[{\ln{\frac{p_{\theta}(x_{t}|x_{t+1})}{ q(x_t|x_{t-1})}}}]}_{\text{一致项}}
 >\end{aligned}
 >$$

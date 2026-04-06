@@ -1,43 +1,4 @@
 {
-  "docs/backend/CN.md": {
-    "pdf": "docs/.vuepress/public/pdfs/backend/CN.pdf",
-    "images": [
-      "/screenshot/backend/image-20251013214454674.png",
-      "/screenshot/backend/image-20251016115152094.png",
-      "/screenshot/backend/image-20251013121751180.png",
-      "/screenshot/backend/image-20251013130002349.png",
-      "/screenshot/backend/image-20251013124408713.png",
-      "/screenshot/backend/image-20251016123303300.png",
-      "/screenshot/backend/image-20251016000006624.png",
-      "/screenshot/backend/image-20251013121843576.png",
-      "/screenshot/backend/image-20251013112742698.png",
-      "/screenshot/backend/image-20251013113529447.png",
-      "/screenshot/backend/image-20251013121120752.png",
-      "/screenshot/backend/image-20251013121537369.png",
-      "/screenshot/backend/image-20251013222829174.png",
-      "/screenshot/backend/image-20251013221831854.png",
-      "/screenshot/backend/image-20251013222040076.png",
-      "/screenshot/backend/image-20251013222333237.png",
-      "/screenshot/backend/image-20251014122953171.png",
-      "/screenshot/backend/image-20251014123604469.png",
-      "/screenshot/backend/image-20251014123732540.png",
-      "/screenshot/backend/image-20251014123747948.png",
-      "/screenshot/backend/image-20251013200644701.png",
-      "/screenshot/backend/image-20251013201120277.png",
-      "/screenshot/backend/image-20251013201551042.png",
-      "/screenshot/backend/image-20251013220614655.png",
-      "/screenshot/backend/image-20251014171229965.png",
-      "/screenshot/backend/image-20251012193353851.png",
-      "/screenshot/backend/image-20251012195424252.png",
-      "/screenshot/backend/image-20251016120726087.png",
-      "/screenshot/backend/image-20251016122413482.png",
-      "/screenshot/backend/image-20251016121348576.png",
-      "/screenshot/backend/image-20251016122723629.png"
-    ],
-    "hash": "2fab25c1ba00ab1671b754413a738c4ed51b017513d57ef5a448ff34f2584856",
-    "size": "13359292",
-    "gen_time": "2026-03-11T09:21:50"
-  },
   "docs/backend/Dubbo.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Dubbo.pdf",
     "images": [
@@ -145,9 +106,9 @@
       "/screenshot/backend/image-20250907105423998.png",
       "/screenshot/backend/image-20250907105940188.png"
     ],
-    "hash": "bf9de2f39b423c38d41689b659ac85587814d6eb2b62618cba116c569577eac9",
-    "size": "12976806",
-    "gen_time": "2025-12-23T16:31:41"
+    "hash": "aee4cbb9da0a91341014a10997af8dc78aa865a5a97ca269ce38a928434cdc5a",
+    "size": "12965682",
+    "gen_time": "2026-04-06T09:53:47"
   },
   "docs/backend/Java.md": {
     "pdf": "docs/.vuepress/public/pdfs/backend/Java.pdf",
@@ -495,9 +456,9 @@
     "images": [
       "/screenshot/dl/image-20250417180348074.png"
     ],
-    "hash": "8ec5e562105b3b5ce040dca91415b9955ac4a2cbcae24e4e8840a815ee136c26",
-    "size": "848119",
-    "gen_time": "2025-12-23T16:32:13"
+    "hash": "e1461b25eb85feefd703821aea3399222517c1c5a681457c4676a557296901af",
+    "size": "848032",
+    "gen_time": "2026-04-06T09:53:49"
   },
   "docs/dl/cv/CV.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/CV.pdf",
@@ -525,9 +486,9 @@
       "/screenshot/dl/image-20250811175302080.png",
       "/screenshot/dl/image-20250811175327478.png"
     ],
-    "hash": "e220fed39ab4d96efa2db6e705d289612a4f4d0881df5111dde342f0c323a496",
-    "size": "4405830",
-    "gen_time": "2025-12-23T16:32:16"
+    "hash": "eb2be5c0c861f344b76f5e5db1fd9774587fb1ff470898c92ac7ec05a24d9005",
+    "size": "4401445",
+    "gen_time": "2026-04-06T09:53:51"
   },
   "docs/dl/cv/DiffusionModel.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/DiffusionModel.pdf",
@@ -537,9 +498,9 @@
       "/screenshot/dl/image-20250511112847361.png",
       "/screenshot/dl/image-20250511111842681.png"
     ],
-    "hash": "185b80742a7a0e458ecfb88b7398371bdb4cae6a415bb4e0883948965bbe099f",
+    "hash": "01540bfac508704a25bdab1c1710cdf2bdd478f477da5b833082e8fe400f8a8c",
     "size": "3156959",
-    "gen_time": "2025-12-23T16:32:19"
+    "gen_time": "2026-04-06T09:53:55"
   },
   "docs/dl/cv/RNN.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/RNN.pdf",
@@ -547,9 +508,9 @@
       "/screenshot/dl/image-20250420134243810.png",
       "/screenshot/dl/image-20250806101607590.png"
     ],
-    "hash": "04ca2ca6bccbd40f92e7a06b1b125751a86a50765dd04ae1d8a48d0572372050",
-    "size": "1490178",
-    "gen_time": "2025-12-23T16:32:21"
+    "hash": "3b187d68660b86338039b21a3a4100049e50274044413ec7b5cda28445baa883",
+    "size": "1488227",
+    "gen_time": "2026-04-06T09:53:57"
   },
   "docs/dl/cv/VAE.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/cv/VAE.pdf",
@@ -558,9 +519,9 @@
       "/screenshot/dl/image-20250501000147212.png",
       "/screenshot/dl/image-20250502115738249.png"
     ],
-    "hash": "031d6211bae0729e027b632bdfad0e242ce1965e0d0165df4922eec079ad9054",
-    "size": "1717795",
-    "gen_time": "2025-12-23T16:32:24"
+    "hash": "b5d019e1e87c64e4904e062ef008716071040e8c3d69241991a98cf9524d41f9",
+    "size": "1711386",
+    "gen_time": "2026-04-06T09:54:00"
   },
   "docs/dl/finetune/Finetune.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/finetune/Finetune.pdf",
@@ -617,9 +578,9 @@
       "/screenshot/dl/image-20250819141437101.png",
       "/screenshot/dl/image-20250819132629103.png"
     ],
-    "hash": "37ceac3e422f86f89f1d1d994276e56b1432329980c7384e3ae706c8c0e54a9a",
-    "size": "4349262",
-    "gen_time": "2025-12-23T16:32:29"
+    "hash": "510e867c42e4844852e49118ffebb6eb5ed9536c24dd16250e121ef7799c474e",
+    "size": "4339158",
+    "gen_time": "2026-04-06T09:54:04"
   },
   "docs/dl/llm/Transformer.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/llm/Transformer.pdf",
@@ -635,9 +596,9 @@
       "/screenshot/dl/image-20250702191639250.png",
       "/screenshot/dl/image-20250702191137599.png"
     ],
-    "hash": "5af19cce3d380f80873340d490894d94c4ce66cf380a8ead17b33c0406553e6f",
-    "size": "3305937",
-    "gen_time": "2025-12-23T16:32:33"
+    "hash": "530f44cf387425b85a914ad5369e8f9a6036db5b2d74175f3e0e95d26580f0ce",
+    "size": "3295384",
+    "gen_time": "2026-04-06T09:54:08"
   },
   "docs/dl/llm/Word2Vec.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/llm/Word2Vec.pdf",
@@ -679,9 +640,9 @@
     "images": [
       "/screenshot/dl/image-20250416233353334.png"
     ],
-    "hash": "fcb593310dbb762cd46eb465322b7f34f474eea4aa431a8c08bc04319ecddd66",
-    "size": "1371023",
-    "gen_time": "2025-12-23T16:32:38"
+    "hash": "eaed5cd6d9f57c814690a227edbf75e43b59b35590288588fc87fd0d298c7f43",
+    "size": "1365793",
+    "gen_time": "2026-04-06T09:54:10"
   },
   "docs/dl/primer/GenerativeModels.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/primer/GenerativeModels.pdf",
@@ -739,9 +700,9 @@
       "/screenshot/dl/image-48.png",
       "/screenshot/dl/image-49.png"
     ],
-    "hash": "162ccb6adde5473b0166a1ac6113df41cc211bfeced606579e0e494c97518ca2",
+    "hash": "4cad967d4542bbbff31f635fbbb3258ea1758d90ce380ff54b869a477c5081ce",
     "size": "10221023",
-    "gen_time": "2025-12-23T16:32:43"
+    "gen_time": "2026-04-06T09:54:15"
   },
   "docs/dl/pytorch/pytorch.md": {
     "pdf": "docs/.vuepress/public/pdfs/dl/pytorch/pytorch.pdf",
@@ -756,9 +717,9 @@
       "/screenshot/dl/image-20250805130358084.png",
       "/screenshot/dl/image-20250805130421265.png"
     ],
-    "hash": "5d320e5f4be9d1395f31fc698e61bb7ad86184e15b5128ea0256beaed7ac5db5",
-    "size": "1826575",
-    "gen_time": "2025-12-23T16:32:45"
+    "hash": "e3b4ae90de7e49b52553548ad02f514bbcb35ad1a9d2e0efeab63fc1b2848f04",
+    "size": "1816025",
+    "gen_time": "2026-04-06T09:54:17"
   },
   "docs/ds/Acwing.md": {
     "pdf": "docs/.vuepress/public/pdfs/ds/Acwing.pdf",
@@ -766,9 +727,9 @@
       "/screenshot/ds/image-20250703102140742.png",
       "/screenshot/ds/image-20250714111902028.png"
     ],
-    "hash": "530ead6fd38b26f869a94051dd7d75dfe6b1f9ec08c0a13a33c1798b3b554d47",
-    "size": "2889280",
-    "gen_time": "2026-03-16T09:50:04"
+    "hash": "4bee52192b0f08a37e10a4b72a3dcb594045d4b6085cd8c7ceab7546eee29fbd",
+    "size": "2887255",
+    "gen_time": "2026-04-06T09:54:20"
   },
   "docs/ds/STL.md": {
     "pdf": "docs/.vuepress/public/pdfs/ds/STL.pdf",
@@ -845,9 +806,9 @@
       "/screenshot/ds/image-53.png",
       "/screenshot/ds/image-54.png"
     ],
-    "hash": "d950d256f189f2419710443093ef81877303c3dc91dcb7ad609ed57841d7a820",
-    "size": "3843639",
-    "gen_time": "2025-11-24T13:36:56"
+    "hash": "1611af779d3062c24b4c7a1eb60a91e2945415b27457582d03da046228a2124b",
+    "size": "3312647",
+    "gen_time": "2026-04-06T09:54:22"
   },
   "docs/ds/查找算法.md": {
     "pdf": "docs/.vuepress/public/pdfs/ds/查找算法.pdf",
@@ -959,16 +920,11 @@
       "/screenshot/backend/image-20251015154123809.png",
       "/screenshot/backend/image-20251015122659139.png",
       "/screenshot/backend/image-20251015173754231.png",
-      "/screenshot/backend/image-20251015173810451.png",
-      "/screenshot/backend/image-20251015160120180.png",
-      "/screenshot/backend/image-20251015161152465.png",
-      "/screenshot/backend/image-20251015161111010.png",
-      "/screenshot/backend/image-20251015165748812.png",
-      "/screenshot/backend/image-20251015165732289.png"
+      "/screenshot/backend/image-20251015173810451.png"
     ],
-    "hash": "4be32e2873dc16074403e1d6d6afdf0919c2165c96353e33f8b9e944b2a8ddba",
-    "size": "5232259",
-    "gen_time": "2026-03-31T09:49:55"
+    "hash": "230dd6e13f9e2008a1d875922ea244c781231c6f72dc6c5abae953644956bd54",
+    "size": "3858391",
+    "gen_time": "2026-04-06T09:54:25"
   },
   "docs/golang/Gorm.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/Gorm.pdf",
@@ -1048,9 +1004,9 @@
       "/myMajor/note/image-20251216104253184.png",
       "/myMajor/note/image-20251216110606101.png"
     ],
-    "hash": "4c44188c48b81352e6d36a278c2e081dc0babaf7e3f10f50ab1321a448e27e2c",
-    "size": "1746606",
-    "gen_time": "2026-01-16T09:15:18"
+    "hash": "5cc61e31c5bc777c92451995275cc7659043e59c9264860ed33e301e249d4ade",
+    "size": "1746613",
+    "gen_time": "2026-04-06T09:54:41"
   },
   "docs/resource/data/1.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/data/1.pdf",
@@ -1087,20 +1043,6 @@
     "size": "65066",
     "gen_time": "2026-01-16T09:15:20"
   },
-  "docs/golang/DB.md": {
-    "pdf": "docs/.vuepress/public/pdfs/golang/DB.pdf",
-    "images": [
-      "/screenshot/backend/image-20260117170137026.png",
-      "/screenshot/backend/image-20260117171642309.png",
-      "/screenshot/backend/image-20260117192823578.png",
-      "/screenshot/backend/image-20260116134036265.png",
-      "/screenshot/backend/image-20260116134013876.png",
-      "/screenshot/backend/image-20260116134539535.png"
-    ],
-    "hash": "3ad08b7f3c3a20377824c3cfac2b222454e487524024e9c330ff9fbd896713bc",
-    "size": "3071912",
-    "gen_time": "2026-03-31T09:49:52"
-  },
   "docs/golang/stdlib.md": {
     "pdf": "docs/.vuepress/public/pdfs/golang/stdlib.pdf",
     "images": [],
@@ -1135,8 +1077,81 @@
   "docs/me/leetcode.md": {
     "pdf": "docs/.vuepress/public/pdfs/me/leetcode.pdf",
     "images": [],
-    "hash": "d77cff347339470fb978f7179777e0a89f7921c91404e8f34e822109664998aa",
-    "size": "580434",
-    "gen_time": "2026-03-31T09:49:56"
+    "hash": "d6d75bde847bf6412bb064f8331ca0d5c60bd934e735394dafd9b0b67965fae1",
+    "size": "636041",
+    "gen_time": "2026-04-06T09:54:33"
+  },
+  "docs/me/formulaic/cn.md": {
+    "pdf": "docs/.vuepress/public/pdfs/me/formulaic/cn.pdf",
+    "images": [
+      "/screenshot/backend/image-20251013214454674.png",
+      "/screenshot/backend/image-20251016115152094.png",
+      "/screenshot/backend/image-20251013121751180.png",
+      "/screenshot/backend/image-20251013130002349.png",
+      "/screenshot/backend/image-20251013124408713.png",
+      "/screenshot/backend/image-20251016123303300.png",
+      "/screenshot/backend/image-20251016000006624.png",
+      "/screenshot/backend/image-20251013121843576.png",
+      "/screenshot/backend/image-20251013112742698.png",
+      "/screenshot/backend/image-20251013113529447.png",
+      "/screenshot/backend/image-20251013121120752.png",
+      "/screenshot/backend/image-20251013121537369.png",
+      "/screenshot/backend/image-20251013222829174.png",
+      "/screenshot/backend/image-20251013221831854.png",
+      "/screenshot/backend/image-20251013222040076.png",
+      "/screenshot/backend/image-20251013222333237.png",
+      "/screenshot/backend/image-20251014122953171.png",
+      "/screenshot/backend/image-20251014123604469.png",
+      "/screenshot/backend/image-20251014123732540.png",
+      "/screenshot/backend/image-20251014123747948.png",
+      "/screenshot/backend/image-20251013200644701.png",
+      "/screenshot/backend/image-20251013201120277.png",
+      "/screenshot/backend/image-20251013201551042.png",
+      "/screenshot/backend/image-20251013220614655.png",
+      "/screenshot/backend/image-20251014171229965.png",
+      "/screenshot/backend/image-20251012193353851.png",
+      "/screenshot/backend/image-20251012195424252.png",
+      "/screenshot/backend/image-20251016120726087.png",
+      "/screenshot/backend/image-20251016122413482.png",
+      "/screenshot/backend/image-20251016121348576.png",
+      "/screenshot/backend/image-20251016122723629.png"
+    ],
+    "hash": "e99f3a67c450b313b761208e4df0732ac67e591e8a79ee3ea5432f386148eab7",
+    "size": "13346296",
+    "gen_time": "2026-04-06T09:54:29"
+  },
+  "docs/me/formulaic/db.md": {
+    "pdf": "docs/.vuepress/public/pdfs/me/formulaic/db.pdf",
+    "images": [
+      "/screenshot/backend/image-20260117170137026.png",
+      "/screenshot/backend/image-20260117171642309.png",
+      "/screenshot/backend/image-20260117192823578.png",
+      "/screenshot/backend/image-20260116134036265.png",
+      "/screenshot/backend/image-20260116134013876.png",
+      "/screenshot/backend/image-20260116134539535.png"
+    ],
+    "hash": "8caa3af0645e9eb9c7c98ed8783aea19c13994b8b12924277a3d6fd8084b69e0",
+    "size": "3071136",
+    "gen_time": "2026-04-06T09:54:31"
+  },
+  "docs/me/formulaic/go.md": {
+    "pdf": "docs/.vuepress/public/pdfs/me/formulaic/go.pdf",
+    "images": [
+      "/screenshot/backend/image-20251015160120180.png",
+      "/screenshot/backend/image-20251015161152465.png",
+      "/screenshot/backend/image-20251015161111010.png",
+      "/screenshot/backend/image-20251015165748812.png",
+      "/screenshot/backend/image-20251015165732289.png"
+    ],
+    "hash": "8b237f933f34e9c50336f11b36d4e05d6a4831af94b53dad6f88232131038bc4",
+    "size": "2011117",
+    "gen_time": "2026-04-06T09:54:32"
+  },
+  "docs/me/formulaic/os.md": {
+    "pdf": "docs/.vuepress/public/pdfs/me/formulaic/os.pdf",
+    "images": [],
+    "hash": "acbfcf89a903a511923bbc4b09df65a5b9f75cc270165720d98dddc784ca53d7",
+    "size": "18283",
+    "gen_time": "2026-04-06T09:54:32"
   }
 }

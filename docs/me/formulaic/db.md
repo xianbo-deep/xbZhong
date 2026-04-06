@@ -8,6 +8,9 @@ icon: material-symbols:database
 date: 2025-02-20
 ---
 
+[本页PDF](/pdfs/me/formulaic/db.pdf)
+
+
 
 ## DB的查漏补缺
 

@@ -7,6 +7,9 @@ timeline: false
 date: 2026-04-01
 ---
 
+[本页PDF](/pdfs/me/formulaic/go.pdf)
+
+
 
 ## 八股
 

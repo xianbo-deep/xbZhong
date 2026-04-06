@@ -7,6 +7,9 @@ icon: streamline:network-solid
 date: 2026-04-01
 ---
 
+[本页PDF](/pdfs/me/formulaic/cn.pdf)
+
+
 ## 计网常见知识
 
 ### 常见含义

@@ -336,9 +336,19 @@ $$
   - 打分函数：$s(k_i,q_i)$
   - 信息提取：$s(k_i,q_i) \cdot v_i$，之后进行拼接
 
-![image-20260520105930741](/myMajor/note/image-20260520105930741.png)
+![](/myMajor/note/image-20260520105930741.png)
 
 Transformer的注意力机制是**基于软性注意力的键值对模式**
+
+
+**打分函数**
+
+- 加性模型
+- 点积模型
+- 缩放点积模型
+- 双线性模型
+
+![](/myMajor/note/image-20260522175901515.png)
 
 **自注意力计算过程**
 
@@ -354,11 +364,14 @@ Transformer的注意力机制是**基于软性注意力的键值对模式**
 - 全连接模型
 - 自注意力模型
 
+
+具体请看[Transformer](/dl/llm/Transformer.md)
+
 ## 概率图模型
 
 **贝叶斯网络**（有向图模型/信念网络）
 
-- 局部马尔可夫性质：每个随机变量在给定父节点的情况下，条件独立于它的非后代节点
+- **局部马尔可夫性质**：每个随机变量在给定父节点的情况下，条件独立于它的非后代节点
 
 **必考**
 
@@ -370,6 +383,453 @@ $$
 p(x_1,\dots,x_7) = p(x_1)p(x_2)p(x_3)p(x_4|x_1,x_2,x_3)p(x_5|x_1,x_3)p(x_6|x_4)p(x_7|x_4,x_5)
 $$
 
+
+### 基于隐变量的学习和推断
+
+**点估计**
+
+- MLE：最大似然
+- MAP：最大估计
+
+
+**生成模型**：包含密度估计和采样两个步骤
+
+
+**含隐变量的参数学习**
+
+- 可以看到隐变量：直接优化$P(X,Z)$
+- 看不到隐变量：优化$P(X) = \int{P(X,Z) dZ}$，但这个积分不好算，因此要用EM算法
+
+**EM算法**：解决已知观测变量$X$但对于隐变量$Z$未知的问题
+
+- E步（期望步）：使用已知模型参数$\theta$和观测变量$X$估计隐变量$Z$
+  - 估计的是隐变量的后验分布$q(Z|X,\theta)$，并让这个分布接近于真实后验分布$p(Z|X,\theta)$
+    - 精确EM：可以直接得到真实后验分布，直接让$q(Z|X,\theta)$等于$p(Z|X,\theta)$
+    - 其它：无法直接算出真实后验分布，让$q(Z|X,\theta)$近似真实后验概率分布
+      - 注意：真实后验概率分布无法直接求出，这里的近似是**间接近似**，也就是在M步最大化似然的同时间接让$q(Z)$和$p(Z|X,\theta)$的KL散度减小
+- M步（最大化步）：使用E步估计得到的隐变量$Z$和观测数据$X$重新拟合模型参数$\theta$
+
+
+**EM算法推导**
+
+目标是最大化$P(X|\theta)$
+
+> 可以转换为
+> $$
+> P(X|\theta) = \int{P(X,Z|\theta) dz}
+> $$
+>
+> 并且有
+> $$
+> P(X|\theta) = \frac{P(X,Z|\theta)}{P(Z|X,\theta)}
+> $$
+>
+> 因此
+> $$
+> \begin{aligned}
+> \log{P(X|\theta)} &= \log{\frac{P(X,Z|\theta)}{P(Z|X,\theta)}} \\
+> &= \log{P(X,Z|\theta)} - \log{P(Z|X,\theta)} \\
+> &= \log{\frac{P(X,Z|\theta)}{q(z)}} - \log{\frac{P(Z|X,\theta)}{q(z)}}
+> \end{aligned}
+> $$
+>
+> 两边同时乘以$q(z)$并对$z$积分
+> $$
+> \begin{aligned}
+>  P(X|\theta) &= \int{q(z)\log{P(X|\theta)}dz} \\
+>  &= \int{q(z)\log{\frac{P(X,Z|\theta)}{q(z)}}} - \int{q(z) \log{\frac{P(Z|X,\theta)}{q(z)}}} \\
+> &= \underbrace{E_{z \sim q(z)}[\log{\frac{P(X,Z|\theta)}{q(z)}}]}_{LowerBound \quad B} + KL(q(z) || P(Z|X,\theta)) \\
+> 
+> \end{aligned}
+> $$
+>
+> 因为$q(z)$是在E步固定的，因此$E_{z \sim q(z)}[-\log{q(z)}]$与$\theta$无关
+>
+> 因此对下界B最大化本质是在对
+> $$
+> E_{z \sim q(z)}[\log{P(X,Z|\theta)}]
+> $$
+>
+> 最大化
+> 
+> 可以对下界B进行进一步变形
+>
+> 由于
+> $$
+> P(X,Z|\theta) = P(X|Z,\theta)P(Z|\theta)
+> $$
+>
+> 但在**VAE**里面，默认$P(Z)$服从正态分布，不受$\theta$的影响
+>
+> 因此
+> $$
+> \begin{aligned}
+> E_{z \sim q(z)}[\log{\frac{P(X,Z|\theta)}{q(z)}}] &= E_{z \sim q(z)}[\log{\frac{P(X|Z,\theta)P(Z|\theta)}{q(z)}}] \\
+> &=  E_{z \sim q(z)}[\log{P(X|Z,\theta})] - KL(q(z) || P(Z|\theta))
+> \end{aligned}
+> $$
+
+**MCMC和变分推断**：为了解决E步中真实后验分布难以计算的问题
+
+- **变分推断**：在后验分布难以计算的情况下，引入一个分布$q(Z)$近似真实后验，在M步里面**间接**使他们俩的KL散度最小
+  - 给分布$q(Z)$引入参数$\phi$形成$q(Z|\phi)$
+- **MCMC**：从后验分布中采样，用样本形成的经验分布来近似后验，这些样本随后可以用样本平均来近似M步里的积分或期望
+
+
+
+### VAE
+
+**本质上是使用神经网络实现变分推断**
+
+
+- 目标：总损失 = 重建损失 + KL 散度损失（对应上面EM算法推导的下界B）
+  - 重建损失要求解码的图像和原始输入尽量接近
+  - KL散度损失要求**近似的后验概率要尽可能接近高斯分布**
+    - **注意**：变分推断是引入一个**分布近似真实后验**，在VAE里面也不例外，这里的KL散度损失只是为了让这个近似后验不要那么乱，接近高斯分布好采样和计算
+- 隐变量：$Z$是一个概率分布
+- 编码器：为一个神经网络，输出隐变量$Z$的概率分布（通常为高斯分布），输出$\mu$和$\sigma$
+- 解码器：接受采样的$Z$，生成图像
+
+![VAE架构](/myMajor/note/image-20260522204700617.png)
+
+
+
+**VAE方程**
+
+- 编码器：$q(z|g_{\phi}(x))$
+- 解码器：$p(x|f_{\theta}(z))$
+- 模型希望似然概率大的同时，让隐变量分布接近真实后验分布
+
+$$
+\begin{aligned}
+\log{p(x|\theta)} - KL[q(z|g_{\phi}(x)) || p(z|x,\theta)] &= E_{q(z|g_{\phi}(x))}[\log{p(x|f_{\theta}(z))}] - KL[q(z|g_{\phi}(x)) || p(z)] \\
+&= \mathcal{L}_{2}(\theta,\phi|x^{(i)}) + \mathcal{L}_{1}(\phi|x^{(i)})
+\end{aligned}
+$$
+
+即
+
+$$
+\mathcal{L}(\theta,\phi|x^{(i)}) = \mathcal{L}_{2}(\theta,\phi|x^{(i)}) + \mathcal{L}_{1}(\phi|x^{(i)})
+$$
+
+**更新方式为随机梯度下降**
+
+
+**VAE流程**
+
+$$
+x \xrightarrow{\phi} z \xrightarrow{\theta} \hat{x}
+$$
+
+
+**参数更新**
+
+- 通过**重参数化**解决对隐变量分布进行采样后梯度无法回传的问题
+  - 想从一个正态分布采样，直接采样梯度无法回传
+  - 因此先采样一个随机噪声$\epsilon$，通过$z = \mu_{\phi}(x) + \sigma_{\phi}(x)\epsilon$保证梯度可以回传 
+  
+**解码器**：梯度由重建项提供，**不需要重参数化**
+
+$$
+\mathcal{L}_2 = E_{q(z|g_{\phi}(x))}[\log{p(x|f_{\theta}(z))}]
+$$
+
+- 实际训练时用采样近似
+
+$$
+\mathcal{L}_2 \approx \frac{1}{L}\sum_{l=1}^L{\log{p(x|f_{\theta}(z^{(l)}))}}
+$$
+
+- 因此解码器的梯度为
+
+$$
+\frac{\partial{\mathcal{L}}}{\partial{\theta}} \approx \frac{1}{L}\sum_{l=1}^L{\frac{\partial{\log{p(x|f_{\theta}(z^{(l)}))}}}{\partial{\theta}}}
+$$
+
+**解码器**：梯度由重建项和KL项提供
+
+- 重建项的梯度需要使用重参数化保证梯度回传
+
+$$
+\frac{\partial{\mathcal{L}}}{\partial{\phi}} = \frac{\partial{\mathcal{L}_1}}{\partial{\phi}} + \frac{\partial{\mathcal{L}_2}}{\partial{\phi}}
+$$
+
+即
+$$
+\frac{\partial{\mathcal{L}}}{\partial{\phi}} = \frac{\partial{\mathcal{L}_1}}{\partial{\phi}} + \frac{1}{L}\sum_{l=1}^{L}\frac{\partial{\log{p(x|f_{\theta}(\tilde{g}_{\phi}(\epsilon^{(l)},x)))}}}{\partial{\phi}}
+$$
+
+
+
+## 深度生成模型
+
+### GAN
+
+**网络架构**
+
+- 判别网络：区分输入是真实数据，还是生成网络生成的假数据
+- 生成网络：生成尽可能欺骗判别网络的逼真数据
+
+**目标函数**
+
+| 符号 | 含义|
+| ------------- | ------------------- |
+| $p_r(x)$  | 真实数据分布              |
+| $p_{\theta}(x)$| 生成网络生成的数据服从的分布|
+| $z\sim p(z)$  | 从噪声分布中采样            |
+| $G(z;\theta)$ | 生成网络生成的假样本          |
+| $D(x;\phi)$  | 判别网络认为 (x) 是真实样本的概率 |
+| $\phi$      | 判别网络参数              |
+| $\theta$      | 生成网络参数              |
+
+
+
+- 判别网络：让判别网络对真实样本的预测概率接近1，对假样本的预测概率接近0
+
+$$
+\max_{\phi}E_{x \sim p_r(x)}[\log{D(x;\phi)}] + E_{z\sim p(z)}[\log{(1 - D(G(z;\theta);\phi))}]
+$$
+
+- 生成网络:生成网络希望自己生成的样本$G(z;\theta)$ 被判别网络认为是真的
+
+$$
+\max_{\theta}(E_{z \sim p(z)} [\log{D(G(z;\theta);\phi)}])
+$$
+
+
+- 总体目标函数：本质上是极小极大博弈
+
+$$
+\min_{\theta}{\max_{\phi}{E_{x \sim p_r(x)}[\log{D(x;\phi)}] + E_{z\sim p(z)}[\log{(1 - D(G(z;\theta);\phi))}]}}
+$$
+
+**最优判别器**
+
+此时固定生成网络，调整判别网络的参数
+
+为了让判别网络目标函数最大，对于每一个x，需要最大化
+
+$$
+p_r(x)\log{D(x)} + p_{\theta}(x)\log{(1 - D(x))} 
+$$
+
+对$D(x)$求导
+
+$$
+\frac{p_r(x)}{D(x)} - \frac{p_{\theta}(x)}{1 - D(x)} = 0
+$$
+
+可以解得最优解
+
+$$
+D^*(x) = \frac{p_r(x)}{p_r(x) + p_{\theta}(x)}
+$$
+
+可以将最优判别器代回目标函数
+
+$$
+\begin{aligned}
+\mathcal{L}(G|D^*) &= E_{x \sim p_r(x)}[\log{D^*(x)}] + E_{x \sim p_{\theta}(x)}[\log{(1 - D^*(x))}] \\
+&= E_{x \sim p_r(x)}[\log{\frac{p_r(x)}{p_r(x) + p_{\theta}(x)}}] + E_{x \sim p_{\theta}(x)}[\log{\frac{p_{\theta}(x)}{p_r(x) + p_{\theta}(x)}}]
+\end{aligned}
+$$
+
+我们定义
+
+$$
+p_a(x) = \frac{1}{2}(p_r(x) + p_{\theta}(x))
+$$
+
+即
+
+$$
+p_r(x) + p_{\theta}(x) = 2p_a(x)
+$$
+
+因此
+
+$$
+\log{\frac{p_r(x)}{p_r(x) + p_{\theta}(x)}} = \log{\frac{p_r(x)}{2p_a(x)}} = \log{\frac{p_r(x)}{p_a(x)}} - \log{2}
+$$
+
+另一项同理
+
+$$
+\log{\frac{p_{\theta}(x)}{p_r(x) + p_{\theta}(x)}} = \log{\frac{p_{\theta}(x)}{2p_a(x)}} = \log{\frac{p_{\theta}(x)}{p_a(x)}} - \log{2}
+$$
+
+所以目标函数可以写为
+
+$$
+\begin{aligned}
+\mathcal{L}(G|D^*) &= E_{x \sim p_r(x)}[\log{\frac{p_r(x)}{p_r(x) + p_{\theta}(x)}}] + E_{x \sim p_{\theta}(x)}[\log{\frac{p_{\theta}(x)}{p_r(x) + p_{\theta}(x)}}] \\
+&= E_{x \sim p_r(x)}[\log{\frac{p_r(x)}{p_a(x)}}] + E_{x \sim p_{\theta}(x)}[ \log{\frac{p_{\theta}(x)}{p_a(x)}}] - 2\log{2} \\
+&= D_{KL}(p_r||p_a) + D_{KL}(p_{\theta}||p_a) - 2\log{2}
+\end{aligned}
+$$
+
+
+而JS散度($\ge 0$)定义为
+
+$$
+D_{JS}(p_r||p_{\theta}) = \frac{1}{2}D_{KL}(p_r||p_a) + \frac{1}{2}D_{KL}(p_{\theta}||p_a)
+$$
+
+最终目标函数可以写为
+
+$$
+\mathcal{L}(G|D^*) = 2D_{JS}(p_r||p_{\theta}) - 2\log{2}
+$$
+
+注意此时求出来的目标函数已经使得判别器是最优的了，现在要让目标函数最小，以求得最佳的生成网络
+
+很显然，当JS散度为0，即$p_r = p_{\theta}$(生成器分布等于真实分布)时，最优收敛点为
+
+$$
+\mathcal{L}(G|D^*) = -2\log{2}
+$$
+
+同时
+
+$$
+D^*(x) = \frac{1}{2}
+$$
+
+
+**模型坍塌**
+
+
+实际训练中可能不使用原始的极小极大目标函数，而是使用生成网络的目标函数
+
+$$
+\mathcal{L}^{'}(G|D^*)=E_{x \sim p_{\theta}(x)}[\log{D^*(x)}] 
+$$
+
+
+代入$D^*(x)$
+
+$$
+\begin{aligned}
+\mathcal{L}^{'}(G|D^*) &= E_{x \sim p_{\theta}(x)}[\log{\frac{p_r(x)}{p_r(x) + p_{\theta}(x)} \cdot \frac{p_{\theta}(x)}{p_{\theta}(x)}}] \\
+&= -E_{x \sim p_{\theta}(x)}[\log{\frac{p_{\theta}(x)}{p_{r}(x)}}] + E_{x \sim p_{\theta}(x)}[\log{\frac{p_{\theta}(x)}{p_r(x) + p_{\theta}(x)}}] \\
+&= -KL(p_{\theta} || p_r) + E_{x \sim p_{\theta}(x)}[\log{(1 - D^*(x))}] \\
+&= -KL(p_{\theta} || p_r) + 2D_{JS}(p_r||p_{\theta}) - 2\log{2} - E_{x \sim p_r(x)}[\log{D^*(x)}]
+\end{aligned}
+$$
+
+
+后两项与生成网络无关，因此生成网络最终目标是
+
+$$
+\argmax_{\theta}\mathcal{L}^{'}(G|D^*) = \argmin_{\theta}{KL(p_{\theta} || p_r)} - 2D_{JS}(p_r||p_{\theta})
+$$
+
+先来理解**KL散度的两种形式**
+
+- 前向KL散度：以真实分布为主，想让模型覆盖真实分布
+  - 如果模型输出的分布不在真实分布中，模型会受到巨大的惩罚
+  - 缺陷：模型输出的图像会变得模糊，试图覆盖真实分布的所有地方，导致输出的图像变成四不像
+- 逆向KL散度：以模型分布为主，想让模型尽量接近真实分布
+  - 如果模型生成了一个样本，但是这个样本不在真实分布中，模型会受到巨大的惩罚
+  - 缺陷：模型只输出特定的样本，只要它生成的样本在真实分布里是合理的，它就不关心那些它没生成的区域
+
+再看看我们推导出来的目标函数，其是一个典型的**逆向KL散度**，而这个目标函数会造成**模型崩塌**
+
+$$
+D_{KL}(p_{\theta} || p_r) = \int{p_{\theta}(x) \log{\frac{p_{\theta}(x)}{p_r(x)}}dx}
+$$
+
+- 情况一：生成器生成了真实分布不存在的东西
+  - 此时 $p_{\theta}(x) > 0$，$p_r(x) = 0$，那么KL散度会无穷大
+  - 说明生成器一旦把概率放到真实数据完全没有的区域，会受到巨大惩罚
+- 情况二：生成器生成的样本没有完全覆盖真实分布
+  - 此时 $p_r(x) > 0$，$p_{\theta}(x) = 0$，那么KL散度为0
+  - 说明生成器漏掉真实数据的一些模式，反向 KL 不会强烈惩罚它
+
+
+
+### 扩散模型
+
+- **前向过程**：对清晰图像每一步加入高斯噪声逐步加噪
+- **后向过程**：训练一个网络对噪声图像逐步去噪
+
+
+## 强化学习
+
+**组成部分**
+
+- 智能体
+- 环境
+
+
+**基本要素**
+
+- 环境的状态集合
+- 智能体的动作集合
+- 策略
+- 状态转移概率
+- 即时奖励
+
+
+**马尔可夫决策过程的轨迹**
+
+
+
+## 大语言模型
+
+**神经网络表示建模**（word2vec）
+
+- 传统分词器的问题：单个词包含的信息量太少，计算量爆炸，稀疏表示难以包含更多的信息
+- word2vec：从稀疏的词袋表示，发展到神经网络学习出来的稠密词向量表示
+  - 将学习到的**从输入层到隐藏层的权重矩阵**作为词向量
+
+
+
+**语言模型基本架构**（预训练 + 后训练 + 提示工程）
+
+- **输出层**
+  - 任务：语言建模、序列到序列（翻译）、分类或非生成任务
+  - 把 hidden 层得到的表示转成具体任务需要的结果
+- **隐藏层**
+  - 模型架构：RNN、LSTM、GRU、Bi-LSTM、Dilated-CNN、Transformer
+  - 负责对 embedding 层得到的词向量继续加工，学习词和词之间的关系
+- **词嵌入层**
+  - 把输入的词或token转换成计算机能处理的向量
+  - 采用模型：Word2Vec
+
+
+**表示模型与生成模型**
+
+- 表示模型：仅使用Transformer编码器，代表模型BERT
+- 生成模型：仅使用Transformer解码器，代表模型GPT
+
+
+**Transformer的预训练**
+
+- 预训练基本思路：将预训练方法应用到Transformer上，并在**下游任务中保持Embedding层和Hidden层结构不变**，只针对具体任务进行**输出层的微调**
+- 预训练可以分为：Embedding层、Hidden层、Output层
+- 两种预训练基本形式（无监督学习）
+  - **GPT（自回归语言模型）**：对于每一句话，预测每个位置的下一个Token（LM任务）
+    - 使用**掩码注意力**
+    - 使用Transformer解码器
+  - **BERT**：随即遮住句子中的部分Token，让模型根据上下文预测被挡住的词（MLM任务）
+    - 使用**双向注意力**
+    - 使用Transformer编码器
+
+
+
+**语言模型架构流派**
+
+- Encoder-only流派：仅包含Transformer编码器，采用双向自注意力机制
+  - **代表模型**：Bert、Roberta
+  - **适合任务**：文本分类、理解、预测
+- Decoder-only流派：仅包含Transformer解码器，采用掩码自注意力机制
+  - **代表模型**：OpenAI的GPT系列，Meta的OPT系列
+  - **适合任务**：文本生成
+- Encoder-Decoder流派：采用序列到序列形式，包含解码器和编码器模块
+  - **代表模型**：Google的T5
+  - **适合任务**：翻译、对话
 
 ## 总结
 

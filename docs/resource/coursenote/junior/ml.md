@@ -1033,7 +1033,7 @@ $$
 > 为什么要这样？
 > 这样选择能让在参数 $\theta^{(i)}$ 处，下界紧贴似然函数，即：
 > $$
-> \log{P(Y,Z|\theta^{(i)})} = \mathcal{L}(q,\theta^{(i)})
+> \log{P(Y|\theta^{(i)})} = \mathcal{L}(q,\theta^{(i)})
 > $$
 > （此时 KL 散度为 0）
 >

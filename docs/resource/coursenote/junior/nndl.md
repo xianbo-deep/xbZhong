@@ -61,7 +61,7 @@ timeline: false
 >
 > 4. 输出 $\theta$
 
-![](C:\Users\23967\AppData\Roaming\Typora\typora-user-images\image-20260530160752919.png)
+![](/myMajor/note/image-20260530160752919.png)
 
 **机器学习模型的几个评价指标**
 
@@ -106,7 +106,7 @@ $$
     - 更新参数
 - 输出模型参数
 
-![](C:\Users\23967\AppData\Roaming\Typora\typora-user-images\image-20260530160449712.png)
+![](/myMajor/note/image-20260530160449712.png)
 
 
 **反向传播算法的推导**

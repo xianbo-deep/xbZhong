@@ -1004,9 +1004,9 @@
       "/myMajor/note/image-20251216104253184.png",
       "/myMajor/note/image-20251216110606101.png"
     ],
-    "hash": "5cc61e31c5bc777c92451995275cc7659043e59c9264860ed33e301e249d4ade",
-    "size": "1746613",
-    "gen_time": "2026-04-06T09:54:41"
+    "hash": "1427659133cb4a6e7ef56e147bf964f619e1905800b26a3c13a7935362f3d251",
+    "size": "1746602",
+    "gen_time": "2026-05-31T10:47:14"
   },
   "docs/resource/data/1.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/data/1.pdf",
@@ -1063,14 +1063,20 @@
   "docs/resource/coursenote/junior/nndl.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/nndl.pdf",
     "images": [
+      "/myMajor/note/image-20260530160752919.png",
+      "/myMajor/note/image-20260530160449712.png",
       "/myMajor/note/image-20260326112423297.png",
       "/myMajor/note/image-20260326112221506.png",
       "/myMajor/note/image-20260520105930741.png",
-      "/myMajor/note/image-20260418115539366.png"
+      "/myMajor/note/image-20260522175901515.png",
+      "/myMajor/note/image-20260418115539366.png",
+      "/myMajor/note/image-20260522204700617.png",
+      "/myMajor/note/image-20260527220029048.png",
+      "/myMajor/note/image-20260527195101423.png"
     ],
-    "hash": "7ddbb621b927435804308567877706f82e77b187ff51eab361dd04fbe80f6cb2",
-    "size": "903112",
-    "gen_time": "2026-05-21T10:43:06"
+    "hash": "35f1ca3d984745dccd465acc3c4b03fd33e7fe4e99792a223a6a9d29c3f785cd",
+    "size": "1771577",
+    "gen_time": "2026-05-31T10:47:19"
   },
   "docs/me/interview.md": {
     "pdf": "docs/.vuepress/public/pdfs/me/interview.pdf",

@@ -421,7 +421,7 @@ export default sidebar({
   ],
   "/resource/coursenote/freshman/":["README.md"],
   "/resource/coursenote/sophomore/":["README.md"],
-  "/resource/coursenote/junior/":["README.md","ml.md","ai_application.md","embedding_system.md","ius.md","brain_computer_interaction.md","nndl.md"],
+  "/resource/coursenote/junior/":["README.md","ml.md","ai_application.md","embedding_system.md","ius.md","brain_computer_interaction.md","nndl.md","ai_chip.md"],
   "/resource/coursenote/senior/":["README.md"],
   "/resource/coursenote/":[
     "README.md",

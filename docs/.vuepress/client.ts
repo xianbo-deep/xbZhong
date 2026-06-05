@@ -3,6 +3,7 @@ import { defineClientConfig } from "@vuepress/client";
 import "vuepress-theme-hope/presets/shinning-feature-panel.scss";
 import "vuepress-theme-hope/presets/left-blog-info.scss";
 import "vuepress-theme-hope/presets/bounce-icon.scss";
+import CustomBlog from "./layouts/CustomBlog.vue";
 import SubscribeForm from "./components/SubscribeForm.vue";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
@@ -10,6 +11,9 @@ import { useRouter } from "vue-router";
 export default defineClientConfig({
   enhance({ app }) {
     app.component("SubscribeForm", SubscribeForm);
+  },
+  layouts: {
+    CustomBlog,
   },
 
   setup() {

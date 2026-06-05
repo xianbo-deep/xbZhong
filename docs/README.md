@@ -1,15 +1,15 @@
 ---
 home: true
-layout: Blog
+layout: CustomBlog
 icon: house
 title: 主页
 heroText: 朝花夕拾
-bgImage: /bg.jpg
+bgImage: false
 heroFullScreen: true
 
-heroImageStyle:
-  width: 150px
-  height: 150px
+# heroImageStyle:
+#   width: 150px
+#   height: 150px
 projects:
   # - icon: folder-open link、book、newspaper、user-group
   #   name: 项目名称

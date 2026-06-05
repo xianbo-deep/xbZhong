@@ -1247,7 +1247,7 @@ $$
 $$
 \begin{aligned}
 Q^{\pi}(s,a) &= \sum_{s'}{p(s'|s,a)[r(s',a,s)+\gamma V^{\pi}(s')]} \\
-&= \sum_{s'}{p(s'|s,a)[r(s',a,s)+\gamma \sum_{a}{\pi(a'|s')Q^{\pi}(s',a')}]}
+&= \sum_{s'}{p(s'|s,a)[r(s',a,s)+\gamma \sum_{a'}{\pi(a'|s')Q^{\pi}(s',a')}]}
 \end{aligned}
 $$
 

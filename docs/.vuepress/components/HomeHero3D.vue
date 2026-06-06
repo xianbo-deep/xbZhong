@@ -27,7 +27,10 @@
       <div class="card-tilt">
         <div
           class="flip-card"
-          :class="{ 'is-flipped': isFlipped }"
+          :class="[
+            { 'is-flipped': isFlipped },
+            `flip-${flipDirection}`,
+          ]"
           role="button"
           tabindex="0"
           :aria-pressed="isFlipped"
@@ -106,6 +109,7 @@ const cursorRing = ref<HTMLElement | null>(null);
 const textZone = ref<HTMLElement | null>(null);
 const titleEl = ref<HTMLElement | null>(null);
 const isFlipped = ref(false);
+const flipDirection = ref<"left" | "right">("right");
 
 let ctx: ReturnType<typeof gsap.context> | null = null;
 let cleanup: (() => void) | null = null;
@@ -128,6 +132,10 @@ const resetDepth = (rootEl: HTMLElement) => {
 };
 
 const toggleFlip = () => {
+  if (!isFlipped.value) {
+    flipDirection.value = Math.random() > 0.5 ? "right" : "left";
+  }
+
   isFlipped.value = !isFlipped.value;
   cursorRing.value?.classList.remove("is-over-text");
 };
@@ -458,6 +466,7 @@ onBeforeUnmount(() => {
 }
 
 .flip-card {
+  --flip-angle: 180deg;
   position: relative;
   display: block;
   width: 100%;
@@ -472,6 +481,14 @@ onBeforeUnmount(() => {
   transform-style: preserve-3d;
 }
 
+.flip-card.flip-left {
+  --flip-angle: -180deg;
+}
+
+.flip-card.flip-right {
+  --flip-angle: 180deg;
+}
+
 .flip-inner {
   position: relative;
   width: 100%;
@@ -483,7 +500,7 @@ onBeforeUnmount(() => {
 }
 
 .flip-card.is-flipped .flip-inner {
-  transform: rotateY(180deg);
+  transform: rotateY(var(--flip-angle));
 }
 
 .card-face {

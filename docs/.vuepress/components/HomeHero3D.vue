@@ -1,5 +1,9 @@
 <template>
-  <section ref="root" class="home-hero-3d">
+  <section
+    ref="root"
+    class="home-hero-3d"
+    :class="{ 'is-card-flipped': isFlipped }"
+  >
     <div ref="spotlight" class="spotlight" />
 
     <div
@@ -20,55 +24,64 @@
     </div>
 
     <div ref="tiltLayer" class="tilt-layer">
-      <button
-        class="flip-card"
-        :class="{ 'is-flipped': isFlipped }"
-        type="button"
-        aria-label="翻转主页介绍卡片"
-        @click="toggleFlip"
-      >
-        <div class="card-face card-front">
-          <div ref="textZone" class="text-zone">
-            <h1
-              ref="titleEl"
-              class="title"
-              :aria-label="`${frontText} / ${backText}`"
-              :data-title="frontText"
-            >
-              <span class="title-front" aria-hidden="true">
-                <span
-                  v-for="(char, index) in frontChars"
-                  :key="`front-${index}`"
-                  class="char"
+      <div class="card-tilt">
+        <div
+          class="flip-card"
+          :class="{ 'is-flipped': isFlipped }"
+          role="button"
+          tabindex="0"
+          :aria-pressed="isFlipped"
+          aria-label="翻转主页介绍卡片"
+          @keydown.enter.prevent="toggleFlip"
+          @keydown.space.prevent="toggleFlip"
+        >
+          <div
+            class="flip-inner"
+          >
+            <div class="card-face card-front">
+              <div ref="textZone" class="text-zone">
+                <h1
+                  ref="titleEl"
+                  class="title"
+                  :aria-label="`${frontText} / ${backText}`"
+                  :data-title="frontText"
                 >
-                  {{ char === " " ? "\u00A0" : char }}
-                </span>
-              </span>
-            </h1>
+                  <span class="title-front" aria-hidden="true">
+                    <span
+                      v-for="(char, index) in frontChars"
+                      :key="`front-${index}`"
+                      class="char"
+                    >
+                      {{ char === " " ? "\u00A0" : char }}
+                    </span>
+                  </span>
+                </h1>
 
-            <div class="meta-wrap" :aria-label="metaText">
-              <div class="meta-depth">{{ metaText }}</div>
-              <div class="meta-depth deep">{{ metaText }}</div>
+                <div class="meta-wrap" :aria-label="metaText">
+                  <div class="meta-depth">{{ metaText }}</div>
+                  <div class="meta-depth deep">{{ metaText }}</div>
 
-              <p class="meta">
-                <span
-                  v-for="(char, index) in metaChars"
-                  :key="`meta-${index}`"
-                  class="meta-char"
-                >
-                  {{ char === " " ? "\u00A0" : char }}
-                </span>
-              </p>
+                  <p class="meta">
+                    <span
+                      v-for="(char, index) in metaChars"
+                      :key="`meta-${index}`"
+                      class="meta-char"
+                    >
+                      {{ char === " " ? "\u00A0" : char }}
+                    </span>
+                  </p>
 
-              <span class="flip-cue" aria-hidden="true" />
+                  <span class="flip-cue" aria-hidden="true" />
+                </div>
+              </div>
+            </div>
+
+            <div class="card-face card-back">
+              <p class="back-copy">{{ backParagraph }}</p>
             </div>
           </div>
         </div>
-
-        <div class="card-face card-back">
-          <p class="back-copy">{{ backParagraph }}</p>
-        </div>
-      </button>
+      </div>
     </div>
   </section>
 </template>
@@ -81,7 +94,7 @@ const frontText = "HELLO, I'M zxb";
 const backText = "你好，我是 zxb";
 const metaText = "21岁 / ECUST";
 const backParagraph =
-  "随着年龄的增长 生活让你变得谦卑 你不再追逐大事 开始珍惜小事：独处的时间 充足的睡眠 良好的饮食 长途散步 以及与所爱之人共度的高质量时光 简单成为最终目标"
+  "随着年龄的增长 生活让你变得谦卑 你不再追逐大事 开始珍惜小事：独处的时间 充足的睡眠 良好的饮食 长途散步 以及与所爱之人共度的高质量时光 简单成为最终目标";
 const frontChars = computed(() => [...frontText]);
 const cursorBackChars = computed(() => [...backText]);
 const metaChars = computed(() => [...metaText]);
@@ -98,6 +111,14 @@ let ctx: ReturnType<typeof gsap.context> | null = null;
 let cleanup: (() => void) | null = null;
 
 const resetDepth = (rootEl: HTMLElement) => {
+  rootEl.style.setProperty("--card-rotate-x", "0deg");
+  rootEl.style.setProperty("--card-rotate-y", "0deg");
+  rootEl.style.setProperty("--scene-x", "0px");
+  rootEl.style.setProperty("--scene-y", "0px");
+  rootEl.style.setProperty("--meta-scene-x", "0px");
+  rootEl.style.setProperty("--meta-scene-y", "0px");
+  rootEl.style.setProperty("--card-bg-x", "0px");
+  rootEl.style.setProperty("--card-bg-y", "0px");
   rootEl.style.setProperty("--title-shadow-x", "0px");
   rootEl.style.setProperty("--title-shadow-y", "0px");
   rootEl.style.setProperty("--meta-near-x", "0px");
@@ -130,38 +151,22 @@ onMounted(() => {
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       intro.fromTo(
-        ".card-front",
-        {
-          opacity: 0,
-          clipPath: "inset(18% 18% 18% 18% round 34px)",
-          filter: "blur(14px)",
-          scale: 0.96,
-        },
-        {
-          opacity: 1,
-          clipPath: "inset(0% 0% 0% 0% round 0px)",
-          filter: "blur(0px)",
-          scale: 1,
-          duration: 0.9,
-        },
-      );
-
-      intro.fromTo(
         ".text-zone",
         {
           opacity: 0,
+          scale: 0.96,
           y: 42,
           z: -80,
           filter: "blur(10px)",
         },
         {
           opacity: 1,
+          scale: 1,
           y: 0,
           z: 0,
           filter: "blur(0px)",
-          duration: 0.8,
+          duration: 0.9,
         },
-        "-=0.55",
       );
 
       intro.to(
@@ -217,14 +222,6 @@ onMounted(() => {
       duration: 0.45,
       ease: "power3.out",
     });
-    const rotateXTo = gsap.quickTo(tiltEl, "rotationX", {
-      duration: 0.52,
-      ease: "power3.out",
-    });
-    const rotateYTo = gsap.quickTo(tiltEl, "rotationY", {
-      duration: 0.52,
-      ease: "power3.out",
-    });
     const xTo = gsap.quickTo(tiltEl, "x", {
       duration: 0.52,
       ease: "power3.out",
@@ -237,15 +234,6 @@ onMounted(() => {
       duration: 0.52,
       ease: "power3.out",
     });
-    const cursorXTo = gsap.quickTo(cursorEl, "x", {
-      duration: 0.14,
-      ease: "power3.out",
-    });
-    const cursorYTo = gsap.quickTo(cursorEl, "y", {
-      duration: 0.14,
-      ease: "power3.out",
-    });
-
     gsap.set([spotlightEl, cursorEl], { xPercent: -50, yPercent: -50 });
 
     const onMove = (event: MouseEvent) => {
@@ -269,23 +257,28 @@ onMounted(() => {
         event.clientY >= textRect.top &&
         event.clientY <= textRect.bottom;
 
-      rotateYTo(0);
-      rotateXTo(0);
-      xTo(x * 16);
-      yTo(y * 12);
-      zTo(72);
+      xTo(x * 8);
+      yTo(y * 6);
+      zTo(76);
       lightXTo(pointerX);
       lightYTo(pointerY);
 
-      rootEl.style.setProperty("--title-shadow-x", `${x * -16}px`);
-      rootEl.style.setProperty("--title-shadow-y", `${y * -12}px`);
-      rootEl.style.setProperty("--meta-near-x", `${x * -3}px`);
-      rootEl.style.setProperty("--meta-near-y", `${y * -2}px`);
-      rootEl.style.setProperty("--meta-deep-x", `${x * -7}px`);
-      rootEl.style.setProperty("--meta-deep-y", `${y * -5}px`);
+      rootEl.style.setProperty("--card-rotate-x", `${y * -16}deg`);
+      rootEl.style.setProperty("--card-rotate-y", `${x * 24}deg`);
+      rootEl.style.setProperty("--scene-x", `${x * 16}px`);
+      rootEl.style.setProperty("--scene-y", `${y * 12}px`);
+      rootEl.style.setProperty("--meta-scene-x", `${x * 6}px`);
+      rootEl.style.setProperty("--meta-scene-y", `${y * 4}px`);
+      rootEl.style.setProperty("--card-bg-x", `${x * -10}px`);
+      rootEl.style.setProperty("--card-bg-y", `${y * -8}px`);
+      rootEl.style.setProperty("--title-shadow-x", `${x * -22}px`);
+      rootEl.style.setProperty("--title-shadow-y", `${y * -16}px`);
+      rootEl.style.setProperty("--meta-near-x", `${x * -6}px`);
+      rootEl.style.setProperty("--meta-near-y", `${y * -4}px`);
+      rootEl.style.setProperty("--meta-deep-x", `${x * -12}px`);
+      rootEl.style.setProperty("--meta-deep-y", `${y * -9}px`);
 
-      cursorXTo(pointerX);
-      cursorYTo(pointerY);
+      gsap.set(cursorEl, { x: pointerX, y: pointerY });
       cursorEl.classList.add("is-visible");
       cursorEl.classList.toggle("is-over-text", isOverText);
       cursorEl.style.setProperty("--cursor-title-left", `${titleLeft - cursorLeft}px`);
@@ -294,8 +287,6 @@ onMounted(() => {
     };
 
     const onLeave = () => {
-      rotateXTo(0);
-      rotateYTo(0);
       xTo(0);
       yTo(0);
       zTo(0);
@@ -304,12 +295,20 @@ onMounted(() => {
       cursorEl.classList.remove("is-over-text");
     };
 
+    const onPointerUp = (event: PointerEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleFlip();
+    };
+
     rootEl.addEventListener("mousemove", onMove);
     rootEl.addEventListener("mouseleave", onLeave);
+    rootEl.addEventListener("pointerup", onPointerUp);
 
     cleanup = () => {
       rootEl.removeEventListener("mousemove", onMove);
       rootEl.removeEventListener("mouseleave", onLeave);
+      rootEl.removeEventListener("pointerup", onPointerUp);
     };
   }, rootEl);
 });
@@ -322,6 +321,14 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .home-hero-3d {
+  --card-rotate-x: 0deg;
+  --card-rotate-y: 0deg;
+  --scene-x: 0px;
+  --scene-y: 0px;
+  --meta-scene-x: 0px;
+  --meta-scene-y: 0px;
+  --card-bg-x: 0px;
+  --card-bg-y: 0px;
   --title-shadow-x: 0px;
   --title-shadow-y: 0px;
   --meta-near-x: 0px;
@@ -424,7 +431,9 @@ onBeforeUnmount(() => {
 }
 
 .tilt-layer,
+.card-tilt,
 .flip-card,
+.flip-inner,
 .card-face,
 .text-zone,
 .title,
@@ -436,6 +445,15 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: -48px;
   z-index: 5;
+  will-change: transform;
+}
+
+.card-tilt {
+  width: 100%;
+  height: 100%;
+  transform: rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y));
+  transform-style: preserve-3d;
+  transition: transform 0.12s ease-out;
   will-change: transform;
 }
 
@@ -452,10 +470,19 @@ onBeforeUnmount(() => {
   background: transparent;
   cursor: none;
   transform-style: preserve-3d;
-  transition: transform 0.78s cubic-bezier(0.2, 0.72, 0.18, 1);
 }
 
-.flip-card.is-flipped {
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: transform 0.82s cubic-bezier(0.2, 0.72, 0.18, 1);
+  will-change: transform;
+}
+
+.flip-card.is-flipped .flip-inner {
   transform: rotateY(180deg);
 }
 
@@ -475,6 +502,7 @@ onBeforeUnmount(() => {
 .card-front {
   background-color: #f7f7f4;
   background-image: radial-gradient(#d6d6d1 1px, transparent 1px);
+  background-position: var(--card-bg-x) var(--card-bg-y);
   background-size: 24px 24px;
 }
 
@@ -532,9 +560,10 @@ onBeforeUnmount(() => {
   color: #050505;
   text-shadow:
     0 1px 0 rgba(255, 255, 255, 0.52),
-    0 13px 26px rgba(0, 0, 0, 0.16),
-    0 34px 68px rgba(0, 0, 0, 0.1);
-  transform: translateZ(72px);
+    0 16px 30px rgba(0, 0, 0, 0.18),
+    0 42px 82px rgba(0, 0, 0, 0.12);
+  transform: translate3d(var(--scene-x), var(--scene-y), 92px);
+  transition: transform 0.08s linear;
 }
 
 .title::before {
@@ -543,12 +572,12 @@ onBeforeUnmount(() => {
   z-index: 1;
   color: rgba(0, 0, 0, 0.14);
   content: attr(data-title);
-  filter: blur(8px);
+  filter: blur(10px);
   pointer-events: none;
   transform: translate3d(
-    calc(18px + var(--title-shadow-x)),
-    calc(22px + var(--title-shadow-y)),
-    -54px
+    calc(24px + var(--title-shadow-x)),
+    calc(30px + var(--title-shadow-y)),
+    -76px
   );
   transform-style: preserve-3d;
 }
@@ -572,12 +601,15 @@ onBeforeUnmount(() => {
 .text-zone {
   position: relative;
   cursor: none;
+  transform-style: preserve-3d;
 }
 
 .meta-wrap {
   position: relative;
   width: fit-content;
   margin: 20px auto 0;
+  transform: translate3d(var(--meta-scene-x), var(--meta-scene-y), 30px);
+  transition: transform 0.08s linear;
 }
 
 .meta {

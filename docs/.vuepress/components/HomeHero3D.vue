@@ -552,7 +552,7 @@ onBeforeUnmount(() => {
 }
 
 .title {
-  font-size: clamp(42px, 7vw, 104px);
+  font-size: clamp(48px, 7.2vw, 108px);
   font-family:
     Inter,
     ui-sans-serif,
@@ -563,7 +563,7 @@ onBeforeUnmount(() => {
     sans-serif;
   font-style: normal;
   font-weight: 900;
-  line-height: 0.92;
+  line-height: 0.88;
   letter-spacing: 0;
   white-space: nowrap;
   text-transform: uppercase;
@@ -576,9 +576,9 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   color: #050505;
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.52),
-    0 16px 30px rgba(0, 0, 0, 0.18),
-    0 42px 82px rgba(0, 0, 0, 0.12);
+    0 1px 0 rgba(255, 255, 255, 0.64),
+    0 10px 18px rgba(0, 0, 0, 0.14),
+    0 30px 62px rgba(0, 0, 0, 0.12);
   transform: translate3d(var(--scene-x), var(--scene-y), 92px);
   transition: transform 0.08s linear;
 }
@@ -587,14 +587,14 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 0;
   z-index: 1;
-  color: rgba(0, 0, 0, 0.14);
+  color: rgba(0, 0, 0, 0.08);
   content: attr(data-title);
-  filter: blur(10px);
+  filter: blur(7px);
   pointer-events: none;
   transform: translate3d(
-    calc(24px + var(--title-shadow-x)),
-    calc(30px + var(--title-shadow-y)),
-    -76px
+    calc(14px + var(--title-shadow-x)),
+    calc(18px + var(--title-shadow-y)),
+    -68px
   );
   transform-style: preserve-3d;
 }
@@ -633,8 +633,8 @@ onBeforeUnmount(() => {
   position: relative;
   z-index: 2;
   margin: 0;
-  color: #111;
-  font-size: clamp(14px, 1.45vw, 20px);
+  color: rgba(5, 5, 5, 0.6);
+  font-size: clamp(12px, 1.12vw, 16px);
   font-style: normal;
   font-weight: 400;
   line-height: 1;
@@ -642,8 +642,8 @@ onBeforeUnmount(() => {
   text-transform: uppercase;
   transform: translateZ(54px);
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.45),
-    0 8px 18px rgba(0, 0, 0, 0.1);
+    0 1px 0 rgba(255, 255, 255, 0.42),
+    0 8px 18px rgba(0, 0, 0, 0.08);
 }
 
 .meta-char {
@@ -658,8 +658,8 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 0;
   z-index: -1;
-  color: rgba(0, 0, 0, 0.045);
-  font-size: clamp(14px, 1.45vw, 20px);
+  color: rgba(0, 0, 0, 0.035);
+  font-size: clamp(12px, 1.12vw, 16px);
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0.08em;
@@ -670,7 +670,7 @@ onBeforeUnmount(() => {
 }
 
 .meta-depth.deep {
-  color: rgba(0, 0, 0, 0.024);
+  color: rgba(0, 0, 0, 0.018);
   filter: blur(8px);
   transform: translate3d(calc(10px + var(--meta-deep-x)), calc(12px + var(--meta-deep-y)), -90px);
 }
@@ -686,13 +686,33 @@ onBeforeUnmount(() => {
 }
 
 .back-copy {
-  width: min(760px, 100%);
+  position: relative;
+  width: min(820px, 86%);
   margin: 0 auto;
+  padding: clamp(28px, 4vw, 54px);
   color: #050505;
-  font-size: clamp(20px, 2.3vw, 34px);
-  font-weight: 650;
-  line-height: 1.55;
+  font-size: clamp(19px, 1.92vw, 28px);
+  font-weight: 500;
+  line-height: 1.78;
   letter-spacing: 0;
+  text-align: left;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5),
+    0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.back-copy::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 1px solid rgba(5, 5, 5, 0.12);
+  border-radius: 28px;
+  background: rgba(247, 247, 244, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -1px 0 rgba(5, 5, 5, 0.035),
+    0 18px 46px rgba(0, 0, 0, 0.045);
+  content: "";
 }
 
 @media (max-width: 768px), (pointer: coarse) {
@@ -730,7 +750,13 @@ onBeforeUnmount(() => {
   }
 
   .back-copy {
+    width: min(100%, 92vw);
+    padding: clamp(24px, 7vw, 36px);
     font-size: clamp(18px, 5.2vw, 26px);
+  }
+
+  .back-copy::after {
+    border-radius: 20px;
   }
 }
 </style>

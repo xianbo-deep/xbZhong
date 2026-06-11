@@ -1056,9 +1056,9 @@
       "/myMajor/note/image-20260421224842985.png",
       "/myMajor/note/image-20260519235640010.png"
     ],
-    "hash": "4c600804d07025f02592195c4cac12e90e8145c04263d98a6f2e57ed3dce2d26",
-    "size": "1237889",
-    "gen_time": "2026-06-06T10:32:27"
+    "hash": "7716038f41e61978d495917e1e5161b0f880f606be4a7d11ae05edfff76f5f3b",
+    "size": "1326569",
+    "gen_time": "2026-06-11T08:41:14"
   },
   "docs/resource/coursenote/junior/nndl.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/nndl.pdf",
@@ -1171,10 +1171,14 @@
   "docs/resource/coursenote/junior/ai_chip.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/ai_chip.pdf",
     "images": [
-      "/myMajor/note/image-20260605104131527.png"
+      "/myMajor/note/image-20260605104131527.png",
+      "/myMajor/note/image-20260608110929703.png",
+      "/myMajor/note/image-20260608111957029.png",
+      "/myMajor/note/image-20260608132412747.png",
+      "/myMajor/note/image-20260610144819985.png"
     ],
-    "hash": "d213afaf2760bcf5540810dc42dd88beb895eee2013cdb7c721ec9710709bc7f",
-    "size": "415506",
-    "gen_time": "2026-06-06T10:32:26"
+    "hash": "9f8ccc15e62dfdf2dba9f89eb675b8a8011d1624f5ebf1fa045c55960cd6fa81",
+    "size": "1125557",
+    "gen_time": "2026-06-11T08:41:13"
   }
 }

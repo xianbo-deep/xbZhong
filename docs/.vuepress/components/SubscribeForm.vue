@@ -1,10 +1,14 @@
 <template>
   <div class="subscribe-container">
-    <div class="subscribe-card">
+    <section class="subscribe-card" aria-labelledby="subscribe-title">
       <div class="card-header">
         <span class="eyebrow">{{ mode === 1 ? "SUBSCRIBE" : "UNSUBSCRIBE" }}</span>
-        <h2 class="title">{{ mode === 1 ? "邮件订阅" : "取消订阅" }}</h2>
-        <p class="subtitle">获取最新文章更新通知，不错过任何精彩内容。</p>
+        <h2 id="subscribe-title" class="title">
+          {{ mode === 1 ? "邮件订阅" : "取消订阅" }}
+        </h2>
+        <p class="subtitle">
+          {{ mode === 1 ? "接收最新文章更新，不错过新的笔记和想法。" : "输入邮箱和验证码，即可取消邮件通知。" }}
+        </p>
       </div>
 
       <div class="mode-switch" :class="{ unsubscribe: mode === 0 }">
@@ -74,7 +78,12 @@
       <p v-if="message" :class="['message', messageType]">
         {{ message }}
       </p>
-    </div>
+
+      <p class="support-note">
+        有问题请发送邮件至
+        <a href="mailto:zhongxianbo@xbzhong.cn">zhongxianbo@xbzhong.cn</a>
+      </p>
+    </section>
   </div>
 </template>
 
@@ -89,7 +98,7 @@ const loading = ref(false);
 const message = ref("");
 const messageType = ref("info"); // 'success', 'error', 'info'
 const activeAction = ref<"verify" | "submit" | "">("");
-let timer: any = null;
+let timer: ReturnType<typeof setInterval> | null = null;
 
 const verifyButtonText = computed(() => {
   if (loading.value && activeAction.value === "verify") return "发送中";
@@ -101,13 +110,26 @@ const submitButtonText = computed(() => {
   return mode.value === 1 ? "立即订阅" : "取消订阅";
 });
 
-const validateEmail = (email: string) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const validateEmail = (value: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 };
 
 const setMode = (newMode: number) => {
   mode.value = newMode;
   message.value = "";
+};
+
+const startCountdown = () => {
+  countdown.value = 60;
+  if (timer) clearInterval(timer);
+
+  timer = setInterval(() => {
+    countdown.value--;
+    if (countdown.value <= 0 && timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }, 1000);
 };
 
 const handleGetVerifyCode = async () => {
@@ -157,16 +179,6 @@ const handleGetVerifyCode = async () => {
     loading.value = false;
     activeAction.value = "";
   }
-};
-
-const startCountdown = () => {
-  countdown.value = 60;
-  timer = setInterval(() => {
-    countdown.value--;
-    if (countdown.value <= 0) {
-      clearInterval(timer);
-    }
-  }, 1000);
 };
 
 const handleSubmit = async () => {
@@ -239,61 +251,62 @@ onUnmounted(() => {
 <style scoped>
 .subscribe-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 2.5rem 1rem;
+  justify-content: center;
+  padding: clamp(0.75rem, 2.4vw, 1.6rem) 1rem clamp(1.5rem, 4vw, 3rem);
 }
 
 .subscribe-card {
   position: relative;
   isolation: isolate;
-  width: 100%;
-  max-width: 520px;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  width: min(100%, 520px);
+  padding: clamp(1.25rem, 3vw, 1.9rem);
   overflow: hidden;
+  color: #050505;
   text-align: left;
-  background-color: #f7f7f4;
-  background-image: radial-gradient(rgba(5, 5, 5, 0.13) 1px, transparent 1px);
-  background-size: 22px 22px;
-  border: 1px solid rgba(5, 5, 5, 0.14);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(247, 247, 244, 0.62)),
+    radial-gradient(rgba(5, 5, 5, 0.06) 1px, transparent 1px);
+  background-size: auto, 24px 24px;
+  border: 1px solid rgba(5, 5, 5, 0.12);
   border-radius: 8px;
   box-shadow:
-    0 18px 46px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+    0 18px 48px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
   transition:
-    transform 0.22s ease,
+    border-color 0.22s ease,
     box-shadow 0.22s ease,
-    border-color 0.22s ease;
+    transform 0.22s cubic-bezier(0.2, 0.72, 0.18, 1);
 }
 
 .subscribe-card:hover {
-  border-color: rgba(5, 5, 5, 0.26);
+  border-color: rgba(5, 5, 5, 0.24);
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
   transform: translateY(-3px);
 }
 
 .subscribe-card::before {
   position: absolute;
-  inset: 0;
+  inset: 12px;
   z-index: -1;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.44)),
-    radial-gradient(circle at 16% 10%, rgba(0, 0, 0, 0.08), transparent 26%);
+  border: 1px solid rgba(5, 5, 5, 0.08);
+  border-radius: 8px;
   content: "";
+  pointer-events: none;
 }
 
 .card-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.05rem;
 }
 
 .eyebrow {
   display: block;
-  margin-bottom: 0.45rem;
-  color: rgba(5, 5, 5, 0.48);
+  margin-bottom: 0.42rem;
+  color: rgba(5, 5, 5, 0.46);
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 750;
   letter-spacing: 0.16em;
   line-height: 1;
 }
@@ -301,18 +314,18 @@ onUnmounted(() => {
 .title {
   margin: 0;
   color: #050505;
-  font-size: clamp(1.65rem, 4vw, 2.25rem);
-  font-weight: 800;
+  font-size: clamp(1.55rem, 3.5vw, 2.05rem);
+  font-weight: 850;
   letter-spacing: 0;
   line-height: 1.08;
 }
 
 .subtitle {
   max-width: 30rem;
-  margin: 0.75rem 0 0;
+  margin: 0.55rem 0 0;
   color: rgba(5, 5, 5, 0.58);
-  font-size: 0.98rem;
-  line-height: 1.7;
+  font-size: 0.96rem;
+  line-height: 1.62;
 }
 
 .mode-switch {
@@ -321,12 +334,12 @@ onUnmounted(() => {
   grid-template-columns: 1fr 1fr;
   gap: 0;
   padding: 4px;
-  margin-bottom: 1.35rem;
+  margin-bottom: 1rem;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.62);
   border: 1px solid rgba(5, 5, 5, 0.12);
   border-radius: 8px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .mode-switch::before {
@@ -337,7 +350,7 @@ onUnmounted(() => {
   width: calc(50% - 4px);
   background: #050505;
   border-radius: 6px;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
   content: "";
   transition: transform 0.24s cubic-bezier(0.2, 0.72, 0.18, 1);
 }
@@ -352,16 +365,16 @@ onUnmounted(() => {
   min-height: 42px;
   padding: 0.7rem 1rem;
   color: rgba(5, 5, 5, 0.58);
-  font-size: 0.96rem;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 750;
   letter-spacing: 0;
   background: transparent;
   border: 0;
   border-radius: 6px;
   cursor: pointer;
   transition:
-    color 0.2s ease,
-    transform 0.2s ease;
+    color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .mode-btn.active {
@@ -374,13 +387,13 @@ onUnmounted(() => {
 }
 
 .input-group {
-  margin-bottom: 1.05rem;
+  margin-bottom: 0.82rem;
 }
 
 label {
   display: block;
   margin-bottom: 0.45rem;
-  color: rgba(5, 5, 5, 0.66);
+  color: rgba(5, 5, 5, 0.64);
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0;
@@ -393,7 +406,7 @@ input {
   box-sizing: border-box;
   color: #050505;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.68);
+  background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(5, 5, 5, 0.14);
   border-radius: 8px;
   outline: none;
@@ -409,9 +422,9 @@ input::placeholder {
 }
 
 input:focus {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   border-color: rgba(5, 5, 5, 0.42);
-  box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.06);
+  box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.055);
   transform: translateY(-1px);
 }
 
@@ -442,28 +455,28 @@ input:disabled {
   font-size: 0.9rem;
   font-weight: 750;
   white-space: nowrap;
-  background: rgba(255, 255, 255, 0.56);
+  background: rgba(255, 255, 255, 0.62);
   border: 1px solid rgba(5, 5, 5, 0.16);
   border-radius: 8px;
   cursor: pointer;
   transition:
     background-color 0.18s ease,
     border-color 0.18s ease,
+    box-shadow 0.18s ease,
     color 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
+    transform 0.18s ease;
 }
 
 .btn-verify:not(:disabled):hover {
   color: #fff;
   background: #050505;
   border-color: #050505;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
   transform: translateY(-1px);
 }
 
 .action-buttons {
-  margin-top: 1.55rem;
+  margin-top: 1.05rem;
 }
 
 .btn {
@@ -472,13 +485,13 @@ input:disabled {
   padding: 0.85rem 1.5rem;
   overflow: hidden;
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 820;
   border-radius: 8px;
   cursor: pointer;
   transition:
-    transform 0.18s ease,
     box-shadow 0.18s ease,
-    opacity 0.18s ease;
+    opacity 0.18s ease,
+    transform 0.18s ease;
 }
 
 .btn span {
@@ -506,14 +519,14 @@ input:disabled {
 }
 
 .btn-primary {
+  color: white;
   background: #050505;
   border: 1px solid #050505;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
-  color: white;
 }
 
 .btn-primary:not(:disabled):hover {
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
   transform: translateY(-2px);
 }
 
@@ -522,12 +535,12 @@ input:disabled {
 }
 
 .message {
-  margin: 1.2rem 0 0;
+  margin: 1.1rem 0 0;
   padding: 0.78rem 0.9rem;
   color: rgba(5, 5, 5, 0.72);
   font-size: 0.92rem;
   line-height: 1.5;
-  background: rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.62);
   border: 1px solid rgba(5, 5, 5, 0.12);
   border-left: 3px solid rgba(5, 5, 5, 0.32);
   border-radius: 8px;
@@ -551,19 +564,133 @@ input:disabled {
   display: none;
 }
 
+.support-note {
+  margin: 0.82rem 0 0;
+  color: rgba(5, 5, 5, 0.46);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.support-note a {
+  color: rgba(5, 5, 5, 0.72);
+  font-weight: 650;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(5, 5, 5, 0.24);
+  transition:
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.support-note a:hover {
+  color: #050505;
+  border-bottom-color: #050505;
+}
+
 @keyframes loading-sweep {
   to {
     transform: translateX(100%);
   }
 }
 
+[data-theme="dark"] .subscribe-card {
+  color: rgba(255, 255, 255, 0.92);
+  background:
+    linear-gradient(135deg, rgba(28, 28, 28, 0.94), rgba(18, 18, 18, 0.9)),
+    radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: auto, 24px 24px;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+[data-theme="dark"] .subscribe-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.46),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .subscribe-card::before {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .subtitle,
+[data-theme="dark"] label,
+[data-theme="dark"] .support-note {
+  color: rgba(255, 255, 255, 0.56);
+}
+
+[data-theme="dark"] .title,
+[data-theme="dark"] .mode-btn:not(.active):hover {
+  color: rgba(255, 255, 255, 0.94);
+}
+
+[data-theme="dark"] .mode-switch,
+[data-theme="dark"] input,
+[data-theme="dark"] .btn-verify,
+[data-theme="dark"] .message {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .mode-switch::before,
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn-verify:not(:disabled):hover {
+  color: #050505;
+  background: #f7f7f4;
+  border-color: #f7f7f4;
+}
+
+[data-theme="dark"] .mode-btn {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+[data-theme="dark"] .mode-btn.active {
+  color: #050505;
+}
+
+[data-theme="dark"] input {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] input::placeholder {
+  color: rgba(255, 255, 255, 0.34);
+}
+
+[data-theme="dark"] input:focus {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.055);
+}
+
+[data-theme="dark"] .btn-verify {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+[data-theme="dark"] .support-note a {
+  color: rgba(255, 255, 255, 0.78);
+  border-bottom-color: rgba(255, 255, 255, 0.22);
+}
+
+[data-theme="dark"] .support-note a:hover {
+  color: rgba(255, 255, 255, 0.96);
+  border-bottom-color: rgba(255, 255, 255, 0.72);
+}
+
 @media (max-width: 520px) {
   .subscribe-container {
-    padding: 1.5rem 0.75rem;
+    padding: 0.75rem 0.75rem 1.5rem;
   }
 
   .subscribe-card {
     padding: 1.25rem;
+  }
+
+  .subscribe-card::before {
+    inset: 8px;
   }
 
   .verify-group {

@@ -39,10 +39,7 @@ export default hopeTheme({
     description: "花梨27届本科生",
     intro: "/me/",
     timeline: "悟已往之不谏",
-    medias: {
-        GitHub: "https://github.com/xianbo-deep",
-        QQ: "tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2396768163&website=www.oicqzone.com"
-    },
+    medias: {},
   },
 
   // 加密配置

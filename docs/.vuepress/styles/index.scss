@@ -36,6 +36,20 @@
   color: rgba(5, 5, 5, 0.78);
 }
 
+.vp-navbar .vp-navbar-center {
+  padding-inline: clamp(0.75rem, 2vw, 2rem);
+}
+
+.vp-navbar .vp-nav-links {
+  gap: 0.18rem;
+}
+
+.vp-navbar .vp-navbar-end {
+  margin-left: clamp(0.75rem, 1.8vw, 1.8rem);
+  padding-left: clamp(0.55rem, 1.2vw, 1rem);
+  border-left: 1px solid rgba(5, 5, 5, 0.1);
+}
+
 .vp-navbar .vp-navbar-brand {
   border-radius: 8px;
   transition:
@@ -302,7 +316,6 @@
 /* 右侧个人信息栏 / 分类标签栏：黑白小面板交互 */
 .vp-page .vp-blogger-info,
 .vp-page .vp-blog-infos {
-  overflow: hidden;
   border: 1px solid rgba(5, 5, 5, 0.1);
   border-radius: 8px;
   background:
@@ -316,6 +329,14 @@
     transform 0.2s cubic-bezier(0.2, 0.72, 0.18, 1),
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.vp-page .vp-blogger-info {
+  overflow: hidden;
+}
+
+.vp-page .vp-blog-infos {
+  overflow: hidden;
 }
 
 .vp-page .vp-blogger-info:hover,
@@ -423,6 +444,10 @@
 }
 
 /* 暗黑模式：只适配上面被覆盖的博客组件 */
+[data-theme="dark"] .vp-navbar .vp-navbar-end {
+  border-left-color: rgba(255, 255, 255, 0.12);
+}
+
 [data-theme="dark"] .vp-article-item {
   border-color: rgba(255, 255, 255, 0.1);
   background:

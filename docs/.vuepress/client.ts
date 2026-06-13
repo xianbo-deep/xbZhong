@@ -5,12 +5,14 @@ import "vuepress-theme-hope/presets/left-blog-info.scss";
 import "vuepress-theme-hope/presets/bounce-icon.scss";
 import CustomBlog from "./layouts/CustomBlog.vue";
 import SubscribeForm from "./components/SubscribeForm.vue";
+import QrContactCard from "./components/QrContactCard.vue";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineClientConfig({
   enhance({ app }) {
     app.component("SubscribeForm", SubscribeForm);
+    app.component("QrContactCard", QrContactCard);
   },
   layouts: {
     CustomBlog,

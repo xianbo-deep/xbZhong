@@ -7,12 +7,17 @@
     <template #heroInfo>
       <span />
     </template>
+
+    <template #infoAfter>
+      <QrSocialMedias />
+    </template>
   </Blog>
 </template>
 
 <script setup lang="ts">
 import { Blog } from "vuepress-theme-hope/blog";
 import HomeHero3D from "../components/HomeHero3D.vue";
+import QrSocialMedias from "../components/QrSocialMedias.vue";
 </script>
 
 <style scoped>

@@ -1,122 +1,252 @@
 <template>
   <div class="subscribe-container">
-    <section class="subscribe-card" aria-labelledby="subscribe-title">
-      <div class="card-header">
-        <span class="eyebrow">{{ mode === 1 ? "SUBSCRIBE" : "UNSUBSCRIBE" }}</span>
-        <h2 id="subscribe-title" class="title">
-          {{ mode === 1 ? "邮件订阅" : "取消订阅" }}
-        </h2>
-        <p class="subtitle">
-          {{ mode === 1 ? "接收最新文章更新，不错过新的笔记和想法。" : "输入邮箱和验证码，即可取消邮件通知。" }}
-        </p>
-      </div>
-
-      <div class="mode-switch" :class="{ unsubscribe: mode === 0 }">
-        <button
-          :class="['mode-btn', { active: mode === 1 }]"
-          type="button"
-          @click="setMode(1)"
+    <div class="subscribe-stage" :class="`is-${currentStep}`" aria-live="polite">
+      <Transition name="card-slide" mode="out-in">
+        <section
+          v-if="currentStep === 'email'"
+          key="email"
+          :class="['subscribe-card', 'email-card', { 'is-unsubscribe': mode === 0 }]"
+          aria-labelledby="subscribe-title"
         >
-          订阅
-        </button>
-        <button
-          :class="['mode-btn', { active: mode === 0 }]"
-          type="button"
-          @click="setMode(0)"
+          <div class="email-flip">
+            <div class="email-face email-front" :aria-hidden="mode === 0" :inert="mode === 0">
+              <div class="card-header">
+                <span class="eyebrow">SUBSCRIBE</span>
+                <h2 id="subscribe-title" class="title">邮件订阅</h2>
+                <p class="subtitle">留下邮箱，新的文章会安静地送达。</p>
+              </div>
+
+              <div class="input-group">
+                <label for="subscribe-email">邮箱地址</label>
+                <input
+                  id="subscribe-email"
+                  v-model="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  :disabled="loading"
+                  @keyup.enter="handleGetVerifyCode"
+                />
+              </div>
+
+              <button
+                class="btn btn-primary btn-block"
+                type="button"
+                :class="{ loading: loading && activeAction === 'verify' }"
+                :disabled="loading || countdown > 0"
+                @click="handleGetVerifyCode"
+              >
+                <span>{{ verifyButtonText }}</span>
+              </button>
+
+              <button class="text-button" type="button" :disabled="loading" @click="setMode(0)">
+                我要退订
+              </button>
+
+              <p v-if="message" :class="['message', messageType]">
+                {{ message }}
+              </p>
+
+              <p class="support-note">
+                有问题请发送邮件至
+                <a href="mailto:zhongxianbo@xbzhong.cn">zhongxianbo@xbzhong.cn</a>
+              </p>
+            </div>
+
+            <div class="email-face email-back" :aria-hidden="mode === 1" :inert="mode === 1">
+              <div class="card-header">
+                <span class="eyebrow">UNSUBSCRIBE</span>
+                <h2 class="title">取消订阅</h2>
+                <p class="subtitle">输入邮箱并验证，即可停止邮件通知。</p>
+              </div>
+
+              <div class="input-group">
+                <label for="unsubscribe-email">邮箱地址</label>
+                <input
+                  id="unsubscribe-email"
+                  v-model="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  :disabled="loading"
+                  @keyup.enter="handleGetVerifyCode"
+                />
+              </div>
+
+              <button
+                class="btn btn-primary btn-block"
+                type="button"
+                :class="{ loading: loading && activeAction === 'verify' }"
+                :disabled="loading || countdown > 0"
+                @click="handleGetVerifyCode"
+              >
+                <span>{{ verifyButtonText }}</span>
+              </button>
+
+              <button class="text-button" type="button" :disabled="loading" @click="setMode(1)">
+                返回订阅
+              </button>
+
+              <p v-if="message" :class="['message', messageType]">
+                {{ message }}
+              </p>
+
+              <p class="support-note">
+                有问题请发送邮件至
+                <a href="mailto:zhongxianbo@xbzhong.cn">zhongxianbo@xbzhong.cn</a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section
+          v-else
+          key="code"
+          class="subscribe-card code-card"
+          aria-labelledby="verify-title"
         >
-          退订
-        </button>
-      </div>
+          <div class="card-header">
+            <span class="eyebrow">VERIFY</span>
+            <h2 id="verify-title" class="title">输入验证码</h2>
+            <p class="subtitle">{{ codeStepText }}</p>
+          </div>
 
-      <div class="input-group">
-        <label for="subscribe-email">邮箱地址</label>
-        <input
-          id="subscribe-email"
-          v-model="email"
-          type="email"
-          placeholder="name@example.com"
-          :disabled="loading"
-        />
-      </div>
+          <div class="code-grid" @paste.prevent="handlePaste">
+            <input
+              v-for="(_, index) in codeDigits"
+              :key="index"
+              :ref="(el) => setCodeInputRef(el, index)"
+              v-model="codeDigits[index]"
+              class="code-input"
+              inputmode="numeric"
+              maxlength="1"
+              autocomplete="one-time-code"
+              :aria-label="`验证码第 ${index + 1} 位`"
+              :disabled="loading"
+              @input="handleCodeInput(index)"
+              @keydown="handleCodeKeydown($event, index)"
+            />
+          </div>
 
-      <div class="input-group verify-group">
-        <div class="verify-field">
-          <label for="subscribe-code">验证码</label>
-          <input
-            id="subscribe-code"
-            v-model="verifyCode"
-            type="text"
-            placeholder="输入验证码"
+          <button
+            class="btn btn-primary btn-block"
+            type="button"
+            :class="{ loading: loading && activeAction === 'submit' }"
+            :disabled="loading || verifyCode.length !== 6"
+            @click="handleSubmit"
+          >
+            <span>{{ submitButtonText }}</span>
+          </button>
+
+          <button
+            class="text-button"
+            type="button"
             :disabled="loading"
-            class="verify-input"
-            @keyup.enter="handleSubmit"
-          />
-        </div>
-        <button
-          class="btn btn-verify"
-          type="button"
-          :class="{ loading: loading && activeAction === 'verify' }"
-          :disabled="loading || countdown > 0"
-          @click="handleGetVerifyCode"
-        >
-          <span>{{ verifyButtonText }}</span>
-        </button>
-      </div>
-
-      <div class="action-buttons">
-        <button
-          class="btn btn-primary btn-block"
-          type="button"
-          :class="{ loading: loading && activeAction === 'submit' }"
-          :disabled="loading"
-          @click="handleSubmit"
-        >
-          <span>{{ submitButtonText }}</span>
-        </button>
-      </div>
-
-      <p v-if="message" :class="['message', messageType]">
-        {{ message }}
-      </p>
-
-      <p class="support-note">
-        有问题请发送邮件至
-        <a href="mailto:zhongxianbo@xbzhong.cn">zhongxianbo@xbzhong.cn</a>
-      </p>
-    </section>
+            @click="returnToEmail"
+          >
+            返回修改邮箱
+          </button>
+        </section>
+      </Transition>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, ref } from "vue";
+import { computed, nextTick, onUnmounted, ref } from "vue";
 
 const email = ref("");
-const verifyCode = ref("");
-const mode = ref(1); // 1: Subscribe, 0: Unsubscribe
+const codeDigits = ref(["", "", "", "", "", ""]);
+const currentStep = ref<"email" | "code">("email");
+const mode = ref<0 | 1>(1);
 const countdown = ref(0);
 const loading = ref(false);
 const message = ref("");
 const messageType = ref("info"); // 'success', 'error', 'info'
 const activeAction = ref<"verify" | "submit" | "">("");
+const codeInputRefs = ref<Array<HTMLInputElement | null>>([]);
 let timer: ReturnType<typeof setInterval> | null = null;
+
+const isPreviewMode = () => {
+  if (typeof window === "undefined") return false;
+
+  const { hostname, search } = window.location;
+  const isLocalHost =
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    hostname === "[::1]";
+
+  return isLocalHost && new URLSearchParams(search).get("preview") === "1";
+};
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const verifyCode = computed(() => codeDigits.value.join(""));
+
+const maskedEmail = computed(() => {
+  const [name, domain] = email.value.split("@");
+  if (!name || !domain) return email.value;
+
+  const visible = name.length <= 2 ? name[0] : `${name.slice(0, 2)}***`;
+  return `${visible}@${domain}`;
+});
 
 const verifyButtonText = computed(() => {
   if (loading.value && activeAction.value === "verify") return "发送中";
-  return countdown.value > 0 ? `${countdown.value}s` : "获取验证码";
+  return countdown.value > 0 ? `${countdown.value}s 后可重发` : "发送验证码";
 });
 
 const submitButtonText = computed(() => {
-  if (loading.value && activeAction.value === "submit") return "处理中";
-  return mode.value === 1 ? "立即订阅" : "取消订阅";
+  if (loading.value && activeAction.value === "submit") return "验证中";
+  return mode.value === 1 ? "验证并订阅" : "验证并退订";
+});
+
+const codeStepText = computed(() => {
+  const actionText = mode.value === 1 ? "完成订阅" : "取消订阅";
+  return `已发送至 ${maskedEmail.value}，请填写 6 位验证码${actionText}。`;
 });
 
 const validateEmail = (value: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 };
 
-const setMode = (newMode: number) => {
-  mode.value = newMode;
+const setMode = (value: 0 | 1) => {
+  mode.value = value;
   message.value = "";
+  stopCountdown();
+  resetCode();
+};
+
+const setCodeInputRef = (el: Element | null, index: number) => {
+  codeInputRefs.value[index] = el as HTMLInputElement | null;
+};
+
+const focusCodeInput = (index: number) => {
+  codeInputRefs.value[index]?.focus();
+  codeInputRefs.value[index]?.select();
+};
+
+const resetCode = () => {
+  codeDigits.value = ["", "", "", "", "", ""];
+};
+
+const goToCodeStep = async () => {
+  currentStep.value = "code";
+  resetCode();
+  await nextTick();
+  focusCodeInput(0);
+};
+
+const returnToEmail = () => {
+  currentStep.value = "email";
+  resetCode();
+};
+
+const stopCountdown = () => {
+  countdown.value = 0;
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
 };
 
 const startCountdown = () => {
@@ -130,6 +260,33 @@ const startCountdown = () => {
       timer = null;
     }
   }, 1000);
+};
+
+const handleCodeInput = (index: number) => {
+  const value = codeDigits.value[index].replace(/\D/g, "").slice(-1);
+  codeDigits.value[index] = value;
+
+  if (value && index < codeDigits.value.length - 1) {
+    focusCodeInput(index + 1);
+  }
+};
+
+const handleCodeKeydown = (event: KeyboardEvent, index: number) => {
+  if (event.key === "Backspace" && !codeDigits.value[index] && index > 0) {
+    focusCodeInput(index - 1);
+  }
+
+  if (event.key === "Enter" && verifyCode.value.length === 6) {
+    handleSubmit();
+  }
+};
+
+const handlePaste = (event: ClipboardEvent) => {
+  const pasted = event.clipboardData?.getData("text").replace(/\D/g, "").slice(0, 6);
+  if (!pasted) return;
+
+  codeDigits.value = Array.from({ length: 6 }, (_, index) => pasted[index] || "");
+  focusCodeInput(Math.min(pasted.length, 6) - 1);
 };
 
 const handleGetVerifyCode = async () => {
@@ -150,6 +307,15 @@ const handleGetVerifyCode = async () => {
   message.value = "";
 
   try {
+    if (isPreviewMode()) {
+      await wait(520);
+      message.value = "";
+      messageType.value = "success";
+      startCountdown();
+      await goToCodeStep();
+      return;
+    }
+
     const response = await fetch(
       `https://api.xbzhong.cn/blog/verify?email=${encodeURIComponent(email.value)}&subscribe=${mode.value}`,
       {
@@ -164,9 +330,10 @@ const handleGetVerifyCode = async () => {
       data.success === true ||
       data.msg === "操作成功"
     ) {
-      message.value = "验证码已发送到您的邮箱，5分钟内有效。";
+      message.value = "";
       messageType.value = "success";
       startCountdown();
+      await goToCodeStep();
     } else {
       message.value = data.msg || "获取验证码失败，请稍后重试。";
       messageType.value = "error";
@@ -182,29 +349,35 @@ const handleGetVerifyCode = async () => {
 };
 
 const handleSubmit = async () => {
-  if (!email.value) {
-    message.value = "请输入邮箱地址";
-    messageType.value = "error";
-    return;
-  }
-
-  if (!validateEmail(email.value)) {
+  if (!email.value || !validateEmail(email.value)) {
+    currentStep.value = "email";
     message.value = "请输入有效的邮箱地址";
     messageType.value = "error";
     return;
   }
 
-  if (!verifyCode.value) {
-    message.value = "请输入验证码";
+  if (verifyCode.value.length !== 6) {
+    message.value = "请输入 6 位验证码";
     messageType.value = "error";
     return;
   }
 
   loading.value = true;
   activeAction.value = "submit";
-  message.value = "";
 
   try {
+    if (isPreviewMode()) {
+      await wait(620);
+      message.value =
+        mode.value === 1
+          ? "预览：订阅验证完成，已返回初始卡片。"
+          : "预览：退订验证完成，已返回初始卡片。";
+      messageType.value = "success";
+      email.value = "";
+      stopCountdown();
+      return;
+    }
+
     const response = await fetch(
       `https://api.xbzhong.cn/blog/subscribe?email=${encodeURIComponent(email.value)}&subscribe=${mode.value}&vc=${encodeURIComponent(verifyCode.value)}`,
       {
@@ -223,14 +396,14 @@ const handleSubmit = async () => {
       message.value = mode.value === 1 ? "订阅成功！感谢您的关注。" : "已成功取消订阅。";
       messageType.value = "success";
       email.value = "";
-      verifyCode.value = "";
+      stopCountdown();
     } else {
-      if (data.code === 1005) {
-        message.value = mode.value === 1 ? "您已订阅，请勿重复操作。" : "您尚未订阅，无需取消。";
-      } else {
-        message.value =
-          data.msg || (mode.value === 1 ? "订阅失败，请稍后重试。" : "取消订阅失败，请稍后重试。");
-      }
+      message.value =
+        data.code === 1005
+          ? mode.value === 1
+            ? "您已订阅，请勿重复操作。"
+            : "您尚未订阅，无需取消。"
+          : data.msg || (mode.value === 1 ? "订阅失败，请稍后重试。" : "取消订阅失败，请稍后重试。");
       messageType.value = "error";
     }
   } catch (error) {
@@ -240,6 +413,7 @@ const handleSubmit = async () => {
   } finally {
     loading.value = false;
     activeAction.value = "";
+    returnToEmail();
   }
 };
 
@@ -253,26 +427,31 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(0.75rem, 2.4vw, 1.6rem) 1rem clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(0.45rem, 1.8vw, 1rem) 1rem clamp(1.4rem, 4vw, 2.6rem);
+}
+
+.subscribe-stage {
+  position: relative;
+  width: min(100%, 460px);
+  min-height: 322px;
+  box-sizing: border-box;
 }
 
 .subscribe-card {
   position: relative;
-  isolation: isolate;
-  width: min(100%, 520px);
-  padding: clamp(1.25rem, 3vw, 1.9rem);
+  width: 100%;
+  min-height: 322px;
+  padding: clamp(1.2rem, 3vw, 1.7rem);
+  box-sizing: border-box;
   overflow: hidden;
   color: #050505;
   text-align: left;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(247, 247, 244, 0.62)),
-    radial-gradient(rgba(5, 5, 5, 0.06) 1px, transparent 1px);
-  background-size: auto, 24px 24px;
-  border: 1px solid rgba(5, 5, 5, 0.12);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(5, 5, 5, 0.1);
   border-radius: 8px;
   box-shadow:
-    0 18px 48px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    0 18px 45px rgba(0, 0, 0, 0.07),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
   transition:
     border-color 0.22s ease,
     box-shadow 0.22s ease,
@@ -280,114 +459,95 @@ onUnmounted(() => {
 }
 
 .subscribe-card:hover {
-  border-color: rgba(5, 5, 5, 0.24);
+  border-color: rgba(5, 5, 5, 0.2);
   box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.86);
-  transform: translateY(-3px);
+    0 22px 58px rgba(0, 0, 0, 0.1),
+    0 1px 0 rgba(255, 255, 255, 0.96) inset;
+  transform: translateY(-2px);
 }
 
-.subscribe-card::before {
+.email-flip {
+  position: relative;
+  min-height: 268px;
+  transition: transform 0.42s cubic-bezier(0.2, 0.72, 0.18, 1);
+}
+
+.email-card.is-unsubscribe .email-flip {
+  transform: translateY(-2px);
+}
+
+.email-face {
+  width: 100%;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.26s ease,
+    transform 0.42s cubic-bezier(0.2, 0.72, 0.18, 1),
+    visibility 0s linear 0s;
+}
+
+.email-back {
   position: absolute;
-  inset: 12px;
-  z-index: -1;
-  border: 1px solid rgba(5, 5, 5, 0.08);
-  border-radius: 8px;
-  content: "";
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(18px) scale(0.985);
+  transition-delay: 0s, 0s, 0.26s;
+}
+
+.email-card.is-unsubscribe .email-front {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-18px) scale(0.985);
+  transition-delay: 0s, 0s, 0.26s;
+}
+
+.email-card.is-unsubscribe .email-back {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+  transition-delay: 0.08s, 0.08s, 0s;
+}
+
+.email-card:not(.is-unsubscribe) .email-back,
+.email-card.is-unsubscribe .email-front {
   pointer-events: none;
 }
 
 .card-header {
   margin-bottom: 1.05rem;
+  text-align: center;
 }
 
 .eyebrow {
   display: block;
-  margin-bottom: 0.42rem;
-  color: rgba(5, 5, 5, 0.46);
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.16em;
+  margin-bottom: 0.5rem;
+  color: rgba(5, 5, 5, 0.44);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   line-height: 1;
 }
 
 .title {
   margin: 0;
   color: #050505;
-  font-size: clamp(1.55rem, 3.5vw, 2.05rem);
+  font-size: clamp(1.45rem, 3vw, 1.9rem);
   font-weight: 850;
   letter-spacing: 0;
-  line-height: 1.08;
+  line-height: 1.12;
 }
 
 .subtitle {
-  max-width: 30rem;
-  margin: 0.55rem 0 0;
+  max-width: 25rem;
+  margin: 0.42rem auto 0;
   color: rgba(5, 5, 5, 0.58);
-  font-size: 0.96rem;
-  line-height: 1.62;
-}
-
-.mode-switch {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  padding: 4px;
-  margin-bottom: 1rem;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(5, 5, 5, 0.12);
-  border-radius: 8px;
-  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
-}
-
-.mode-switch::before {
-  position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: 4px;
-  width: calc(50% - 4px);
-  background: #050505;
-  border-radius: 6px;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
-  content: "";
-  transition: transform 0.24s cubic-bezier(0.2, 0.72, 0.18, 1);
-}
-
-.mode-switch.unsubscribe::before {
-  transform: translateX(100%);
-}
-
-.mode-btn {
-  position: relative;
-  z-index: 1;
-  min-height: 42px;
-  padding: 0.7rem 1rem;
-  color: rgba(5, 5, 5, 0.58);
-  font-size: 0.95rem;
-  font-weight: 750;
-  letter-spacing: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 6px;
-  cursor: pointer;
-  transition:
-    color 0.18s ease,
-    transform 0.18s ease;
-}
-
-.mode-btn.active {
-  color: #fff;
-}
-
-.mode-btn:not(.active):hover {
-  color: #050505;
-  transform: translateY(-1px);
+  font-size: 0.92rem;
+  line-height: 1.58;
 }
 
 .input-group {
-  margin-bottom: 0.82rem;
+  margin-bottom: 0.95rem;
 }
 
 label {
@@ -401,13 +561,13 @@ label {
 
 input {
   width: 100%;
-  min-height: 46px;
-  padding: 0.8rem 0.95rem;
+  min-height: 48px;
+  padding: 0.78rem 0.9rem;
   box-sizing: border-box;
   color: #050505;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(5, 5, 5, 0.14);
+  background: #fff;
+  border: 1px solid rgba(5, 5, 5, 0.16);
   border-radius: 8px;
   outline: none;
   transition:
@@ -422,10 +582,11 @@ input::placeholder {
 }
 
 input:focus {
-  background: rgba(255, 255, 255, 0.96);
-  border-color: rgba(5, 5, 5, 0.42);
-  box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.055);
-  transform: translateY(-1px);
+  background: #fff;
+  border-color: rgba(5, 5, 5, 0.48);
+  box-shadow:
+    0 0 0 4px rgba(5, 5, 5, 0.055),
+    0 10px 24px rgba(0, 0, 0, 0.045);
 }
 
 input:disabled {
@@ -433,62 +594,36 @@ input:disabled {
   opacity: 0.62;
 }
 
-.verify-group {
+.code-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 132px;
-  gap: 10px;
-  align-items: end;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(0.42rem, 1.4vw, 0.62rem);
+  margin: 1.2rem 0 1.05rem;
 }
 
-.verify-field {
-  min-width: 0;
-}
-
-.verify-input {
-  width: 100%;
-}
-
-.btn-verify {
-  min-height: 46px;
-  padding: 0.8rem 0.9rem;
-  color: #050505;
-  font-size: 0.9rem;
-  font-weight: 750;
-  white-space: nowrap;
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(5, 5, 5, 0.16);
-  border-radius: 8px;
-  cursor: pointer;
-  transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease;
-}
-
-.btn-verify:not(:disabled):hover {
-  color: #fff;
-  background: #050505;
-  border-color: #050505;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
-  transform: translateY(-1px);
-}
-
-.action-buttons {
-  margin-top: 1.05rem;
+.code-input {
+  aspect-ratio: 1 / 1.08;
+  min-height: 0;
+  padding: 0;
+  font-size: clamp(1.28rem, 4vw, 1.58rem);
+  font-weight: 850;
+  line-height: 1;
+  text-align: center;
 }
 
 .btn {
   position: relative;
   min-height: 48px;
-  padding: 0.85rem 1.5rem;
+  padding: 0.82rem 1.35rem;
   overflow: hidden;
-  font-size: 1rem;
+  font-size: 0.96rem;
   font-weight: 820;
   border-radius: 8px;
+  border: 1px solid transparent;
   cursor: pointer;
   transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
     box-shadow 0.18s ease,
     opacity 0.18s ease,
     transform 0.18s ease;
@@ -522,27 +657,52 @@ input:disabled {
   color: white;
   background: #050505;
   border: 1px solid #050505;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 13px 28px rgba(0, 0, 0, 0.16);
 }
 
 .btn-primary:not(:disabled):hover {
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
-  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+  transform: translateY(-1px);
 }
 
 .btn-block {
   width: 100%;
 }
 
+.text-button {
+  display: block;
+  width: fit-content;
+  margin: 0.78rem auto 0;
+  padding: 0.3rem 0;
+  color: rgba(5, 5, 5, 0.56);
+  font-size: 0.86rem;
+  font-weight: 700;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.text-button:not(:disabled):hover {
+  color: #050505;
+  transform: translateY(-1px);
+}
+
+.text-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .message {
-  margin: 1.1rem 0 0;
-  padding: 0.78rem 0.9rem;
+  margin: 0.9rem 0 0;
+  padding: 0.68rem 0.78rem;
   color: rgba(5, 5, 5, 0.72);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   line-height: 1.5;
-  background: rgba(255, 255, 255, 0.62);
+  background: rgba(5, 5, 5, 0.035);
   border: 1px solid rgba(5, 5, 5, 0.12);
-  border-left: 3px solid rgba(5, 5, 5, 0.32);
   border-radius: 8px;
 }
 
@@ -565,9 +725,9 @@ input:disabled {
 }
 
 .support-note {
-  margin: 0.82rem 0 0;
+  margin: 0.78rem 0 0;
   color: rgba(5, 5, 5, 0.46);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   line-height: 1.6;
   text-align: center;
 }
@@ -587,6 +747,26 @@ input:disabled {
   border-bottom-color: #050505;
 }
 
+.card-slide-enter-active,
+.card-slide-leave-active {
+  transition:
+    opacity 0.28s ease,
+    filter 0.28s ease,
+    transform 0.44s cubic-bezier(0.2, 0.72, 0.18, 1);
+}
+
+.card-slide-enter-from {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translate3d(0, 18px, 0) scale(0.982);
+}
+
+.card-slide-leave-to {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translate3d(0, -14px, 0) scale(0.982);
+}
+
 @keyframes loading-sweep {
   to {
     transform: translateX(100%);
@@ -595,13 +775,10 @@ input:disabled {
 
 [data-theme="dark"] .subscribe-card {
   color: rgba(255, 255, 255, 0.92);
-  background:
-    linear-gradient(135deg, rgba(28, 28, 28, 0.94), rgba(18, 18, 18, 0.9)),
-    radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: auto, 24px 24px;
+  background: rgba(24, 24, 24, 0.94);
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow:
-    0 18px 48px rgba(0, 0, 0, 0.32),
+    0 18px 45px rgba(0, 0, 0, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.045);
 }
 
@@ -612,44 +789,23 @@ input:disabled {
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-[data-theme="dark"] .subscribe-card::before {
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
 [data-theme="dark"] .eyebrow,
 [data-theme="dark"] .subtitle,
 [data-theme="dark"] label,
-[data-theme="dark"] .support-note {
+[data-theme="dark"] .support-note,
+[data-theme="dark"] .text-button {
   color: rgba(255, 255, 255, 0.56);
 }
 
 [data-theme="dark"] .title,
-[data-theme="dark"] .mode-btn:not(.active):hover {
+[data-theme="dark"] .text-button:not(:disabled):hover {
   color: rgba(255, 255, 255, 0.94);
 }
 
-[data-theme="dark"] .mode-switch,
 [data-theme="dark"] input,
-[data-theme="dark"] .btn-verify,
 [data-theme="dark"] .message {
-  background: rgba(255, 255, 255, 0.045);
+  background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .mode-switch::before,
-[data-theme="dark"] .btn-primary,
-[data-theme="dark"] .btn-verify:not(:disabled):hover {
-  color: #050505;
-  background: #f7f7f4;
-  border-color: #f7f7f4;
-}
-
-[data-theme="dark"] .mode-btn {
-  color: rgba(255, 255, 255, 0.58);
-}
-
-[data-theme="dark"] .mode-btn.active {
-  color: #050505;
 }
 
 [data-theme="dark"] input {
@@ -666,8 +822,10 @@ input:disabled {
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.055);
 }
 
-[data-theme="dark"] .btn-verify {
-  color: rgba(255, 255, 255, 0.84);
+[data-theme="dark"] .btn-primary {
+  color: #050505;
+  background: #f7f7f4;
+  border-color: #f7f7f4;
 }
 
 [data-theme="dark"] .support-note a {
@@ -682,23 +840,31 @@ input:disabled {
 
 @media (max-width: 520px) {
   .subscribe-container {
-    padding: 0.75rem 0.75rem 1.5rem;
+    padding: 0.45rem 0.75rem 1.4rem;
+  }
+
+  .subscribe-stage,
+  .subscribe-card {
+    min-height: 326px;
   }
 
   .subscribe-card {
     padding: 1.25rem;
   }
 
-  .subscribe-card::before {
-    inset: 8px;
+  .code-grid {
+    gap: 0.38rem;
   }
+}
 
-  .verify-group {
-    grid-template-columns: 1fr;
-  }
-
-  .btn-verify {
-    width: 100%;
+@media (prefers-reduced-motion: reduce) {
+  .subscribe-card,
+  .card-slide-enter-active,
+  .card-slide-leave-active,
+  input,
+  .btn,
+  .text-button {
+    transition: none;
   }
 }
 </style>

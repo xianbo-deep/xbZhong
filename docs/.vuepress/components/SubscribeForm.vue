@@ -198,6 +198,10 @@ const isApiSuccess = (data: any) => {
 };
 
 const getApiMessage = (data: any, fallback: string) => {
+  if (typeof data?.error === "string" && data.error) {
+    return data.error;
+  }
+
   if (typeof data?.code === "number" && apiErrorMessages[data.code]) {
     return apiErrorMessages[data.code];
   }

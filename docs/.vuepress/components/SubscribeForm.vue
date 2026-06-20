@@ -165,6 +165,19 @@ const activeAction = ref<"verify" | "submit" | "">("");
 const codeInputRefs = ref<Array<HTMLInputElement | null>>([]);
 let timer: ReturnType<typeof setInterval> | null = null;
 
+const CodeSuccess = 0;
+
+const apiErrorMessages: Record<number, string> = {
+  1000: "请求参数有误，请检查邮箱和验证码。",
+  1001: "当前请求未授权。",
+  1005: "服务器内部错误，请稍后重试。",
+  2000: "登录状态无效。",
+  2001: "登录状态已过期。",
+  2002: "密码错误。",
+  2003: "用户不存在。",
+  2005: "缺少登录凭证。",
+};
+
 const isPreviewMode = () => {
   if (typeof window === "undefined") return false;
 
@@ -179,6 +192,22 @@ const isPreviewMode = () => {
 };
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const isApiSuccess = (data: any) => {
+  return data?.code === CodeSuccess || data?.success === true;
+};
+
+const getApiMessage = (data: any, fallback: string) => {
+  if (typeof data?.code === "number" && apiErrorMessages[data.code]) {
+    return apiErrorMessages[data.code];
+  }
+
+  if (typeof data?.msg === "string" && data.msg && data.msg !== "success") {
+    return data.msg;
+  }
+
+  return fallback;
+};
 
 const verifyCode = computed(() => codeDigits.value.join(""));
 
@@ -324,18 +353,13 @@ const handleGetVerifyCode = async () => {
     );
     const data = await response.json();
 
-    if (
-      data.code === 200 ||
-      data.code === 0 ||
-      data.success === true ||
-      data.msg === "操作成功"
-    ) {
+    if (isApiSuccess(data)) {
       message.value = "";
       messageType.value = "success";
       startCountdown();
       await goToCodeStep();
     } else {
-      message.value = data.msg || "获取验证码失败，请稍后重试。";
+      message.value = getApiMessage(data, "获取验证码失败，请稍后重试。");
       messageType.value = "error";
     }
   } catch (error) {
@@ -387,23 +411,16 @@ const handleSubmit = async () => {
 
     const data = await response.json();
 
-    if (
-      data.code === 200 ||
-      data.code === 0 ||
-      data.success === true ||
-      data.msg === "操作成功"
-    ) {
+    if (isApiSuccess(data)) {
       message.value = mode.value === 1 ? "订阅成功！感谢您的关注。" : "已成功取消订阅。";
       messageType.value = "success";
       email.value = "";
       stopCountdown();
     } else {
-      message.value =
-        data.code === 1005
-          ? mode.value === 1
-            ? "您已订阅，请勿重复操作。"
-            : "您尚未订阅，无需取消。"
-          : data.msg || (mode.value === 1 ? "订阅失败，请稍后重试。" : "取消订阅失败，请稍后重试。");
+      message.value = getApiMessage(
+        data,
+        mode.value === 1 ? "订阅失败，请稍后重试。" : "取消订阅失败，请稍后重试。",
+      );
       messageType.value = "error";
     }
   } catch (error) {

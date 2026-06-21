@@ -1054,11 +1054,12 @@
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/brain_computer_interaction.pdf",
     "images": [
       "/myMajor/note/image-20260421224842985.png",
-      "/myMajor/note/image-20260519235640010.png"
+      "/myMajor/note/image-20260519235640010.png",
+      "/myMajor/note/image-20260620155803359.png"
     ],
-    "hash": "7716038f41e61978d495917e1e5161b0f880f606be4a7d11ae05edfff76f5f3b",
-    "size": "1326569",
-    "gen_time": "2026-06-11T08:41:14"
+    "hash": "2556946a8f719ab0a9871d0995a171a0077a0b33e0bad1d0aa914f434c05cd95",
+    "size": "2064387",
+    "gen_time": "2026-06-21T08:41:44"
   },
   "docs/resource/coursenote/junior/nndl.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/nndl.pdf",

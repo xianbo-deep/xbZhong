@@ -17,7 +17,7 @@ timeline: false
 
 [Latex在线编辑器](https://cn.overleaf.com/)
 
-[PDF拆分](https://tools.pdf24.org/zh/split-pdf)
+[PDF工具](https://www.ilovepdf.com/zh-cn)
 
 [PDF2text](https://tools.pdf24.org/zh/pdf-to-txt)
 

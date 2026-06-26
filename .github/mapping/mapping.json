@@ -936,9 +936,9 @@
   "docs/resource/tools.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/tools.pdf",
     "images": [],
-    "hash": "6490c8a9701f124caa18c77be6a32a67134fc1a92a86b63e9012ebb247714f6a",
-    "size": "83659",
-    "gen_time": "2025-12-23T22:42:59"
+    "hash": "0e5d834c79abc08d4c0b37e07dc0107f50a7e83dcccbcc58541d4b4a913f57da",
+    "size": "82891",
+    "gen_time": "2026-06-26T08:40:31"
   },
   "docs/resource/coursenote/junior/ai_application.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/ai_application.pdf",
@@ -1057,9 +1057,9 @@
       "/myMajor/note/image-20260519235640010.png",
       "/myMajor/note/image-20260620155803359.png"
     ],
-    "hash": "2556946a8f719ab0a9871d0995a171a0077a0b33e0bad1d0aa914f434c05cd95",
-    "size": "2064387",
-    "gen_time": "2026-06-21T08:41:44"
+    "hash": "4075737a8248c47b30069892b43dc539d810529bb98d07f94288f7ed00357681",
+    "size": "2124260",
+    "gen_time": "2026-06-26T08:40:30"
   },
   "docs/resource/coursenote/junior/nndl.md": {
     "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/nndl.pdf",
@@ -1182,5 +1182,15 @@
     "hash": "9ae361bcca60400c3cd5f318d54f0b1d0035b3929098c53e301740ce255c9dce",
     "size": "1229486",
     "gen_time": "2026-06-16T08:49:21"
+  },
+  "docs/resource/coursenote/junior/ai_philosophy.md": {
+    "pdf": "docs/.vuepress/public/pdfs/resource/coursenote/junior/ai_philosophy.pdf",
+    "images": [
+      "/myMajor/note/image-20260622100601900.png",
+      "/myMajor/note/image-20260622100609859.png"
+    ],
+    "hash": "09636878d08cf1782d26e93e079cc33d0849d2e0ae19554afd8c6cdef6a6fb8e",
+    "size": "9367974",
+    "gen_time": "2026-06-26T08:40:28"
   }
 }

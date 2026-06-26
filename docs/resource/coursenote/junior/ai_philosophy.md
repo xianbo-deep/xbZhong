@@ -5,6 +5,9 @@ article: false
 timeline: false
 ---
 
+[本页PDF](/pdfs/resource/coursenote/junior/ai_philosophy.pdf)
+
+
 
 ## 小抄
 

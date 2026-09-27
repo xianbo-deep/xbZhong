@@ -35,24 +35,61 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 
 ![image-20251018161042945](/screenshot/backend/image-20251018161042945.png)
 
-- **控制平面**
+- **控制平面（Control Plane）**
   - `kube-apiserver`：负责**处理接受外来请求**的工作，是控制平面的前端
+    - 无状态，可水平扩缩，缓解实例压力，分发流量
+    - 支持**认证、鉴权、准入控制**
+    - http端口：8080；https端口：6443
   - `etcd`：**分布式键值存储**，存储集群状态数据
-  - `kube-scheduler`：负责监视**新创建的、未指定运行节点（node）的Pods**，并选择节点让Pod在上面运行
-  - `kube-controller-manager`：运行控制器进程，**多个控制器会在同一个进程运行**
+    - 只有`kube-apiserver`会与`etcd`通信
+  - `kube-scheduler`：负责监视**新创建的、未指定运行节点（node）的Pods**，并选择节点让Pod在上面运行，决定Pod放在哪一台Node
+    - **调度两个重要步骤**：过滤、打分
+  - `kube-controller-manager`：运行控制器进程，**负责调谐实际状态到理想状态**
     - 监测集群中**各种资源对象**的状态，并根据状态做出响应
-    - 有许多不同类型，在这不进行赘述
-- **工作节点**
-  - `kubelet`：会在集群中每个节点上运行，**保证容器（containers）都运行在Pod中**
+    - 其是一个进程/控制平面组件，其有许多不同类型，在这不进行赘述，运行时只使用一个进程进行启动，同时**用协程并发运行不同的控制器类型实例**
+- **工作节点（Worker Node）**
+  - `kubelet`：**负责容器生命周期和管理本节点的Pod**，会在集群中每个节点上运行，**保证容器（containers）都运行在Pod中**
     - 会定期从`apiserver`接收新的或者修改后的pod规范，并将pod的工作信息等汇报给`apiserver`
-  - `kube-proxy`：网络代理，实现**服务间访问和负载均衡**
+  - `kube-proxy`：网络代理，实现**Service的负载均衡和网络规则**，让访问service的流量正确转发到背后的Pod上
+    - `iptables`模式：用 iptables 规则做 DNAT（目标地址转换），随机选择 Pod
+    - `IPVS`模式：用内核 IPVS（IP Virtual Server）做负载均衡，按算法选择后端
   - `Container Runtime`：负责管理 Kubernetes 环境中容器的执行和生命周期
 
 ![image-20251018160307336](/screenshot/backend/image-20251018160307336.png)
 
 
+**CRI**：现在的k8s使用`Container Runtime Interface`进行接口定义，管理kubelet如何与容器runtime对接，**使 kubelet 能够使用各种容器运行时，无需重新编译集群组件**
 
-#### 常见资源对象
+- CRI是k8s**接口规范**，实现了CRI就可以接入k8s
+- 常见实现包括containered、CRI-O
+- 规定kubelet如何与容器runtime对话
+
+#### CNI
+
+**Container Network Interface，定义容器网络配置标准**
+
+- k8s网络模型要求：
+  - 所有 Pod 之间可以直接通信，无需NAT
+  - 所有 Node 和 Pod 之间可以直接通信，无需NAT
+  - Pod 看到的自己的 IP 和其他 Pod 看到的它的 IP 一致
+- CNI插件职责：
+  - 创建/删除 veth pair
+  - 分配IP
+  - 配置路由
+
+#### Kubernetes Namespace
+
+**作用：逻辑隔离资源，不是网络隔离也不是物理隔离**
+
+- 大多数资源，如Pod、Service、Deployment、PVC等都是**Namespace级别的**
+- 而Node、PV、Namespace等属于**集群级资源**
+- 命名空间内名称唯一，跨命名空间可重名
+
+#### ServiceAccount
+
+**给 Pod 内的进程提供身份，用于访问 API Server 或其他服务**
+
+### 常见资源对象
 
 ![image-20251018153922491](/screenshot/backend/image-20251018153922491.png)
 
@@ -63,7 +100,6 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 **概念**
 
 - k8s集群中的工作机器，可以是**物理机或虚拟机**
-
 - 提供计算资源来运行`pod`
 - 由控制面进行**调度和管理**
 - 节点上的[组件](https://kubernetes.io/zh-cn/docs/concepts/architecture/#node-components)包括`kubelet`、 容器运行时以及`kube-proxy`
@@ -77,23 +113,196 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 - 当 `kubelet` 启动参数中 `--register-node=true` 时，节点会**自动向 API Server 注册**
 - 节点的状态包括以下内容：
   - **地址**：节点的 IP、主机名等
-  - **状况**：表示节点是否健康、是否可调度
+    - `HostName`：节点主机名
+    - `InternalIP`：集群内部访问节点的IP
+    - `ExternalIP`：集群外部访问节点的IP
+  - **状况**：表示节点是否健康、是否可调度，调度器会根据下述条件决定是否把新Pod调度到这个节点
+    - `Ready`：节点是否健康
+    - `MemoryPressure`：内存是否紧张
+    - `DiskPressure`：磁盘是否紧张
+    - `PIDPressure`：进程数是否过多
+    - `NetworkUnavailable`：网络是否不可用
   - **容量与可分配**：节点可提供与已分配的资源
+    - `Capacity`：节点总资源量
+    - `Allocatable`：真正可供Pod使用的资源量
   - **信息**：节点的操作系统、内核、Kubelet 版本等
 - 节点会通过**周期性心跳**上报状态，控制面据此判断节点是否“可用
+
+**节点心跳**
+
+- kubelet更新节点对象的`.status`字段，告诉apiserver自己还存活
+  - 每次更新需要写etcd，压力大
+- 每个Node在`kube-node-lease`命名空间里面都有一个对应的**Lease对象**，kubelet 定期更新这个 Lease，控制平面依靠这个判断 Node 是否存活 
+  - 写入数据量小，压力小
+
+**Node制备**：创建新的 Node 并加入集群
+
+
+- Cluster Autoscaler（自动扩缩器）会根据 Pending Pod 自动增减节点，但其**本身不负责调度**
+
+> 除了CA（Cluster Autoscaler），还有HPA（Horizontal Pod Autoscaler）、VPA（Vertical Pod Autoscaler）
+>
+> - CA根据Pending Pod自动增删Node（节点）
+> - HPA负责根据指标自动增减Pod副本数
+> - VPA自动调整Pod的`requests`和`limits`
+>   - `requests`是容器对资源的最低需求声明，也是**调度器分配资源的唯一依据**
+>   - `limits`是容器的资源使用上限
+
+- 需要满足两个约束才能增删节点
+  - **Pod调度约束**：如资源请求，节点亲和性，污点与容忍等
+  - **Autoscaler配置的Node约束**：如节点数量上下限，机型等
+
+**Node整合**：将利用率低的Node上的Pod移走，并删除这个Node
+
+- **节点利用率低**：requests总和远小于节点容量
+- **空节点优先整合**
+- **非空节点整合有破坏性**：被整合的Node的Pod需要重建并且被调度到其它节点
+
+**污点与容忍度**
+
+- **污点**：写在 Node 上，使节点能够排斥一类特定的 Pod，有下列三种 Effect
+  - `NoSchedule`：不让不容忍的新 Pod 来，不动已有 Pod（无论是否容忍）
+  - `PreferNoSchedule`：尽量不让不容忍的新 Pod 来，不动已有 Pod（无论是否容忍）
+  - `NoExecute`：不让不容忍的新 Pod 来，赶走已有的不容忍的 Pod
+- **容忍度**：写于 Pod 上，允许调度器调度 Pod 到带有对应污点的 Node 上
+
+
+**节点亲和性与反亲和性**：定义在 Pod 上，支持在 Pod 上自定义动态规则
+
+- 亲和性：Pod 倾向于去某些 Node
+- 反亲和性：Pod 倾向于不去某些 Node
+- 两种策略模式
+  - `requiredDuringSchedulingIgnoredDuringExecution`：Pod 必须调度到满足条件的节点，否则不调度
+  - `preferredDuringSchedulingIgnoredDuringExecution`：Pod 尽量调度到满足条件的节点，但不强求
+
+**NodeSelector 和 NodeAffinity**
+
+- `NodeSelector`：Pod 声明一个标签键值对，调度器只把 Pod 放到拥有该标签的 Node 上
+  - 只能等值匹配，不满足就 Pending
+- `NodeAffinity`：节点亲和性，Pod 声明一组表达式，调度器根据表达式匹配节点标签
+  - 支持硬性（required）和软性（preferred） 两种策略
+  - 支持多个条件组合，能进行更灵活的节点选择
+
+
 
 #### Pod
 
 - k8s中的最小部署单元，但不是一个稳定的实体，容易**被创建和销毁**
   - 发生故障的时候k8s会销毁pod，并创建一个新的pod进行替代
-- 一个Pod里可以有一个或多个容器，**共享网络和卷**
+- 一个Pod里可以有一个或多个容器（Container），**共享网络和存储**
+- 一个Pod只有一个IP
 - 使用多个容器应当是这多个容器**紧密关联**，否则应该拆分为多个Pod部署
+
+**共享资源**
+
+- PID 命名空间：Pod 中的不同应用程序可以看到其他应用程序的进程 ID
+- 网络命名空间：Pod 中的多个容器能够访问同一个IP和端口范围
+- IPC 命名空间：Pod 中的多个容器能够使用 SystemV IPC 或 POSIX 消息队列进行通信
+- UTS 命名空间：Pod 中的多个容器共享一个主机名
+- Volumes（共享存储卷）：Pod 中的各个容器可以访问在 Pod 级别定义的 Volumes
+
+**生命周期**
+
+- `Pending`：Pod 已创建，但容器还没启动
+- `Running`：Pod 已调度到节点，容器正在运行
+- `Succeeded`：Pod 的所有容器正常退出
+- `Failed`：至少一个容器异常退出
+- `Unknown`：无法获取 Pod 状态
+
+**重启策略**：可以通过`restartPolicy`字段进行重启策略设置
+
+- `Always`：容器挂了就重启（默认）
+- `OnFailure`：异常退出才重启
+- `Never`：从不重启
+
+**镜像拉取策略**：通过`imagePullPolicy`字段控制
+
+- `Always`：每次启动容器都去仓库拉最新镜像
+- `IfNotPresent`：节点上已有该镜像就不拉，没有才拉
+- `Never`：只用本地镜像，没有就失败
+
+**探针**： kubelet 用来检查容器健康状态的机制
+
+- `livenessProbe`：存活探针，检测容器是否还在正常运行，失败时根据重启策略进行重启
+- `readinessProbe`：就绪探针，失败时控制器会将此pod从对应service的endpoint列表中移除，从此不再将任何请求调度到此Pod上，**并不重启容器**
+- `startupProbe`：启动探针，检测容器是否启动完成，启动期间，**存活探针和就绪探针都不生效，避免应用启动时间太长导致被kill**
+- **常用参数**
+  - `initialDelaySeconds`：表示在容器启动后延时多久秒才开始探测
+  - `periodSeconds`：表示执行探测的频率，即间隔多少秒探测一次
+  - `timeoutSeconds`：表示探测超时时间,容器必须在超时时间范围内做出响应，否则视为本次探测失败
+  - `successThreshold`：表示最少连续探测成功多少次才被认定为成功
+  - `failureThreshold`：表示连续探测失败多少次才被认定为失败
+
+**终止流程**
+
+- 用户/控制器发起删除
+- apiServer将 Pod 状态更新成 Terminating，被标记为 deletionTimestamp
+- Pod 从 Service 的 Endpoint 删除，不再接收新流量，与此同时kubelet 监听到 Pod 要被删除
+- 执行 preStop 钩子
+- kubelet 向容器主进程发送 SIGTERM 信号
+- 等待优雅退出，若退出超时，kubelet 发送 SIGKILL，强制杀掉进程
+
+
+
+**Pod亲和性和反亲和性（affinity与AntiAffinity）**
+
+- Pod 亲和性：希望当前 Pod 和某些 Pod 调度到**同一个拓扑域**
+- Pod 反亲和性：希望当前 Pod 和某些 Pod 调度到**不同拓扑域**
+- `requiredDuringSchedulingIgnoredDuringExecution`：Pod 必须调度到满足条件的拓扑域，否则不调度
+- `preferredDuringSchedulingIgnoredDuringExecution`：Pod 尽量调度到满足条件的拓扑域，但不强求
+
+**节点拓扑分布约束**：目标是让同一组 Pod **在不同的故障域里尽量均匀分布**，避免全挤在一个节点或可用区，遇到一个故障就全挂（一个域里面有多个Node）
+
+- `maxSkew`：最大不均衡度，设为 1 时，任意两个域中 Pod 数量差小于等于1
+- `topologyKey`：按什么方式进行分布，如节点、域，决定了调度时是把节点当作最小单位，还是把 zone / region当作最小单位
+- `whenUnsatisfiable`：不满足约束时怎么办
+  - `DoNotSchedule`：硬性，不满足则继续 Pod Pending
+  - `ScheduleAnyway`：软性，仍然调度，但优先选偏斜最小的节点
+
+
+**QoS类**：根据 Pod 的**资源请求（request）和限制（limit）**自动划分的优先级等级，用来决定节点资源紧张时，先驱逐谁、后驱逐谁（前提是 Pod 超用资源，实际用量超过request）
+
+- `Guaranteed`：优先级最高，最不容易被驱逐，Pod 中每个容器的 CPU 和内存都必须同时设置 request 和 limit
+- `Burstable`：优先级第二高，不满足`Guaranteed`条件，但至少有一个容器设置了 request 或 limit
+- `BestEffort`：优先级最低，节点资源不足时**第一个被驱逐**，所有容器都没有设置任何 CPU/内存的 request 或 limit
+
+**Pod的特殊类型**
+
+- 静态Pod：节点上的 kubelet 直接管理，不受 apiServer 控制，被存放到某个具体的 Node 上的具体文件当中，并且只在该 Node 上启动、运行，不能被调度到其他节点
+- 自主式Pod：
+- 动态Pod
+
+##### Init 容器
+
+主容器启动之前运行的专用容器
+
+- **运行时机**：主容器启动之前运行
+- **执行顺序**：多个 Init 容器串行执行
+- **生命周期**：执行完就退出，不会一直运行
+- **失败行为**：失败则 Pod 重启，直到成功
+- **主要用途**：初始化配置、等待依赖、准备数据
+- **不支持探针**
+
+##### Sidecar 容器
+
+**边车容器是和主容器一起运行、辅助主容器工作的容器**
+
+- **运行时机**：和主容器**同时运行**
+- **执行顺序**：并行，不分先后
+- **生命周期**：和主容器**同生共死**
+- **用途**：辅助主容器（日志、代理、监控）
+- 与主容器共享网络和数据卷
+- 边车容器支持探针来控制其生命周期
+
+
 
 #### Service
 
-**为Pod提供稳定的访问入口和服务发现**
+**为一组Pod提供稳定的访问入口和服务发现**
 
 - 定义服务访问规则和抽象，实际由`kube-proxy`实现转发
+- 负责TCP/UDP连接，OSI四层
+- Pod的IP会变，Service负责提供一个虚拟IP（Cluster IP），让别人能稳定访问到 Pod
 
 ![image-20251018151814388](/screenshot/backend/image-20251018151814388.png)
 
@@ -101,14 +310,34 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 - 可以为**内部服务**和**外部服务**提供访问入口
   - 使用节点的IP地址和端口号映射到`Service`的IP地址和端口号是实现**外部服务**
 
+**四种类型**
+
+- `ClusterIP`：集群内部虚拟 IP，仅限集群内部访问
+- `NodePort`：每个节点开一个端口，范围为30000-32767
+- `LoadBalancer`：云厂商负载均衡器
+- `ExternalName`：DNS别名，起一个别名，别名指向真实IP，应用代码使用别名访问
+
+**端口**
+
+- `nodePort`：节点端口
+- `port`：Service的端口
+- `targetPort`：Pod的端口
+
+
+**EndpointSlice**：保存 Service 当前可以访问的后端 Endpoint
+
+- 由 EndpointSlice Controller 自动维护
+- 把一个 Service 的端点拆成多个 slice，**减少对象体积，降低更新放大**
+- **CoreDNS**负责集群内 DNS 解析，将域名转换为IP
+
 #### Ingress
 
  **集群外部访问集群内服务的统一入口**
 
 ![image-20251018152403502](/screenshot/backend/image-20251018152403502.png)
 
-- 可以根据**请求的域名和路径**转发到不同的服务上
-
+- 可以根据**请求的域名和路径**转发到不同的 Service 上
+- 负责HTTP/HTTPS 等协议内容，OSI七层
 - 可配置不同的转发规则
 - 可实现负载均衡，配置SSL证书
 
@@ -118,7 +347,6 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 
 - 存储明文信息，不建议存储敏感信息
 - 使**应用程序和配置解耦**，配置变更时不用重新构建镜像
-
 - 方便Pod进行配置的动态获取
 
 #### Secret
@@ -138,14 +366,103 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 - 可以实现**容器间共享数据**
 - 可直接挂载**宿主机目录**进行存储，也可以绑定**外部远程存储**
 
+
+**临时卷**：生命周期跟着 Pod 走
+
+- `emptyDir`：Pod 调度到节点时创建，Pod 删除就没了
+- `hostPath`：直接把宿主机目录挂进容器。Pod 删了数据还在，但不能跨节点迁移，且安全风险高
+
+
+
+
+**持久卷**：脱离 Pod 的生命周期，一个 PVC 只能绑定一个 PV
+
+- **PV（PersistentVolume）**：集群级别的存储资源，生命周期独立于任何 Pod
+- **PVC（PersistentVolumeClaim）**：用户/应用对存储的申请单，声明需求，系统找到符合要求的 PV 进行绑定
+- **StorageClass**：动态供给的模板，创建 PVC 时会自动创建对应的 PV 并自动进行绑定
+
+
+
+**CSI（Container Storage Interface）**：容器存储接口
+
+- 不同云盘的创建方式、挂载方式、扩容方式都是完全不一样的，因此需要CSI让云厂商实现这个接口，就可以接入k8s，被k8s使用
+- 包括以下标准操作
+  - `CreateVolume`：创建一块盘
+  - `DeleteVolume`：删除一块盘
+  - `ControllerPublish`：把盘挂到某个节点
+  - `NodeStage/NodePublish`：在节点上把盘挂进容器
+  - `CreateSnapshot`：给盘打快照
+  - `ExpandVolume`：扩容
+
+**卷模式**：决定卷以什么形式呈现给 Pod
+
+- `Filesystem`：卷被挂载为一个目录，Pod 像用普通文件夹一样读写文件
+- `Block`：卷以原始块设备的形式直接给 Pod，中间没有文件系统层
+  - 就是一块磁盘，无文件、目录的概念，需要自己管理数据布局
+
+**volumeBindingMode**：决定 PVC 什么时候绑定 PV
+
+- `Immediate`：先绑定，再调度
+  - 创建 PVC
+  - 立刻找 PV 绑定
+  - 创建 Pod
+  - 调度器决定 Pod 去哪个节点
+  - 如果 Pod 去的节点访问不了这个 PV ,挂载失败
+- `WaitForFirstConsumer`：先调度，再绑定
+  - 创建 PVC
+  - 不绑定，等 Pod 调度
+  - 创建 Pod
+  - 调度器决定 Pod 去 node1
+  - 根据 node1 的位置，绑定一个 node1 能访问的 PV
+  - Pod 挂载成功
+
+**PV四种状态**
+
+- `Available`：空闲，可被绑定
+- `Bound`：已绑定某个 PVC
+- `Released`：PVC删了，但回收策略是 Retain，等待手动处理
+- `Failed`：自动回收失败
+
+
+**PV/PVC访问模式**
+
+- `ReadWriteOnce`：单节点读写，同一时间只能被一个节点挂载读写
+- `ReadOnlyMany`：多节点只读，可以被多个节点同时挂载，但只能读，不能写
+- `ReadWriteMany`：多节点读写，可以被多个节点同时挂载，并且能同时读写
+- `ReadWriteOncePod`：单 Pod 读写，同一时间，只能被一个 Pod 挂载读写。连同一节点上的其他 Pod 都不行
+
+
+**回收策略**：PVC被删除后，它绑定的那块PV该怎么办
+
+- `Retain`：保留
+- `Delete`：直接删除
+- `Recycle`：清空数据，留着盘（已废弃）
+
+
+
 #### Deployment
 
-负责**管理和控制 Pod 的运行与副本数量**
+负责**管理和控制 Pod 的运行与副本数量**，**无状态应用的核心控制器**
 
 - 适合管理**无状态应用**
-
 - 可自动维持期望副本数，执行**Pod的自动重建**
-- 支持版本回滚、更新
+- 支持版本回滚、平滑更新
+- 用来管理 **ReplicaSet**，ReplicaSet管理 Pod
+
+**升级策略**
+
+- `Recreate`：重建更新，会杀掉所有正在运行的 Pod，然后再重新创建新的 Pod
+- `rollingUpdate`：滚动更新，会以滚动更新的方式来逐个更新pod，同时通过设置滚动更新的两个参数`maxUnavailable`、`maxSurge`来控制更新的过程
+  - `maxSurge`：最大激增数，更新时，最多可以比期望副本数多出几个 Pod
+  - `maxUnavailable`：最大不可用数，更新时，最多允许几个 Pod 处于不可用状态
+
+#### ReplicaSet
+
+**确保指定数量的 Pod 副本始终在运行**
+
+- 通过 apiServer 监听 Pod 数量，对比期望副本数进行增删
+- 无版本回滚和滚动更新的能力
+- 一个版本一个`ReplicaSet`，`Deployment`通过使用不同版本的`ReplicaSet`进行版本回滚
 
 #### StatefulSet
 
@@ -153,6 +470,72 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 
 - 适合管理有状态应用
 - 可以保证**Pod的唯一标识、启动顺序和停止顺序受控、稳定的存储卷**
+- 给予每个 Pod 固定的身份（名字、网络、存储），每个 Pod 有独立的 PVC
+- 删除 StatefulSet 的时候**不会自动删除 PVC**，需要手动删除
+
+
+**行为特征**
+
+- 有序创建：从0到 N-1，顺序创建
+- 有序删除：从 N-1 到 0，顺序删除
+- 有序更新
+  - 逆序更新：若更新失败，重建此 Pod，不影响前面的 Pod
+  - 手动更新：更改模板后需手动删除 Pod 才能触发更新
+  - 分区更新：只更新一部分的 Pod，确保没问题才继续更新别的
+
+**Headless Service**
+
+- 相较于普通 Serivce，**无 Cluster IP，不负责负载均衡，直接返回后端 Pod 的IP列表**
+- 和 StatefulSet 配套使用，因为 StatefulSet 的 Pod 需要固定的 DNS，而 Headless Service 可以直接返回 Pod 的 ip
+
+**volumeClaimTemplates**
+
+- 模板，写完后自动为**每个 Pod 创建一个独立 PVC**
+
+#### DaemonSet
+
+**确保集群中每个节点上都运行一个 Pod 副本**
+
+- 新节点加入会自动创建 Pod
+- 副本数自动等于节点数
+- 默认行为：每个节点创建一个Pod，但会**自动加上节点亲和性**
+- 也可以用`nodeSelector`实现在部分节点上跑
+- **自动容忍一些系统污点**，节点有问题时，DaemonSet 的 Pod 也要能跑
+
+
+#### Job
+
+**创建一个或多个 Pod，直到指定数量的 Pod 成功结束**
+
+- `completions`：需要成功几次
+- `parallelism`：同时跑几个Pod
+- `backoffLimit`：失败重试次数
+- `activeDeadlineSeconds`：超时时间
+- `restartPolicy`：重启策略
+  - `Never`：容器失败不重启，每次失败都创建新 Pod
+  - `OnFailure`：容器失败重启同一个 Pod
+
+### CronJob
+
+**用来定时运行 Job 的控制器**
+
+|字段|范围|特殊字符|
+|---|---|---|
+分|	0-59	|* , - /
+时|	0-23	|同上
+日|	1-31	|同上
+月|	1-12	|同上
+周|	0-6（0=周日）|同上
+
+- `schedule`：Cron 表达式（分、时、日、月、周）
+- `concurrencyPolicy`：并发策略
+  - `Allow`：允许并发，前一个没跑完也创建新的
+  - `Forbid`：禁止并发，前一个没跑完就跳过本次
+  - `Replace`：替换，前一个没跑完就杀掉，创建新的
+- `startingDeadlineSeconds`：如果到了执行时间，但因为集群故障没创建 Job，允许多久内补创建
+- `successfulJobsHistoryLimit`：保留几个成功的Job
+- `failedJobsHistoryLimit`：保留几个失败的Job
+- `suspend`：是否暂停，暂停后不再创建新 Job
 
 ## Minikube
 

@@ -80,7 +80,42 @@
             </div>
 
             <div class="card-face card-back">
-              <p class="back-copy">{{ backParagraph }}</p>
+              <div class="calendar-shell" aria-label="创意日历">
+                <header class="calendar-header">
+                  <div class="calendar-year" aria-label="当前年份">
+                    <span class="calendar-year-progress" :style="{ '--year-progress': yearProgress + '%' }">{{ currentYear }}</span>
+                    <span class="calendar-year-ghost">{{ currentYear + 1 }}</span>
+                  </div>
+                </header>
+                <nav class="month-list" aria-label="月份">
+                  <span
+                    v-for="month in months"
+                    :key="month"
+                    class="month-item"
+                    :class="{ 'is-current': month === currentMonth }"
+                    :style="{ '--month-progress': monthFillProgress(month) + '%' }"
+                  >
+                    <span class="month-value">{{ month }}</span>
+                  </span>
+                </nav>
+                <div class="calendar-main">
+                  <section class="month-card">
+                    <div class="month-card-top"><span class="month-name">{{ monthName }}</span><span class="month-index">{{ currentMonth }} / {{ currentYear }}</span></div>
+                    <div class="weekday-row"><span v-for="weekday in weekdays" :key="weekday">{{ weekday }}</span></div>
+                    <div class="days-grid"><span v-for="(day, index) in calendarDays" :key="day + '-' + index" class="day-cell" :class="{ 'is-empty': !day, 'is-elapsed': day && day < currentDay, 'is-future': day && day > currentDay, 'is-today': day === currentDay, 'is-weekend': index % 7 === 0 || index % 7 === 6 }">{{ day || "" }}</span></div>
+                  </section>
+                  <div class="time-flow" aria-label="年度时间进度">
+                    <div class="time-flow-track">
+                      <span class="time-flow-fill" :style="{ width: yearProgress + '%' }" />
+                      <span class="time-flow-marker" :style="{ left: yearProgress + '%' }" />
+                    </div>
+                    <div class="time-flow-meta">
+                      <span>TIME / FLOW</span>
+                      <span>{{ yearProgress }}%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -96,11 +131,28 @@ import { gsap } from "gsap";
 const frontText = "HELLO, I'M zxb";
 const backText = "你好，我是 zxb";
 const metaText = "21岁 / ECUST";
-const backParagraph =
-  "随着年龄的增长 生活让你变得谦卑 你不再追逐大事 开始珍惜小事：独处的时间 充足的睡眠 良好的饮食 长途散步 以及与所爱之人共度的高质量时光 简单成为最终目标";
 const frontChars = computed(() => [...frontText]);
 const cursorBackChars = computed(() => [...backText]);
 const metaChars = computed(() => [...metaText]);
+const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth() + 1;
+const currentDay = today.getDate();
+const months = Array.from({ length: 12 }, (_, index) => index + 1);
+const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthName = monthNames[currentMonth - 1];
+const firstWeekday = new Date(currentYear, currentMonth - 1, 1).getDay();
+const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+const calendarDays = [...Array(firstWeekday).fill(null), ...Array.from({ length: daysInMonth }, (_, index) => index + 1)];
+const dayOfYear = Math.floor((today.getTime() - new Date(currentYear, 0, 0).getTime()) / 86400000);
+const totalDays = ((currentYear % 4 === 0 && currentYear % 100 !== 0) || currentYear % 400 === 0) ? 366 : 365;
+const yearProgress = Math.round((dayOfYear / totalDays) * 1000) / 10;
+const monthProgress = Math.round((currentDay / daysInMonth) * 1000) / 10;
+const monthFillProgress = (month: number) => {
+  const elapsedMonths = (dayOfYear / totalDays) * 12;
+  return Math.max(0, Math.min(100, (elapsedMonths - (month - 1)) * 100));
+};
 
 const root = ref<HTMLElement | null>(null);
 const tiltLayer = ref<HTMLElement | null>(null);
@@ -715,6 +767,376 @@ onBeforeUnmount(() => {
   content: "";
 }
 
+.calendar-shell {
+  width: min(980px, 92vw);
+  color: #050505;
+  text-align: left;
+}
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding-bottom: clamp(18px, 2vw, 30px);
+  border-bottom: 1px solid rgba(5, 5, 5, 0.14);
+}
+.month-index, .note-title, .note-foot {
+  margin: 0;
+}
+.calendar-year {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: clamp(54px, 8.5vw, 132px);
+  font-weight: 850;
+  letter-spacing: -0.08em;
+  line-height: 0.74;
+}
+.calendar-year-ghost {
+  color: rgba(5, 5, 5, 0.17);
+  font-weight: 500;
+}
+.month-list {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.25rem;
+  padding: 16px 0 24px;
+}
+.month-item {
+  position: relative;
+  color: rgba(5, 5, 5, 0.38);
+  font-size: clamp(10px, 1vw, 14px);
+  font-weight: 750;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+.month-item.is-current { color: #050505; }
+.month-item.is-current::after {
+  position: absolute;
+  right: 24%;
+  bottom: -10px;
+  left: 24%;
+  height: 3px;
+  background: #050505;
+  border-radius: 4px;
+  content: "";
+}
+.calendar-main {
+  display: block;
+  width: 100%;
+}
+.month-card {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: clamp(18px, 2.2vw, 30px);
+  border: 1px solid rgba(5, 5, 5, 0.14);
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.42);
+  background-image:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(207, 207, 202, 0.34)),
+    radial-gradient(#d6d6d1 1px, transparent 1px);
+  background-size: 100% 100%, 24px 24px;
+  background-position: 0 0, 0 0;
+  box-shadow: 0 18px 42px rgba(5, 5, 5, 0.06);
+}
+.month-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 18px;
+}
+.month-name {
+  font-size: clamp(26px, 3.7vw, 54px);
+  font-weight: 820;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+.month-index {
+  color: rgba(5, 5, 5, 0.48);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+}
+.weekday-row, .days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.weekday-row {
+  padding: 12px 0 10px;
+  border-top: 1px solid rgba(5, 5, 5, 0.12);
+  color: rgba(5, 5, 5, 0.48);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+.day-cell {
+  display: grid;
+  min-height: clamp(32px, 4vw, 58px);
+  place-items: center;
+  color: rgba(5, 5, 5, 0.78);
+  font-size: clamp(13px, 1.5vw, 19px);
+  font-weight: 650;
+  border-radius: 50%;
+}
+.day-cell.is-weekend { color: rgba(5, 5, 5, 0.4); }
+.day-cell.is-today {
+  color: #f7f7f4;
+  background: #050505;
+  box-shadow:
+    0 7px 16px rgba(5, 5, 5, 0.2),
+    0 0 0 7px rgba(5, 5, 5, 0.045),
+    0 14px 28px rgba(5, 5, 5, 0.12);
+}
+.calendar-note {
+  padding-top: clamp(14px, 2vw, 30px);
+}
+.note-mark {
+  display: block;
+  margin-bottom: 22px;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1;
+}
+.note-title {
+  font-size: clamp(24px, 3vw, 42px);
+  font-weight: 820;
+  letter-spacing: -0.06em;
+}
+.note-copy {
+  max-width: 240px;
+  margin: 16px 0 24px;
+  color: rgba(5, 5, 5, 0.58);
+  font-size: clamp(13px, 1.3vw, 17px);
+  line-height: 1.75;
+}
+.note-rule {
+  width: 100%;
+  height: 1px;
+  margin-bottom: 14px;
+  background: rgba(5, 5, 5, 0.16);
+}
+.note-foot {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(5, 5, 5, 0.48);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+.note-foot span { color: #050505; font-size: 18px; }
+[data-theme="dark"] .calendar-shell { color: #f7f7f4; }
+[data-theme="dark"] .month-index,
+[data-theme="dark"] .note-title,
+[data-theme="dark"] .note-foot { color: rgba(247, 247, 244, 0.7); }
+[data-theme="dark"] .calendar-header,
+[data-theme="dark"] .month-card,
+[data-theme="dark"] .weekday-row,
+[data-theme="dark"] .note-rule { border-color: rgba(247, 247, 244, 0.18); }
+[data-theme="dark"] .calendar-year-ghost,
+[data-theme="dark"] .month-item,
+[data-theme="dark"] .day-cell.is-weekend,
+[data-theme="dark"] .note-copy { color: rgba(247, 247, 244, 0.42); }
+[data-theme="dark"] .month-item.is-current,
+[data-theme="dark"] .day-cell,
+[data-theme="dark"] .note-foot span { color: #f7f7f4; }
+[data-theme="dark"] .month-item.is-current::after { background: #f7f7f4; }
+[data-theme="dark"] .month-card { background: rgba(5, 5, 5, 0.14); box-shadow: 0 18px 42px rgba(0, 0, 0, 0.18); }
+[data-theme="dark"] .day-cell.is-today { color: #050505; background: #f7f7f4; }
+
+.calendar-year-progress {
+  color: transparent;
+  background: linear-gradient(
+    to right,
+    #050505 0 var(--year-progress),
+    rgba(5, 5, 5, 0.17) var(--year-progress) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.month-value {
+  color: transparent;
+  background: linear-gradient(
+    to right,
+    #050505 0 var(--month-progress),
+    rgba(5, 5, 5, 0.24) var(--month-progress) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.month-item.is-past .month-value {
+  color: #050505;
+}
+.month-item.is-current .month-value {
+  color: transparent;
+  background: linear-gradient(
+    to right,
+    #050505 0 var(--month-progress),
+    rgba(5, 5, 5, 0.28) var(--month-progress) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+[data-theme="dark"] .calendar-year-progress {
+  background: linear-gradient(
+    to right,
+    #f7f7f4 0 var(--year-progress),
+    rgba(247, 247, 244, 0.17) var(--year-progress) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+[data-theme="dark"] .month-value {
+  color: rgba(247, 247, 244, 0.28);
+}
+[data-theme="dark"] .month-value {
+  background: linear-gradient(
+    to right,
+    #f7f7f4 0 var(--month-progress),
+    rgba(247, 247, 244, 0.24) var(--month-progress) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.time-flow {
+  width: min(760px, 100%);
+  margin: clamp(18px, 2vw, 28px) auto 0;
+}
+.time-flow-track {
+  position: relative;
+  height: 3px;
+  overflow: visible;
+  background: rgba(5, 5, 5, 0.1);
+}
+.time-flow-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  background: #050505;
+  transition: width 0.8s cubic-bezier(0.2, 0.72, 0.18, 1);
+}
+.time-flow-fill::after {
+  position: absolute;
+  top: -4px;
+  right: -14px;
+  width: 28px;
+  height: 11px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  content: "";
+  animation: time-sweep 3.2s ease-in-out infinite;
+}
+.time-flow-marker {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #f7f7f4;
+  border-radius: 50%;
+  background: #050505;
+  box-shadow: 0 0 0 4px rgba(5, 5, 5, 0.1), 0 5px 12px rgba(5, 5, 5, 0.18);
+  transform: translate(-50%, -50%);
+  transition: left 0.8s cubic-bezier(0.2, 0.72, 0.18, 1);
+}
+.time-flow-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 9px;
+  color: rgba(5, 5, 5, 0.42);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+.day-cell.is-elapsed {
+  color: rgba(5, 5, 5, 0.92);
+}
+.day-cell.is-future {
+  color: rgba(5, 5, 5, 0.3);
+}
+[data-theme="dark"] .day-cell.is-future {
+  color: rgba(247, 247, 244, 0.3);
+}
+.day-cell.is-today {
+  animation: today-breathe 2.8s ease-in-out infinite;
+}
+@keyframes time-sweep {
+  0%, 35% { opacity: 0; transform: translateX(-12px); }
+  55% { opacity: 0.85; }
+  75%, 100% { opacity: 0; transform: translateX(12px); }
+}
+@keyframes today-breathe {
+  0%, 100% { box-shadow: 0 7px 16px rgba(5, 5, 5, 0.2), 0 0 0 7px rgba(5, 5, 5, 0.045), 0 14px 28px rgba(5, 5, 5, 0.12); }
+  50% { box-shadow: 0 9px 20px rgba(5, 5, 5, 0.24), 0 0 0 9px rgba(5, 5, 5, 0.065), 0 18px 32px rgba(5, 5, 5, 0.14); }
+}
+[data-theme="dark"] .time-flow-track { background: rgba(247, 247, 244, 0.16); }
+[data-theme="dark"] .time-flow-fill { background: #f7f7f4; }
+[data-theme="dark"] .time-flow-marker { border-color: #050505; background: #f7f7f4; box-shadow: 0 0 0 4px rgba(247, 247, 244, 0.12), 0 5px 12px rgba(0, 0, 0, 0.28); }
+[data-theme="dark"] .time-flow-meta { color: rgba(247, 247, 244, 0.44); }
+[data-theme="dark"] .day-cell.is-elapsed { color: rgba(247, 247, 244, 0.92); }
+@media (prefers-reduced-motion: reduce) {
+  .time-flow-fill::after,
+  .day-cell.is-today { animation: none; }
+}
+.card-back {
+  padding: clamp(24px, 4vw, 52px);
+}
+.calendar-shell {
+  width: min(1040px, 92vw);
+  max-height: calc(100vh - var(--navbar-height) - 40px);
+  margin: auto;
+  overflow: visible;
+}
+.calendar-header {
+  gap: 1.2rem;
+  padding-bottom: clamp(14px, 1.6vw, 22px);
+}
+.calendar-year {
+  font-size: clamp(54px, 8vw, 118px);
+  line-height: 0.82;
+}
+.month-list {
+  gap: 0.12rem;
+  padding: 12px 0 18px;
+}
+.month-item {
+  font-size: clamp(9px, 0.85vw, 12px);
+}
+.calendar-main {
+  width: 100%;
+}
+.month-card {
+  width: min(700px, 100%);
+  padding: clamp(14px, 1.7vw, 24px);
+}
+.month-card-top {
+  padding-bottom: 13px;
+}
+.month-name {
+  font-size: clamp(23px, 3vw, 42px);
+}
+.month-index {
+  font-size: 10px;
+}
+.weekday-row, .days-grid {
+  gap: 3px;
+}
+.weekday-row {
+  padding: 9px 0 7px;
+  font-size: 9px;
+}
+.day-cell {
+  min-height: clamp(34px, 4.2vw, 62px);
+  font-size: clamp(13px, 1.45vw, 19px);
+}
+.day-cell.is-today {
+  box-shadow:
+    0 5px 12px rgba(5, 5, 5, 0.18),
+    0 0 0 5px rgba(5, 5, 5, 0.04),
+    0 10px 20px rgba(5, 5, 5, 0.1);
+}
+.time-flow {
+  margin-top: 16px;
+}
 @media (max-width: 768px), (pointer: coarse) {
   .home-hero-3d {
     min-height: calc(100vh - var(--navbar-height));
@@ -757,6 +1179,72 @@ onBeforeUnmount(() => {
 
   .back-copy::after {
     border-radius: 20px;
+  }
+
+  .calendar-shell {
+    width: min(100%, 92vw);
+  }
+
+  .calendar-header {
+    align-items: center;
+    flex-direction: row;
+    gap: 1.2rem;
+  }
+
+  .calendar-year {
+    font-size: clamp(54px, 17vw, 92px);
+  }
+
+  .month-list {
+    gap: 0.08rem;
+    padding: 14px 0 22px;
+  }
+
+  .month-item {
+    font-size: 9px;
+  }
+
+  .calendar-main {
+    display: block;
+  }
+
+  .month-card {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  .month-name {
+    font-size: clamp(25px, 8vw, 40px);
+  }
+
+  .day-cell {
+    min-height: 34px;
+  }
+
+  .calendar-note {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 14px;
+    padding: 0 4px;
+  }
+
+  .note-mark {
+    grid-row: span 3;
+    margin: 2px 0 0;
+  }
+
+  .note-title {
+    font-size: 24px;
+  }
+
+  .note-copy {
+    margin: 7px 0 10px;
+    font-size: 13px;
+  }
+
+  .note-rule,
+  .note-foot {
+    grid-column: 1 / -1;
   }
 }
 </style>

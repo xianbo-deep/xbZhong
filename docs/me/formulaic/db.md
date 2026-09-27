@@ -106,12 +106,12 @@ create table tb_name(...) engine = Innodb;
 - 会以**一定频率把缓冲池的数据刷新到磁盘**，减少磁盘IO，加快处理速度
 - **以页为单位，采用链表的数据结构管理页**，有三种类型的页
   - `free page`：空闲页，未被使用
-  - `clean page`：被使用的页，数据未被修改
+  - `clean page`：被使用的页，数据未被修改，内存数据与磁盘数据一致
   - `dirty page`：脏页，被使用的页，数据被修改过，数据与磁盘的数据产生不一致
 
 
 
-**`Change Buffer`**：更改缓冲区
+**`Change Buffer`**：更改缓冲区，主要优化二级索引的修改
 
 - **针对非聚簇索引**执行增删改语句且这些数据没有在`Buffer Pool`的时候，会先把**数据变更**缓存在`Change Buffer`中
 
@@ -184,10 +184,12 @@ create table tb_name(...) engine = Innodb;
 
 `redo log`和`undo log`保证事务的**原子性、一致性、持久性**
 
-- `redo log`：重做日志，保证事务的**持久性**，记录**数据页的物理修改**
+- `redo log`：Innodb引擎层，重做日志，保证事务的**持久性**，记录**数据页的物理修改**
   - 改`buffer pool`的页，然后把数据变更的的情况写入`redo log buffer`，再按一定策略**顺序写入**磁盘的`redo log files`
   - 可以避免因宕机导致内存的数据丢失而无法保证数据持久性
-- `undo log`：回滚日志，保证事务的**原子性**
+  - WAL：Write-Ahead Logging，保证数据不丢和高性能的核心技术，修改数据前，先写redo log
+    - 数据页是随机写（慢），redo log是顺序写（快），提升性能
+- `undo log`：Innodb引擎层，回滚日志，保证事务的**原子性**
   - **作用**：提供回滚和MVCC
   - 是逻辑日志，描述的是如何恢复一行到旧状态，记录**操作的反向操作**
   - 进行`insert`时，产生的`undo log`日志在事务被提交后**可被立刻删除**
@@ -822,6 +824,8 @@ MDL加锁过程是系统自动控制，无需显式使用，在访问表的时�
 
 ### BinLog
 
+**MySQL Server层**
+
 **二进制日志（BinaryLog）**，记录了所有的DDL（数据定义）语句和DML（数据操纵）语句，**不包括数据查询语句**
 
 **作用**：
@@ -909,6 +913,13 @@ show variables like '%binlog_expire%'
 
 - MySQL将事务操作记录到redolog中并记录为`prepare`状态
 - 当事务提交时，MySQL将事务操作记录到binlog中，然后把redolog中的日志记录为`commit`状态
+
+
+**崩溃恢复**
+
+- redo log 为prepare，Binlog完整：主库提交
+- redo log 为prepare，Binlog不完整：主库回滚
+- redo log 为commit：主库已经提交
 
 ### 主从复制
 

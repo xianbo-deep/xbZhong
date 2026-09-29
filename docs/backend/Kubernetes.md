@@ -31,6 +31,8 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 
 典型的**MASTER-WORKER**架构
 
+- master
+
 ![image-20251017150052951](/screenshot/backend/image-20251017150052951.png)
 
 ![image-20251018161042945](/screenshot/backend/image-20251018161042945.png)
@@ -64,6 +66,14 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 - 常见实现包括containered、CRI-O
 - 规定kubelet如何与容器runtime对话
 
+
+#### List-Watch
+
+k8s所有组件与API Server保持数据同步的核心机制，有俩个阶段
+
+- 阶段一：List（全量），组件启动时先调用API Server的List接口，拉取某类资源的完整状态
+- 阶段二：Watch（增量）
+
 #### CNI
 
 **Container Network Interface，定义容器网络配置标准**
@@ -88,6 +98,56 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 #### ServiceAccount
 
 **给 Pod 内的进程提供身份，用于访问 API Server 或其他服务**
+
+
+#### RBAC
+
+Role-Based Access Control（基于角色的访问控制），负责k8s权限管理
+
+- 谁可以对哪些资源做什么操作
+- `Subject`：用户、用户组
+- `Verb`：get、list、watch、create、update、delete 等
+- `Resource`：Pod、Deployment、CRD等
+
+
+|对象|作用范围|作用|
+|--|--|--|
+|Role	|某个 Namespace 内|定义一组权限规则|
+|ClusterRole|整个集群|定义一组权限规则|
+|RoleBinding|某个 Namespace 内|把 Role 绑定给 Subject|
+|ClusterRoleBinding|整个集群|把 ClusterRole 绑定给 Subjec|
+
+
+需要写yaml文件进行**权限定义和权限绑定**
+
+```yaml
+# ClusterRole：定义权限清单
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: my-operator-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+
+# ClusterRoleBinding：把权限发给谁
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: my-operator-binding
+subjects:
+  - kind: ServiceAccount
+    name: my-operator-sa
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: my-operator-role
+  apiGroup: rbac.authorization.k8s.io
+```
 
 ### 常见资源对象
 
@@ -126,7 +186,7 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
     - `Capacity`：节点总资源量
     - `Allocatable`：真正可供Pod使用的资源量
   - **信息**：节点的操作系统、内核、Kubelet 版本等
-- 节点会通过**周期性心跳**上报状态，控制面据此判断节点是否“可用
+- 节点会通过**周期性心跳**上报状态，控制面据此判断节点是否可用
 
 **节点心跳**
 
@@ -515,7 +575,7 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
   - `Never`：容器失败不重启，每次失败都创建新 Pod
   - `OnFailure`：容器失败重启同一个 Pod
 
-### CronJob
+#### CronJob
 
 **用来定时运行 Job 的控制器**
 
@@ -537,6 +597,214 @@ Kubernetes是一个容器编排框架，提供了一个**可弹性运行分布�
 - `failedJobsHistoryLimit`：保留几个失败的Job
 - `suspend`：是否暂停，暂停后不再创建新 Job
 
+### 二次开发
+
+#### Controller
+
+k8s的一种控制逻辑，主要负责将**当前状态调谐至目标状态**，可以理解成是一个循环，不断检查当前状态，当状态偏离时将当前状态调谐至目标状态，称之为**Reconcile Loop**
+
+- Observe（观察）：获取当前实际状态，以及用户声明的期望状态
+- Compare（比较）：判断当前状态和期望状态是否一致
+- Update（更新）：采取操作，让实际状态向期望状态靠近
+
+
+当实际状态和期望状态不一致时才允许更新资源，也就是**调谐过程应该要具有幂等性**
+
+
+
+#### Operator
+
+k8s自带的controller只认识k8s自带的资源，当我们需要自定义资源让k8s管理时，就需要自己实现Controller，而当这个Controller还包含大量针对某个应用的操作，如故障转移、状态管理、版本回滚升级，就称其为**Operator**
+
+**组成部分**
+
+- **CRD**：自定义资源定义
+- **CR**：自定义资源，CRD的实例
+- **Controller**：控制器
+
+
+
+##### Informer机制
+
+**不给 API Server 造成巨大压力的前提下，实时感知集群中资源的变化**
+
+
+内部有一个 **Reflector**，通过 **List-Watch** 机制与API Server通信
+
+- List：初始化时，拉取指定资源的全量数据并记录**版本号（resourceVersion）**
+- Watch：通过HTTP长连接持续监听，由API Server推送**增量事件**
+- 这些事件被放进 **DeltaFIFO 队列**中，然后由 Informer 内部 消费队列里的事件并存到 **Indexer（本地缓存）**，同时将事件分发给注册的 **EventHandler**，调用提前写好的回调函数
+
+
+##### Leader Election
+
+保证多个 **Manager** 只有一个在工作的机制，防止多个 **Manager** 对同一个资源进行操作导致发生错误
+
+靠k8s的**Lease对象**进行Leader的选择，存储在etcd（集群级别）
+
+- 每个副本启动后，都去抢这个对象
+- 抢到的人是Leader
+- Leader定期续约，证明自己还存活
+- 其它副本尝试抢，抢不到就等待
+- Leader挂了，不再续约，Lease过期，其他副本进行争抢
+
 ## Minikube
 
 迷你版的`Kubernetes`，可以在本地部署**一个完整的单节点Kubernetes集群**
+
+
+## kubectl
+
+命令行工具，和k8s集群通信的客户端，可以通过它向 API Server 发请求，从而操作集群
+
+**集群与配置**
+
+- `kubectl version`：查看客户端和服务端版本
+- `kubectl cluster-info`：查看集群信息
+- `kubectl get nodes`：查看集群节点
+- `kubectl config view`：查看kubeconfig配置
+
+**查看资源**
+
+```bash
+kubectl get pods
+kubectl get deployments
+kubectl get services
+kubectl get nodes
+kubectl get namespaces
+
+# 缩写
+kubectl get po
+kubectl get deploy
+kubectl get svc
+kubectl get ns
+```
+
+- `kubectl get pods`：列出当前命名空间的Pod
+  - `kubectl get pods -A`：列出所有命名空间的Pod
+  - `kubectl get pods -n <namespace>`：指定命名空间
+  - `kubectl get pods -w`：持续观察 Pod 状态变化
+- `kubectl get pods -o wide`：显示更多信息（IP、节点等）
+- `kubectl describe <resource> <name>`：查看资源详情
+- `kubectl logs <pod>`：查看日志，deployment、job也支持
+  - `kubectl logs <pod> -f`：实时跟踪
+  - `kubectl logs <pod> -c <container>`：查看指定容器
+
+**创建与修改**
+
+
+- `kubectl run <name> --imgae=<image>`：创建 Pod 资源
+- `kubectl apply -f app.yaml`：声明式创建/更新，资源存在时更新
+- `kubectl create -f app.yaml`：按文件创建资源，资源存在时报错
+  - `kubectl create <resource> <name>`：快速创建
+    - `--replicas`：指定副本数，deployment才支持
+    - `--image`：镜像，deployment才支持
+- `kubectl delete -f app.yaml`：按文件删除资源
+  - `kubectl delete <resource> <name>`：删除资源
+- `kubectl set image deploy/<name> <container>=<image>`：更新镜像
+
+**发布管理**
+
+
+- `kubectl rollout status deploy/<name>`：查看滚动更新状态
+- `kubectl rollout undo deploy/<name>`：回滚到上一版本
+- `kubectl rollout history deploy/nginx`：查看历史版本
+
+
+**进入容器与调试**
+
+- `kubectl exec -it <pod> -- bash`：进入容器
+- `kubectl exec -it <pod> -c <container> -- bash`：指定 Pod 里的容器
+- `kubectl port-forward my-pod 8080:80`：把本地电脑的端口转发到集群里 Pod 的端口，让你能直接在本机访问 Pod
+- `kubectl port-forward svc/<name> 8080:80`：转发到 Service
+
+**编辑与查看yaml**
+
+- `kubeclt edit <resource>/<name>`：编辑集群资源
+- `kubeclt get <resource> <name> -o yaml`：查看资源完整yaml
+
+
+## kubebuilder
+
+**Makefile**：自动化构建工具的配置文件，将长串命令封装成简单的命令，提高开发效率
+
+- `make manifests`：生成 CRD yaml
+- `make generate`：生成自动代码
+- `make install`：把 CRD 安装到当前集群
+- `make deploy`：把 Operator 部署到集群
+- `make undeploy`：卸载 Operator
+- `make run`：本地跑控制器，连接到集群调试
+
+
+**Webhook**：在对象写入 etcd 之前，拦截请求并执行你自定义的逻辑
+
+**常见命令**
+
+- `kubebuilder version`：查看当前安装的版本
+- `kubebuilder init`：初始化项目，生成基本的代码框架和Makefile
+  - `--domain`：API组名的后缀，组名=group+domain
+  - `--repo`：指定项目的Go module路径
+- `kubebuilder create api`：创建新的 API（CRD）和对应的控制器代码
+  - `--group`：资源属于哪个组，必填
+  - `--version`：资源属于哪个版本，必填
+  - `--kind`：资源叫什么名字，必填
+- `kubebuilder create webhook`：创建 Webhook 代码
+  - `--group`：资源属于哪个组，必填
+  - `--version`：资源属于哪个版本，必填
+  - `--kind`：资源叫什么名字，必填
+
+
+**自定义资源**
+
+- `TypeMeta`：apiVersion和kind
+- `ObjectMeta`：name、namespace等等
+- `Spec`：用户需要的
+- `Status`：Controller 执行之后，实际发生了什么
+
+
+**例子**
+
+```yaml
+apiVersion: compute.domain.com/v1
+kind: EC2Instance
+metadata:
+  name: my-instance
+  namespace: default
+
+spec:
+  amiID: ami-xxx
+  keyName: my-key
+```
+
+```go
+type EC2InstanceSpec struct {
+    AMIID   string `json:"amiID,omitempty"`
+    KeyName string `json:"keyName,omitempty"`
+}
+
+type EC2InstanceStatus struct {
+    InstanceID string `json:"instanceID,omitempty"`
+    Phase      string `json:"phase,omitempty"`
+    PublicIP   string `json:"publicIP,omitempty"`
+}
+
+type TypeMeta struct {
+    Kind       string
+    APIVersion string
+}
+
+type EC2Instance struct {
+    metav1.TypeMeta   `json:",inline"`
+    metav1.ObjectMeta `json:"metadata,omitempty"`
+
+    Spec   EC2InstanceSpec   `json:"spec,omitempty"`
+    Status EC2InstanceStatus `json:"status,omitempty"`
+}
+
+type EC2InstanceList struct {
+    metav1.TypeMeta `json:",inline"`
+    metav1.ListMeta `json:"metadata,omitempty"`
+
+    Items []EC2Instance `json:"items"`
+}
+```

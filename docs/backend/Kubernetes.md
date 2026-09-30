@@ -99,6 +99,8 @@ k8s所有组件与API Server保持数据同步的核心机制，有俩个阶段
 
 **给 Pod 内的进程提供身份，用于访问 API Server 或其他服务**
 
+Pod默认会挂载一个ServiceAccount，**权限靠 RBAC 绑定**
+
 
 #### RBAC
 
@@ -634,6 +636,10 @@ k8s自带的controller只认识k8s自带的资源，当我们需要自定义资�
 - List：初始化时，拉取指定资源的全量数据并记录**版本号（resourceVersion）**
 - Watch：通过HTTP长连接持续监听，由API Server推送**增量事件**
 - 这些事件被放进 **DeltaFIFO 队列**中，然后由 Informer 内部 消费队列里的事件并存到 **Indexer（本地缓存）**，同时将事件分发给注册的 **EventHandler**，调用提前写好的回调函数
+  - DeltaFIFO 队列里保存的是资源对象及其变化类型
+- EventHandler再把资源的**Name/Namespace**放进 Controller 的 **Working Queue**
+  - **Working Queue**放的是资源的**Name/Namespace**，而不是完整对象，这样控制器想要获取最新对象就只需要根据队列里的Name查询**Indexer**即可
+  - **Working Queue**会进行**去重**，对同一个 key 做合并/去重处理
 
 
 ##### Leader Election
@@ -647,6 +653,38 @@ k8s自带的controller只认识k8s自带的资源，当我们需要自定义资�
 - Leader定期续约，证明自己还存活
 - 其它副本尝试抢，抢不到就等待
 - Leader挂了，不再续约，Lease过期，其他副本进行争抢
+
+##### Finalizer机制
+
+**延迟资源删除的机制**，让控制器有机会在资源被真正删除前，执行一些清理工作
+
+- 创建自定义资源时，加上 Finalizer
+- 当用户执行删除时，控制器发现自定义资源有 Finalizer，执行清理逻辑
+- 当清理完成后，控制器移除 Finalizer
+- k8s删除自定义资源
+
+Finalizer加在CRD的yaml文件里，通常用`<域名>/<名称>`格式，避免冲突
+
+
+#### Reconcile函数
+
+**Reconcile 函数什么时候会被调用**
+
+- 用户修改自定义资源
+- 控制器自己更新对象
+- 控制器刚启动时
+- 各种重试情况
+
+**需要注意防止 Reconcile 陷入死循环，在实例被更新的时候不要重复创建实例！！！**
+
+**返回值**
+
+- `Result`
+  - `Requeue`：是否重新排队调谐
+  - `RequeueAfter`：指定一个延迟时间，在多久之后重新排队调谐。如果大于 0，则隐含了`Requeue`为 true，无需同时设置`Requeue`
+- `error`
+
+
 
 ## Minikube
 
@@ -672,6 +710,7 @@ kubectl get deployments
 kubectl get services
 kubectl get nodes
 kubectl get namespaces
+kubectl get crd
 
 # 缩写
 kubectl get po
@@ -754,7 +793,7 @@ kubectl get ns
   - `--kind`：资源叫什么名字，必填
 
 
-**自定义资源**
+**自定义资源**：Spec/Status分离
 
 - `TypeMeta`：apiVersion和kind
 - `ObjectMeta`：name、namespace等等

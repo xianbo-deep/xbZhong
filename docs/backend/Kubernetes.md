@@ -155,6 +155,29 @@ roleRef:
 
 ![image-20251018153922491](/screenshot/backend/image-20251018153922491.png)
 
+**所有资源的骨架**
+
+- `apiVersion`：API版本
+- `kind`：资源类型
+- `metadata`：元信息
+- `spec`：期望状态
+- `status`由k8s自动填充
+
+```yaml
+apiVersion: apps/v1        # API 版本
+kind: Deployment           # 资源类型
+metadata:                  # 元信息
+  name: nginx
+  namespace: default
+  labels:
+    app: nginx
+spec:                      # 期望状态
+  replicas: 3
+  ...
+```
+
+
+
 #### Node（节点）
 
 > Node是K8s的工作单元主机，Pod是它上面运行的工作负载，控制面调度Pod到Node上运行
@@ -334,6 +357,29 @@ roleRef:
 - 自主式Pod：
 - 动态Pod
 
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.25
+    ports:
+    - containerPort: 80
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+```
+
 ##### Init 容器
 
 主容器启动之前运行的专用容器
@@ -372,14 +418,14 @@ roleRef:
 - 可以为**内部服务**和**外部服务**提供访问入口
   - 使用节点的IP地址和端口号映射到`Service`的IP地址和端口号是实现**外部服务**
 
-**四种类型**
+**四种类型**（type）
 
 - `ClusterIP`：集群内部虚拟 IP，仅限集群内部访问
 - `NodePort`：每个节点开一个端口，范围为30000-32767
 - `LoadBalancer`：云厂商负载均衡器
 - `ExternalName`：DNS别名，起一个别名，别名指向真实IP，应用代码使用别名访问
 
-**端口**
+**端口**（ports）
 
 - `nodePort`：节点端口
 - `port`：Service的端口
@@ -392,6 +438,22 @@ roleRef:
 - 把一个 Service 的端点拆成多个 slice，**减少对象体积，降低更新放大**
 - **CoreDNS**负责集群内 DNS 解析，将域名转换为IP
 
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  type: CluserIP
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
 #### Ingress
 
  **集群外部访问集群内服务的统一入口**
@@ -403,6 +465,25 @@ roleRef:
 - 可配置不同的转发规则
 - 可实现负载均衡，配置SSL证书
 
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  rules:
+  - host: api.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80
+```
+
 #### ConfigMap
 
 存储**非敏感配置数据**的资源对象，用于将配置从容器镜像中分离出来，使Pod可以动态获取配置
@@ -411,12 +492,32 @@ roleRef:
 - 使**应用程序和配置解耦**，配置变更时不用重新构建镜像
 - 方便Pod进行配置的动态获取
 
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  key1: value1
+  key2: value2
+```
+
 #### Secret
 
 存储**敏感配置数据**的资源对象
 
 - 默认使用**base64编码**存储，不直接明文展示
 - 并不是一种加密方式，需要配合k8s其他组件实提高安全性
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secret
+type: Opaque
+data:
+  password: xxxxxxxx
+```
 
 #### Volumes
 
@@ -486,7 +587,7 @@ roleRef:
 - `Failed`：自动回收失败
 
 
-**PV/PVC访问模式**
+**PV/PVC访问模式**（accessModes）
 
 - `ReadWriteOnce`：单节点读写，同一时间只能被一个节点挂载读写
 - `ReadOnlyMany`：多节点只读，可以被多个节点同时挂载，但只能读，不能写
@@ -517,6 +618,37 @@ roleRef:
 - `rollingUpdate`：滚动更新，会以滚动更新的方式来逐个更新pod，同时通过设置滚动更新的两个参数`maxUnavailable`、`maxSurge`来控制更新的过程
   - `maxSurge`：最大激增数，更新时，最多可以比期望副本数多出几个 Pod
   - `maxUnavailable`：最大不可用数，更新时，最多允许几个 Pod 处于不可用状态
+
+**示例**
+
+- `template`：完整的 Pod 定义，Pod 的模板
+- `selector`：Pod 的标签，Deployment只管理这些 Pod
+- 只要 Pod 的标签和 Deployment 的 selector 的标签匹配，且他们在同一个命名空间，那么 Pod 就会被 Deployment 管理
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec: 
+      containers:
+      - name: nginx
+        image: nginx:1:25
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+```
 
 #### ReplicaSet
 
@@ -550,11 +682,49 @@ roleRef:
 - 相较于普通 Serivce，**无 Cluster IP，不负责负载均衡，直接返回后端 Pod 的IP列表**
 - 和 StatefulSet 配套使用，因为 StatefulSet 的 Pod 需要固定的 DNS，而 Headless Service 可以直接返回 Pod 的 ip
 
-**volumeClaimTemplates**
+**示例**
 
-- 模板，写完后自动为**每个 Pod 创建一个独立 PVC**
+- `template`：Pod 模板
+- `volumeClaimTemplates`：模板，写完后自动为**每个 Pod 创建一个独立 PVC**
+- `selector`：Pod 的标签，Deployment只管理这些 Pod
+- `serviceName`：指向一个 Headless Service
+- `accessModes`：PV/PVC访问模式
+- `volumeMounts.name`：对应 volumeClaimTemplates 里的 name: data
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
+```
 
 #### DaemonSet
+
 
 **确保集群中每个节点上都运行一个 Pod 副本**
 
@@ -564,6 +734,25 @@ roleRef:
 - 也可以用`nodeSelector`实现在部分节点上跑
 - **自动容忍一些系统污点**，节点有问题时，DaemonSet 的 Pod 也要能跑
 
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd
+spec:
+  selector:
+    matchLabels:
+      app: fluentd
+  template:
+    metadata:
+      labels:
+        app: fluentd
+    spec:
+      containers:
+      - name: fluentd
+        image: fluentd:latest
+```
 
 #### Job
 
@@ -576,6 +765,22 @@ roleRef:
 - `restartPolicy`：重启策略
   - `Never`：容器失败不重启，每次失败都创建新 Pod
   - `OnFailure`：容器失败重启同一个 Pod
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: my-job
+sepc:
+  template:
+    spec:
+      containers:
+      - name: job
+        image: busybox
+        command: ["echo", "hello"]
+      restartPolicy: Never
+
+```
 
 #### CronJob
 
@@ -598,19 +803,30 @@ roleRef:
 - `successfulJobsHistoryLimit`：保留几个成功的Job
 - `failedJobsHistoryLimit`：保留几个失败的Job
 - `suspend`：是否暂停，暂停后不再创建新 Job
+- `restartPolicy`：重启策略
+  - `Never`：容器失败不重启，每次失败都创建新 Pod
+  - `OnFailure`：容器失败重启同一个 Pod
+
+```yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-cron
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cron
+            image: busybox
+            command: ["date"]
+          restartPolicy: OnFailure
+```
 
 ### 二次开发
 
-#### Controller
-
-k8s的一种控制逻辑，主要负责将**当前状态调谐至目标状态**，可以理解成是一个循环，不断检查当前状态，当状态偏离时将当前状态调谐至目标状态，称之为**Reconcile Loop**
-
-- Observe（观察）：获取当前实际状态，以及用户声明的期望状态
-- Compare（比较）：判断当前状态和期望状态是否一致
-- Update（更新）：采取操作，让实际状态向期望状态靠近
-
-
-当实际状态和期望状态不一致时才允许更新资源，也就是**调谐过程应该要具有幂等性**
 
 
 
@@ -623,6 +839,17 @@ k8s自带的controller只认识k8s自带的资源，当我们需要自定义资�
 - **CRD**：自定义资源定义
 - **CR**：自定义资源，CRD的实例
 - **Controller**：控制器
+
+##### Controller
+
+k8s的一种控制逻辑，主要负责将**当前状态调谐至目标状态**，可以理解成是一个循环，不断检查当前状态，当状态偏离时将当前状态调谐至目标状态，称之为**Reconcile Loop**
+
+- Observe（观察）：获取当前实际状态，以及用户声明的期望状态
+- Compare（比较）：判断当前状态和期望状态是否一致
+- Update（更新）：采取操作，让实际状态向期望状态靠近
+
+
+当实际状态和期望状态不一致时才允许更新资源，也就是**调谐过程应该要具有幂等性**
 
 
 
@@ -665,8 +892,16 @@ k8s自带的controller只认识k8s自带的资源，当我们需要自定义资�
 
 Finalizer加在CRD的yaml文件里，通常用`<域名>/<名称>`格式，避免冲突
 
+**CRD删除流程**
 
-#### Reconcile函数
+- 当实例需要删除时，k8s会给出 **deletiontimestamp**
+- controller查看实例Finalizer
+- controller删除真正资源
+- controller移除Finalizer
+- k8s删除CR
+
+
+##### Reconcile函数
 
 **Reconcile 函数什么时候会被调用**
 
@@ -684,6 +919,9 @@ Finalizer加在CRD的yaml文件里，通常用`<域名>/<名称>`格式，避免
   - `RequeueAfter`：指定一个延迟时间，在多久之后重新排队调谐。如果大于 0，则隐含了`Requeue`为 true，无需同时设置`Requeue`
 - `error`
 
+
+
+#### Scheduler
 
 
 ## Minikube
@@ -725,6 +963,7 @@ kubectl get ns
   - `kubectl get pods -w`：持续观察 Pod 状态变化
 - `kubectl get pods -o wide`：显示更多信息（IP、节点等）
 - `kubectl describe <resource> <name>`：查看资源详情
+  - `-n <namespace>`：在指定命名空间查找
 - `kubectl logs <pod>`：查看日志，deployment、job也支持
   - `kubectl logs <pod> -f`：实时跟踪
   - `kubectl logs <pod> -c <container>`：查看指定容器
@@ -770,8 +1009,11 @@ kubectl get ns
 - `make manifests`：生成 CRD yaml
 - `make generate`：生成自动代码
 - `make install`：把 CRD 安装到当前集群
+- `make uninstall`：卸载 CRD
 - `make deploy`：把 Operator 部署到集群
 - `make undeploy`：卸载 Operator
+- `make docker-build`：构建镜像
+- `make docker-push`：推送镜像
 - `make run`：本地跑控制器，连接到集群调试
 
 
@@ -847,3 +1089,51 @@ type EC2InstanceList struct {
     Items []EC2Instance `json:"items"`
 }
 ```
+
+
+## Helm
+
+**k8s的包管理工具**
+
+- 将所有yaml打包成一个Chart
+- 用`values.yaml`统一管理可变字段
+- 安装、升级、回滚使用一条命令即可 
+
+**重要概念**
+
+- `Chart`：一个应用包，存放所有YAML模板，一个目录
+- `Release`：Chart 在集群里的一次安装实例
+- `Values`：配置变量，覆盖默认值
+- `Repository`：Chart 仓库，存放和分发 Chart
+
+```
+mychart/
+├── Chart.yaml          # Chart 元信息（名字、版本）
+├── values.yaml         # 默认配置值
+├── templates/          # YAML 模板
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   └── _helpers.tpl    # 模板函数
+└── charts/             # 依赖的子 Chart
+```
+
+
+**常用命令**
+
+- `helm create <name>`：创建 Chart 骨架
+- `helm package <chart>`：打包成.tgz
+- `helm pull <chart>`：下载 Chart
+- `helm install <release-name> <chart>`：安装
+  - `<release-name>`：这次安装的名字
+  - `<chart>`：路径或者仓库名
+- `helm uninstall <release-name>`：卸载
+- `helm status <release-name>`：查看状态
+- `helm upgrade <release-name> <chart>`：升级
+- `helm history <release-name>`：查看历史
+- `helm rollback <release-name> <revision>`：回滚版本
+- `helm list`：查看所有 Release
+- `helm repo add <alias> <repo>`：添加仓库  
+  - `<alias>`：仓库别名
+  - `<repo>`：仓库地址
+- `helm repo list`：查看已添加的仓库
+- `helm repo remove <alias>`：删除仓库

@@ -284,6 +284,8 @@ volumes:
 
 ### Container
 
+![容器如何实现的](/screenshot/backend/image-20261007154229445.png)
+
 前面说过，容器是一组被操作系统隔离起来的进程，而**Namespace、Cgroup、OverlayFS**实现了这个隔离的功能
 
 **常见Namespace**
@@ -296,9 +298,13 @@ volumes:
 - `IPC Namespace`：信号量，消息队列隔离
 - `User Namespace`：容器内root可映射为宿主普通用户
 
+![Mount Namespace](/screenshot/backend/image-20261007154150447.png)
+
 **Cgroup（Control Groups）**：将一批进程分成一组，对这组进程进行资源统计和限制，包括CPU、内存、IO、进程数量、CPU权重等
 
 - 容器内存超限会被`OOM Killer`杀掉
+
+![Control Group](/screenshot/backend/image-20261007154050356.png)
 
 **OverlayFS**：联合文件系统，将多个文件系统目录叠起来，给用户展示成一个统一目录
 

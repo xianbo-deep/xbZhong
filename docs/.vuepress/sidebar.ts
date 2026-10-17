@@ -120,12 +120,6 @@ export default sidebar({
       
     },
     {
-      text: "Kubernetes",
-      icon: "devicon:kubernetes",
-      link: "Kubernetes.md",
-      expanded: true,
-    },
-    {
       text: "RabbitMQ",
       icon: "devicon:rabbitmq",
       link: "RabbitMQ.md",
@@ -190,7 +184,16 @@ export default sidebar({
     },
   ],
   "/me/formulaic/":["go.md","db.md","cn.md","os.md"],
+  "/me/paper/": ["papers.md"],
   "/me/":[
+    {
+      text: "八股",
+      link: "/me/formulaic/go.md",
+    },
+    {
+      text: "论文",
+      link: "/me/paper/papers.md",
+    },
     {
       text: "Leetcode",
       icon: "devicon:leetcode",
@@ -200,10 +203,6 @@ export default sidebar({
       text: "面试",
       icon: "streamline-freehand:job-choose-candidate",
       link: "interview.md",
-    },
-    {
-      text: "八股",
-      link: "/me/formulaic/go.md",
     },
   ],
   "/golang/":[
@@ -226,6 +225,12 @@ export default sidebar({
       expanded: true, 
     },
     {
+      text: "Kubernetes",
+      icon: "devicon:kubernetes",
+      link: "Kubernetes.md",
+      expanded: true,
+    },
+    {
       text: "Bash",
       icon: "mdi:bash",
       link: "Bash.md",
@@ -236,6 +241,16 @@ export default sidebar({
       icon: "devicon:go",
       link: "stdlib.md",
       expanded: true, 
+    },
+    {
+      text: "k8s源码学习",
+      icon: "devicon:kubernetes",
+      prefix: "k8s/",
+      children: [
+        "kube-scheduler.md",
+        "kube-controller-manager.md",
+      ],
+      expanded: true,
     },
   ],
   "/ds/":[

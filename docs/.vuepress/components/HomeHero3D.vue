@@ -134,23 +134,47 @@ const metaText = "21岁 / ECUST";
 const frontChars = computed(() => [...frontText]);
 const cursorBackChars = computed(() => [...backText]);
 const metaChars = computed(() => [...metaText]);
-const today = new Date();
-const currentYear = today.getFullYear();
-const currentMonth = today.getMonth() + 1;
-const currentDay = today.getDate();
 const months = Array.from({ length: 12 }, (_, index) => index + 1);
 const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const monthName = monthNames[currentMonth - 1];
-const firstWeekday = new Date(currentYear, currentMonth - 1, 1).getDay();
-const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-const calendarDays = [...Array(firstWeekday).fill(null), ...Array.from({ length: daysInMonth }, (_, index) => index + 1)];
-const dayOfYear = Math.floor((today.getTime() - new Date(currentYear, 0, 0).getTime()) / 86400000);
-const totalDays = ((currentYear % 4 === 0 && currentYear % 100 !== 0) || currentYear % 400 === 0) ? 366 : 365;
-const yearProgress = Math.round((dayOfYear / totalDays) * 1000) / 10;
-const monthProgress = Math.round((currentDay / daysInMonth) * 1000) / 10;
+const currentYear = ref(0);
+const currentMonth = ref(1);
+const currentDay = ref(1);
+const monthName = ref("");
+const daysInMonth = ref(31);
+const calendarDays = ref<Array<number | null>>([]);
+const dayOfYear = ref(1);
+const totalDays = ref(365);
+const yearProgress = ref(0);
+const monthProgress = ref(0);
+
+const updateCalendar = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  const monthDays = new Date(year, month, 0).getDate();
+  const firstWeekday = new Date(year, month - 1, 1).getDay();
+  const yearDays = ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) ? 366 : 365;
+  const elapsedDay = Math.floor((today.getTime() - new Date(year, 0, 0).getTime()) / 86400000);
+
+  currentYear.value = year;
+  currentMonth.value = month;
+  currentDay.value = day;
+  monthName.value = monthNames[month - 1];
+  daysInMonth.value = monthDays;
+  calendarDays.value = [
+    ...Array<number | null>(firstWeekday).fill(null),
+    ...Array.from({ length: monthDays }, (_, index) => index + 1),
+  ];
+  dayOfYear.value = elapsedDay;
+  totalDays.value = yearDays;
+  yearProgress.value = Math.round((elapsedDay / yearDays) * 1000) / 10;
+  monthProgress.value = Math.round((day / monthDays) * 1000) / 10;
+};
+
 const monthFillProgress = (month: number) => {
-  const elapsedMonths = (dayOfYear / totalDays) * 12;
+  const elapsedMonths = (dayOfYear.value / totalDays.value) * 12;
   return Math.max(0, Math.min(100, (elapsedMonths - (month - 1)) * 100));
 };
 
@@ -165,6 +189,17 @@ const flipDirection = ref<"left" | "right">("right");
 
 let ctx: ReturnType<typeof gsap.context> | null = null;
 let cleanup: (() => void) | null = null;
+let calendarTimer: ReturnType<typeof setTimeout> | null = null;
+
+const scheduleCalendarUpdate = () => {
+  const now = new Date();
+  const nextDay = new Date(now);
+  nextDay.setHours(24, 0, 0, 50);
+  calendarTimer = setTimeout(() => {
+    updateCalendar();
+    scheduleCalendarUpdate();
+  }, Math.max(1000, nextDay.getTime() - now.getTime()));
+};
 
 const resetDepth = (rootEl: HTMLElement) => {
   rootEl.style.setProperty("--card-rotate-x", "0deg");
@@ -193,6 +228,9 @@ const toggleFlip = () => {
 };
 
 onMounted(() => {
+  updateCalendar();
+  scheduleCalendarUpdate();
+
   const rootEl = root.value;
   const tiltEl = tiltLayer.value;
   const spotlightEl = spotlight.value;
@@ -374,6 +412,10 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  if (calendarTimer) {
+    clearTimeout(calendarTimer);
+    calendarTimer = null;
+  }
   cleanup?.();
   ctx?.revert();
 });

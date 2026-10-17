@@ -260,13 +260,7 @@ spec:                      # 期望状态
   - `requiredDuringSchedulingIgnoredDuringExecution`：Pod 必须调度到满足条件的节点，否则不调度
   - `preferredDuringSchedulingIgnoredDuringExecution`：Pod 尽量调度到满足条件的节点，但不强求
 
-**NodeSelector 和 NodeAffinity**
 
-- `NodeSelector`：Pod 声明一个标签键值对，调度器只把 Pod 放到拥有该标签的 Node 上
-  - 只能等值匹配，不满足就 Pending
-- `NodeAffinity`：节点亲和性，Pod 声明一组表达式，调度器根据表达式匹配节点标签
-  - 支持硬性（required）和软性（preferred） 两种策略
-  - 支持多个条件组合，能进行更灵活的节点选择
 
 
 
@@ -357,6 +351,36 @@ spec:                      # 期望状态
 - 自主式Pod：
 - 动态Pod
 
+**NodeName、NodeSelector 和 NodeAffinity**
+
+- `NodeName`：直接指定节点的主机名
+- `NodeSelector`：Pod 声明一个标签键值对，调度器只把 Pod 放到拥有该标签的 Node 上
+  - 只能等值匹配，不满足就 Pending
+- `NodeAffinity`：节点亲和性，Pod 声明一组表达式，调度器根据表达式匹配节点标签
+  - 支持硬性（required）和软性（preferred） 两种策略
+  - 支持多个条件组合，能进行更灵活的节点选择
+
+**label**：标签，可以给 Node 打，也可以给 Pod 打
+
+- 给 Pod 打了之后，Service、Deployment会根据这个标签寻找匹配的 Pod
+- 给 Node 打了之后，scheduler 进行调度的时候会根据 Pod 的 nodeSelector 或 nodeAffinity 来匹配节点标签
+
+**示例**
+
+- `envFrom`：注入环境变量
+  - `configMapRef`：注入 ConfigMap 作为环境变量
+  - `secretRef`：注入 Secret 作为环境变量
+- `env`：环境变量
+- `nodeName`：指定 Node 调度
+- `nodeSelector`：按节点标签等值匹配
+- `nodeAffinity`：节点亲和性
+- `PodAffinity`：Pod亲和性
+- `podAntiAffinity`：Pod反亲和性
+  - 靠`labelSelector`找 Pod，靠`topologyKey`定义同域
+  - `weight`用于打分，满足一个`preferred`条件，就加上对应的分数
+  - `operator`：`In`、`NotIn`、`Exists`、`DoesNotExist`、`Gt`、`Lt`
+- `tolerations`：容忍度
+  - `operator`：`Equal`（精确匹配）和`Exists`（只要 key 存在即可）
 
 ```yaml
 apiVersion: v1
@@ -366,6 +390,61 @@ metadata:
   labels:
     app: nginx
 spec:
+  nodeName: xxx
+  nodeSelector:
+    app: nginx
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: rank
+              operator: Lt
+              values:
+                - 5
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          preference:
+            matchExpressions:
+              - key: disktype
+                operator: In
+                values: ["ssd"]
+
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app: nginx
+          namespaces: ["zxb"]
+          topologyKey: kubernetes.io/hostname
+      
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app: nginx
+            topologyKey: kubernetes.io/hostname
+
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app: nginx
+          namespaces: ["zxb"]
+          topologyKey: kubernetes.io/hostname
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app: nginx
+            topologyKey: kubernetes.io/hostname
+  tolerations:
+    - key: "gpu"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
   containers:
   - name: nginx
     image: nginx:1.25
@@ -378,6 +457,27 @@ spec:
       limits:
         cpu: "500m"
         memory: "256Mi"
+    envFrom:
+      - configMapRef:
+          name: myconfig
+      - secretRef:
+          name: mysecret
+    env:
+      - name: key1
+        value: value1
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 80
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 5
+  restartPolicy: Always
 ```
 
 ##### Init 容器
@@ -438,6 +538,10 @@ spec:
 - 把一个 Service 的端点拆成多个 slice，**减少对象体积，降低更新放大**
 - **CoreDNS**负责集群内 DNS 解析，将域名转换为IP
 
+**示例**
+
+- `spec.selector`：Pod 的标签，Service 只管理这些 Pod
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -446,7 +550,7 @@ metadata:
   labels:
     app: nginx
 spec:
-  type: CluserIP
+  type: ClusterIP
   selector:
     app: nginx
   ports:
@@ -772,6 +876,10 @@ kind: Job
 metadata:
   name: my-job
 sepc:
+  completions: 3
+  parallelisim: 1
+  backoffLimit: 4
+  activeDeadlineSeconds: 600
   template:
     spec:
       containers:
@@ -779,7 +887,6 @@ sepc:
         image: busybox
         command: ["echo", "hello"]
       restartPolicy: Never
-
 ```
 
 #### CronJob
@@ -814,6 +921,11 @@ metadata:
   name: my-cron
 spec:
   schedule: "0 * * * *"
+  concurrencyPolicy: Allow
+  startingDeadlineSeconds: 60
+  successfulJobsHistoryLimit: 3
+  failedJobHistoryLimit: 1
+  suspend: False
   jobTemplate:
     spec:
       template:
@@ -923,6 +1035,273 @@ Finalizer加在CRD的yaml文件里，通常用`<域名>/<名称>`格式，避免
 
 #### Scheduler
 
+**kube-scheduler**
+
+- Informer 持续从 API-Server 感受资源变化，把待调度的 Pod 放入调度队列（Scheduling Queue）
+  - 同时维护 scheduler 的本地缓存，避免反复查 API-Server
+- 调度器从 activeQ 取出一个待调度 Pod
+  - 队列还需考虑公平性、优先级等
+- 调度失败，Pod 放入指定队列；调度成功，绑定 Node
+  - 临时失败，进入backoffQ；资源/条件不满足，进入unschedulableQ
+
+**kube-scheduler一次调度被拆成俩个阶段：Scheduling Cycle和Binding Cycle**
+
+- **Scheduling Cycle**：调度周期，并行，给 Pod 选一个节点
+- **Binding Cycle**：绑定周期，并行，把选好的节点真正绑定到 Pod 上
+
+
+**核心过程：过滤、打分**
+
+- 调度器对从队列弹出的每个 Pod 使用过滤器进行过滤
+- 然后对过滤后的 Pod 进行打分，打分时是使用多个插件的权重进行加权求和
+- 通过分数选出节点后，调度器修改本地缓存，假设 Pod 已经放到 Node 上（Assume），随后执行绑定
+- 若绑定失败，进行缓存回滚
+
+##### SchedulingQueue
+
+包含三类 Pod
+
+- activeQ：当前可以立刻拿出来调度的 Pod
+- backoffQ：调度失败，但需要重试，是退避等待区，需要等待一段时间
+- unschedulabelPods：当前不可调度的 Pod
+
+
+![](/screenshot/backend/image-20261005234400098.png)
+
+##### Assume与Scheduler Cache
+
+**Assume**：在scheduler本地缓存里假设 Pod 已经被调度到节点了，更新 Scheduler Cache
+
+- API Server写入需要时间，在这段时间里，若有新的 Pod 需要调度，看到的还是旧资源状态，因此需要Assume操作
+- 作用：**防止资源超卖、提升吞吐量**
+
+
+**Scheduler Cache**：调度器维护自己的一份调度状态，用于快速查找，避免多次向API Server查询
+
+
+##### Scheduling Cycle 与 Binding Cycle
+
+**Scheduling Cycle**
+
+- `PreFilter`：预处理 Pod 信息、检查前置条件
+- `Filter`：对每个节点运行，过滤掉不能运行该 Pod 的节点
+- `PostFilter`：**仅当 Filter 后没有任何可行节点**时才调用。典型实现是抢占，尝试驱逐低优先级 Pod 来腾出空间
+- `PreScore`：为后续的 Score 做一次性准备工作，生成可共享状态
+- `Score`：对通过过滤的节点逐一打分。多个插件的分数会按权重合并
+- `NormalizeScore`：在最终排名前，修改同一插件的分数，使不同插件的分值范围可比
+- `Reserve`：**调度周期的最后一步**。通知有状态插件资源已被预留，防止在等待绑定时发生竞争。如果后续任何步骤失败，会触发 **Unreserve 回滚**
+
+**Binding Cycle**
+
+- `Permit`：决定是否**放行、拒绝或者等待**。等待用于组调度，让 Pod 暂缓绑定，直到条件满足
+- `PreBind`：执行绑定前的准备工作，比如创建并挂载网络卷
+- `Bind`：**真正提交绑定**。将 Pod 与节点的关联写入 API Server
+- `PostBind`：绑定成功后的通知型操作，用于清理或记录
+
+**PostFileter与抢占**
+
+- 当Filter之后无可用节点，进入PostFilter，尝试进行抢占
+- 赶走节点上比**当前Pod优先级更低的Pod**
+- 抢占无法解决**污点不容忍、亲和性不满足**的场景
+- 抢占并非直接完成调度，而是**创建可调度条件**，释放资源后**当前Pod需要重新进行过滤和打分**
+
+##### 事件驱动机制
+
+当Pod调度失败时，会被放入backoffQ/unschedulableQ，进入unschedulableQ时scheduler会记录这个 Pod 被哪些**调度约束**卡住，为后续**事件激活**提供依据
+
+当集群内资源发生变化，会产生相应的事件，根据之前记录的 Pod 的调度约束，会根据事件激活相应的 Pod，放入 backoffQ 等待退避时间结束后进入 activeQ
+
+
+
+#### GPU调度
+
+k8s只认识CPU和内存，要想调度GPU需要暴露GPU给k8s，并且**资源建模的丰富程度，取决于这层暴露了多少信息**：如果提供了型号、显存、拓扑，调度器就能做精细调度
+
+##### GPU基础
+
+**硬件结构**
+
+- `SM`：计算核心，GPU调度的基本单位，反映计算单元的实际活跃度
+- `NVLink`：卡间高速互联，专为 GPU 之间通信设计的高速通道，带宽高于PCIe
+  - `NVSwitch`：解决8卡以上互联的问题，在芯片帮助下任意两张卡都是NVLink直连，不经过PCIe
+- `PCIe`：卡与CPU/其他设备通信的标准通道，包括网卡、SSD、声卡等，GPU 之间的通信如果走 PCIe，需要绕道 CPU
+- `Tensor Core`：专为矩阵乘法设计的硬件单元
+
+**ECC与行重映射**
+
+- 当某个显存的行出现ECC错误时，硬件会把这一行**重映射到备用行**，操作系统和应用程序看不到任何内存缺失，地址空间是连续的
+- 当备用行全部用完，GPU就坏了
+
+**NUMA**：非统一内存访问，是一种服务器CPU架构
+
+- 每个CPU都有自己的本地内存
+- 访问本地内存是很快的，但是访问其它 Node 的内存很慢
+- **NUMA亲和**：让 Pod 独占的 CPU、GPU等硬件资源尽量分配在同一个 NUMA 节点，**避免跨 NUMA 访问带来延迟、性能下降**
+
+**GPU共享**
+
+- **MIG**：把一张物理GPU切成多个独立的实例，提高利用率
+- **Time-Slicing**：时间片轮转，不同进程轮流使用一张GPU
+- **MPS**：并发共享，多个 CUDA 进程 并发共享GPU
+
+##### GPU Operator
+
+**核心组件**
+
+- **Driver管理**：自动在节点上安装/检验 NVIDIA 驱动
+- **Container Toolkit**：配置容器运行时，让容器可以访问GPU
+- **Device Plugin**
+- **GPU Feature Discovery（GFD）**：自动给节点打标签，补充 Device Plugin 缺失的信息
+- **DCGM Exporter**：导出 GPU 监控指标到 Prometheus
+- **MIG Manager**：自动配置 MIG 分区
+- **Node Feature Discovery（NFD）**：识别节点硬件特征，打标签
+
+
+**核心CRD**：ClusterPolicy，改这个CRD可以自动调整各个组件
+
+##### 暴露方式
+
+目前有三种暴露方式将GPU暴露给k8s
+
+- Device Plugin
+- Device Plugin + 标签
+- DRA
+
+
+**Device Plugin**：k8s设计的通用扩展机制，任何厂商都可以写自己的 Device Plugin
+
+> 是跑在每一个节点上的 DaemonSet，负责发现 GPU、上报给 kubelet、并在 Pod 调度后告诉 kubelet 怎么把 GPU 挂进容器。它只做三件事：发现、上报、分配
+>
+> **核心机制**：两个gRPC接口
+>
+> Device Plugin 和 kubelet 之间通过 gRPC 通信。它必须实现两个核心接口，分别是`ListAndWatch`和`Allocate`
+> - `ListAndWatch`：上报，持续告诉kubelet我这个节点有哪些设备
+> - `Allocate`：分配，对节点已有GPU分配给调度过来的Pod
+>
+> 局限性：只提供GPU数量，不知道卡之间的拓扑关系，不支持超分（request必须等于limit），只支持整数分配
+
+```
+物理 GPU
+   ↓
+NVIDIA Driver
+   ↓
+NVIDIA Device Plugin
+   ↓ ListAndWatch
+kubelet Device Manager
+   ↓
+Node.Status.Capacity / Allocatable
+   ↓
+API Server
+   ↓
+kube-scheduler
+   ↓
+选择 Node
+   ↓
+kubelet
+   ↓ Allocate
+Device Plugin
+   ↓
+返回设备信息 / CDI 等
+   ↓
+Container Runtime
+   ↓
+容器获得 GPU
+```
+GPU Feature Discovery：自动给节点打标签，能够知道更多信息，但是**信息是节点级的，不是卡级的**
+
+
+**DRA**：能让调度器看到每张卡有什么属性，并使用CEL表达式精确筛选
+
+- 支持CEL属性筛选
+- 支持优先级列表
+- 支持设备共享
+- 支持设备污点与容忍
+- 能够暴露资源健康状态
+- 但目前**不支持抢占**
+
+> 使用3个CRD来实现
+>
+> - **ResourceClaim**：资源申领，用CEL表达设备需求，可以精确到型号、显存等任意属性，支持优先级列表
+> - **ResourceClaimTemplate**：资源申领模板，Pod引用这个模板，k8s自动为每个 Pod 生成独立的ResourceClaim
+> - **DeviceClass**：用于定义设备类别
+> - **ResourceSlice**：资源切片，DRA驱动向调度器暴露设备信息的机制，当设备信息变化，驱动会自动更新Slice
+
+```
+DRA Driver
+   ↓
+创建 ResourceSlice
+   ↓
+向 Kubernetes 描述：
+有哪些设备
+每个设备有哪些属性
+哪些 Node 能访问它们
+
+用户
+   ↓
+创建 ResourceClaim
+   ↓
+声明：
+我要什么设备
+
+Pod
+   ↓
+引用 ResourceClaim
+   ↓
+kube-scheduler
+   ↓
+同时完成：
+设备匹配 + Node 选择
+   ↓
+把具体 allocation 写入 ResourceClaim.status
+   ↓
+Pod 被绑定到能访问该设备的 Node
+   ↓
+kubelet + DRA Driver
+   ↓
+准备具体设备
+   ↓
+容器使用设备
+```
+##### 资源建模
+
+> 你能设计多精细的调度策略，取决于 Scheduler 到底拿得到多少信息
+
+**静态属性**：不会频繁变化，可用来做**硬约束**
+
+- GPU数量
+- GPU型号
+- 显存容量
+- 算力等级
+- GPU拓扑
+
+**动态属性**：会随时间变化，适合用来做**软约束**
+
+- 计算利用率
+- 显存利用率
+- 温度
+- 功耗
+- 健康状态
+
+##### 调度策略
+
+
+1. 数量/型号/显存硬约束过滤
+2. 碎片感知，优先减少资源碎片
+3. 利用率感知，让调度器优先选更闲的节点，但不能只看瞬时值，要配合平滑和阈值，避免抖动
+4. 拓扑感知，让调度器优先把 Pod 放到 GPU 互联更近的节点
+5. 多目标打分，把多个策略的分数加权合并
+
+##### 分布式训练
+
+[笔记](dl/llm/LLM.md)
+
+
+
+##### Kueue
+
+**核心概念**
+
+- Workload：Kueue管理的任务单元
 
 ## Minikube
 
@@ -957,36 +1336,50 @@ kubectl get svc
 kubectl get ns
 ```
 
-- `kubectl get pods`：列出当前命名空间的Pod
+- `kubectl get all`：查看所有资源对象
+- `kubectl get pods`：列出当前命名空间的Pod，其它资源对象也是如此
   - `kubectl get pods -A`：列出所有命名空间的Pod
   - `kubectl get pods -n <namespace>`：指定命名空间
   - `kubectl get pods -w`：持续观察 Pod 状态变化
+  - `kubectl get pods -l <labelname>=<labelval>`：按标签筛选
+  - `kubectl get pods --show-labels`：查看标签
 - `kubectl get pods -o wide`：显示更多信息（IP、节点等）
 - `kubectl describe <resource> <name>`：查看资源详情
   - `-n <namespace>`：在指定命名空间查找
 - `kubectl logs <pod>`：查看日志，deployment、job也支持
   - `kubectl logs <pod> -f`：实时跟踪
   - `kubectl logs <pod> -c <container>`：查看指定容器
+- `kubectl explain <资源>.<字段>.<子字段>`：查字段文档
 
 **创建与修改**
 
 
 - `kubectl run <name> --imgae=<image>`：创建 Pod 资源
 - `kubectl apply -f app.yaml`：声明式创建/更新，资源存在时更新
+  - `--dry-run`：试运行，不创建真正资源对象
+    - `client`：在客户端检查代码语法，不提交到服务器
+    - `server`：给服务器审查一遍，服务器检查规则，但不创建真正资源对象
 - `kubectl create -f app.yaml`：按文件创建资源，资源存在时报错
-  - `kubectl create <resource> <name>`：快速创建
+  - `kubectl create <resource> <name>`：快速创建（包括命名空间）
     - `--replicas`：指定副本数，deployment才支持
     - `--image`：镜像，deployment才支持
 - `kubectl delete -f app.yaml`：按文件删除资源
   - `kubectl delete <resource> <name>`：删除资源
 - `kubectl set image deploy/<name> <container>=<image>`：更新镜像
+- `kubectl label <resource> <name> <labelname>=<labelval>`：打标签
+  - `kubectl label <resource> <name> <labelname>=<labelval> --overwrite`：覆盖已有标签
+  - `kubectl label <resource> <name> <labelname>-`：删除标签
+- `kubectl taint node <name> <key>=<value>:<effect>`：打污点到 Node 上
+  - 三种`effect`：`NoSchedule`、`PreferNoSchedule`、`NoExecute
+  - `kubectl taint node <name> <key>=<value>:<effect>-`：删除污点
 
 **发布管理**
 
-
-- `kubectl rollout status deploy/<name>`：查看滚动更新状态
-- `kubectl rollout undo deploy/<name>`：回滚到上一版本
-- `kubectl rollout history deploy/nginx`：查看历史版本
+- 针对`Deployment`、`DaemonSet`、`StatefulSet`
+- `kubectl rollout status <resource>/<name>`：查看滚动更新状态
+- `kubectl rollout undo <resource>/<name>`：回滚到上一版本
+- `kubectl rollout history <resource>/<name>`：查看历史版本
+- `kubectl rollout restart <resource>/<name>`：不改变镜像或配置，强制重新创建所有 Pod
 
 
 **进入容器与调试**

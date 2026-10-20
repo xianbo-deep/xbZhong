@@ -2203,6 +2203,18 @@ LFU的访问次数叫做**逻辑访问次数**，是因为并不是统计key被�
 
 ![image-20250918113723379](/screenshot/backend/image-20250918113723379.png)
 
+
+
+### Redis多线程
+
+Redis核心命令的执行是**单线程**的，但redis的**后台任务线程（BIO）和网络I/O线程是多线程的**
+
+**BIO线程**
+
+- `bio_close_file`：关闭文件线程，负责异步执行关闭文件描述符（close）的操作
+- `bio_aof_fsync`：AOF刷盘线程，负责处理 AOF 日志的 fsync 刷盘任务
+- `bio_lazy_free`：惰性删除线程，负责异步释放内存
+
 ## 最佳实践
 
 ### 键值设计

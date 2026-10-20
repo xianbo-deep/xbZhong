@@ -81,7 +81,7 @@ type Person struct {
 - 通过实现`Table`接口就可以指定表名
 
 ```go
-type Tabler interface {
+type Table interface {
   TableName() string
 }
 ```
@@ -598,10 +598,19 @@ db.Model(Person{}).Count(&count)
 
 #### Find
 
-**批量查询**
+**批量查询**，需要使用 Model 对应的结构体
 
 ```go
 func (db *DB) Find(dest interface{}, conds ...interface{}) (tx *DB)
+```
+
+
+#### Scan
+
+**接收查询结果**，不需要使用 Model 对应的结构体
+
+```go
+func (db *DB) Scan(dest interface{}) (tx *DB)
 ```
 
 #### Select

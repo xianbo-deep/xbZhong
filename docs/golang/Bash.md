@@ -3,7 +3,6 @@ title: Bash
 author: xbZhong
 isOriginal: true
 article: true
-category: mdi:bash
 timeline: true
 icon: logos:gin
 date: 2025-12-19

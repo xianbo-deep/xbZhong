@@ -129,6 +129,50 @@ func(p *person) getName(newName string){
 具体选择何种方式需要考虑是否需要修改原值，结构体大小等因素
 
 
+### recover、panic与defer
+
+recover不能跨 goroutine 捕获 panic，每个协程都有独立的调用栈和panic状态
+
+且recover必须在defer函数中直接被调用，以下做法是错误的
+
+```go
+// 错误示范：间接调用
+func main() {
+    defer func() {
+        printRecover() // 这里调用了一个包装函数
+    }()
+    panic("boom")
+}
+
+func printRecover() {
+    r := recover() // 这里的 recover 不是被 defer 直接调用的
+    fmt.Println(r) // 输出 <nil>，因为捕获失败
+}
+```
+
+defer语句注册时，**参数立即求值，但函数体延迟到所在函数返回前才执行**，且defer是先进后出的，执行在 **return 语句给返回值赋值之后、函数真正返回给调用者之前**
+
+
+```go
+func demo() {
+    x := 1
+
+    // 情况 A：defer + 普通函数调用（参数）
+    defer fmt.Println("A:", x)   // x 在这里"注册时"就被求值，锁定为 1
+
+    // 情况 B：defer + 闭包（捕获变量）
+    defer func() {
+        fmt.Println("B:", x)     // 不立即求值，执行时才去读 x
+    }()
+
+    x = 2   // 修改 x
+}
+// 输出顺序（defer 后进先出）：
+// B: 2
+// A: 1
+```
+
+
 ### nil
 
 接口底层结构

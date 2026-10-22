@@ -225,6 +225,12 @@ export default sidebar({
       expanded: true, 
     },
     {
+      text: "6.824",
+      icon: "iconoir:multi-mac-os-window",
+      link: "6.824.md",
+      expanded: true, 
+    },
+    {
       text: "Kubernetes",
       icon: "devicon:kubernetes",
       link: "Kubernetes.md",

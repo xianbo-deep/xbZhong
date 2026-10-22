@@ -1565,6 +1565,8 @@ type WaitGroup struct {
 - 进行下一轮GC时，**此时`victim`没被复活的对象就会被回收**
 
 
+每个`sync.Pool`底层有`local`和`victim`数组指针，二者的结构完全一致，数组里的每个元素是一个`poolLocal`结构体，数组长度为P的数量，每个结构体里面有`private`槽和`shared`字段
+
 ---
 
 `sync.Map`

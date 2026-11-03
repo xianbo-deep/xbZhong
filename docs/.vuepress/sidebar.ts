@@ -183,13 +183,8 @@ export default sidebar({
       
     },
   ],
-  "/me/formulaic/":["go.md","db.md","cn.md","os.md"],
   "/me/paper/": ["papers.md"],
   "/me/":[
-    {
-      text: "八股",
-      link: "/me/formulaic/go.md",
-    },
     {
       text: "论文",
       link: "/me/paper/papers.md",
@@ -205,7 +200,17 @@ export default sidebar({
       link: "interview.md",
     },
   ],
+  "/golang/formulaic/":["go.md","db.md","cn.md","os.md"],
+  "/golang/k8s/": ["kube-scheduler.md", "kube-controller-manager.md"],
   "/golang/":[
+    {
+      text: "八股",
+      link: "/golang/formulaic/go.md",
+    },
+    {
+      text: "k8s源码学习",
+      link: "k8s/kube-scheduler.md", 
+    },
     {
       text: "Go",
       icon: "logos:go",
@@ -247,16 +252,6 @@ export default sidebar({
       icon: "devicon:go",
       link: "stdlib.md",
       expanded: true, 
-    },
-    {
-      text: "k8s源码学习",
-      icon: "devicon:kubernetes",
-      prefix: "k8s/",
-      children: [
-        "kube-scheduler.md",
-        "kube-controller-manager.md",
-      ],
-      expanded: true,
     },
   ],
   "/ds/":[

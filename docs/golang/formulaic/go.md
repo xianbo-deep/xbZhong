@@ -507,8 +507,8 @@ Go1.14版本及之后使用的调度方法
 
 - 后台监控线程sysmon巡检发现某个协程运行超过了10ms，sysmon调用系统调用，向运行该协程的线程M发送一个 **`SIGURG`** 信号
 - 内核接受到信号后，暂停M的指令流，强制将 CPU 的控制权交给预先注册好的**信号处理函数（sighandler）**
-- `sighandler`会把当前协程的寄存器状态进行保存，并修改协程的程序计数器，让他指向一个特殊的`Runtime`函数
-- 这个`Runtime`函数把原本被中断的代码地址压栈，然后调用调度逻辑，将协程放回全局队列，让M运行其它的协程
+- `sighandler`调用`doSigPreemt`，先检查被中断的位置是否是一个异步安全点。如果是，就通过`pushCall`修改被中断上下文的 PC（程序计数器）和 SP（栈指针），并把原本被中断的代码地址压栈，伪造出调用了`asyncPreemt`
+- `asyncPreemt`函数保存寄存器，然后调用`asyncPreemt2`，这个函数通过`mcall`切换到 g0 栈，然后执行调度逻辑，将协程放回全局队列，让M运行其它的协程
 
 #### Go的GM模型
 
@@ -561,9 +561,13 @@ Go1.14版本及之后使用的调度方法
 
 - **复用线程**：`work stealing`机制，`hand off`机制
 
-  - `work stealing`机制：当某一个`thread`空闲时，会去别的`Processor`的本地队列**偷取一批协程执行**
+  - `work stealing`机制：当某一个`thread`空闲时，会去别的`Processor`的本地队列尾部**偷取一半的协程执行**
   - `hand off`机制：当某一个`thread`进行`syscall`**遇到阻塞时**，会唤醒一个`thread`，将**被阻塞的`thread`的`Processor`的本地队列**交给被唤醒的`thread`
     - 发生`hand off`时，需要对线程上下文的状态进行存储，以便下次调度时进行恢复。**M的栈保存在G对象上，将M所需要的寄存器保存到G对象上即可实现现场保护**
+    - 当某一个`thread`要执行`syscall`之前，调用`entersyscall`，**主动释放自己持有的 P**
+    - 后台监控线程`sysmon`监测到其**遇到阻塞时**，会调用`handoffp`
+    - `handoffp`检查 P 的本地队列，如果有未执行的 G，就把 P 交给一个空闲的 M，如果没有空闲 M，就创建新的 M 来接管这个 P，继续执行队列中的 G
+    - 原 M 在系统调用返回后，尝试重新获取一个 P。如果拿不到，就把当前 G 放入全局队列，自己休眠等待
 
   ![image-20251015161152465](/screenshot/backend/image-20251015161152465.png)
 
@@ -614,6 +618,14 @@ Go1.14版本及之后使用的调度方法
 
 **对象分类分配**
 
-- 微小对象（小于16字节）：在mcache的tiny分配器中进行分配，多个微小对象可以共享一个内存块
+- 微小对象（小于16字节）：在mcache的tiny分配器中进行分配，多个微小对象可以共享一个内存块，前提是**不含指针**，否则 GC 无法正常标记和清除。含指针的需要走正常的 size class 路径
 - 小对象（16字节-32kb）：通过size class机制，预定义了**67**种大小规格，优先从p的mcache对应的mspan中分配，如果mcache没有内存，则向mcentral申请，如果mcentral没有内存，则向mheap申请，如果mheap没有内存，则向操作系统申请内存
 - 大对象（大于32kb）：直接从mheap分配，跨越多个页面
+
+**mspan**
+
+Go 内存管理的基本单位，是一段连续的页，会被切分成固定大小的槽位，槽位大小由 size class 决定
+
+- `mcache`持有从`mcentral`申请的`mspan`，用完了就会向`mcentral`申请新的
+- `mcentral`按规格管理`mspan`的链表，负责把有空间的`mspan`交给`mcache`
+- 当`mcentral`没有可用的`mspan`时，它会向`mheap`申请页，由`mheap`切分出新的`mspan`下发

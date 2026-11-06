@@ -24,7 +24,7 @@ date: 2026-04-01
 
 **MSS**：除去 IP 和 TCP 头部之后，一个网络包所能容纳的 TCP 数据的最大长度
 
-![](C:\Users\zxb\AppData\Roaming\Typora\typora-user-images\image-20261104111251009.png)
+![](/screenshot/backend/image-20261104111251009.png)
 
 ### TCP/IP模型
 
@@ -91,18 +91,18 @@ date: 2026-04-01
   - 但旧 SYN 比新 SYN 先到达，服务端响应了旧 SYN 之后，客户端发现响应结果并不是新 SYN 需要的，因此发起 RST 中止连接
   - 两次握手的情况下，服务端没有中间状态给客户端来阻止历史连接，导致服务端可能建立一个历史连接，造成资源浪费
 
-![](C:\Users\zxb\AppData\Roaming\Typora\typora-user-images\image-20261104105820101.png)
+![](/screenshot/backend/image-20261104105820101.png)
 
 
 - 帮助双方同步初始化序列号
   
-![](C:\Users\zxb\AppData\Roaming\Typora\typora-user-images\image-20261104110326010.png)
+![](/screenshot/backend/image-20261104110326010.png)
 
 
 - 能避免资源浪费
   - 两次握手会造成消息滞留情况下，服务端重复接受无用的连接请求 SYN 报文，而造成重复分配资源
 
-![](C:\Users\zxb\AppData\Roaming\Typora\typora-user-images\image-20261104110932706.png)
+![](/screenshot/backend/image-20261104110932706.png)
 
 **不使用两次握手和四次握手的原因**：
 
@@ -117,7 +117,7 @@ date: 2026-04-01
 
 **半连接队列（SYN队列）和全连接队列（accept队列）**
 
-![](C:\Users\zxb\AppData\Roaming\Typora\typora-user-images\image-20261104112121089.png)
+![](/screenshot/backend/image-20261104112121089.png)
 
 - 服务端接收到 SYN 报文，就会创建一个半连接对象，然后放进半连接队列
 - 接着发送 SYN + ACK 报文给客户端，等待客户端回复 ACK 报文

@@ -1363,6 +1363,8 @@ Redis会把每一个master节点**映射到0-16383共16384个插槽**上
 
 Redis事务不支持回滚机制，因此当某个命令执行失败时，其余的命令仍会继续执行，因此现在大多都使用LUA脚本
 
+Lua脚本原子性的原因**是其执行的时候会阻塞其它客户端发送的命令**
+
 
 
 ## 原理
@@ -1424,6 +1426,8 @@ typedef struct intset{
 ##define INTSET_ENC_INT32 (sizeof(int32_t)) /* 4字节整数, 范围类似java的int */
 ##define INTSET_ENC_INT64 (sizeof(int64_t)) /* 8字节整数, 范围类似java的long */
 ```
+
+**整个数组只采用一种编码方式**
 
 Redis会将`intset`中所有的整数按照**升序**依次保存在`contents`数组中：
 
@@ -1616,9 +1620,28 @@ Dict每次新增键值对的时候都会**检查负载因子**(`LoadFactor = use
 
 连续多次空间扩展操作称为**连锁更新问题**。新增、删除都可能导致这种问题
 
+#### ListPack
+
+Redis 7.0之后全面替代 ZipList
+
+让每个节点只记录自己的长度，解决了连锁更新的问题，`backlen`字段
+
+用一块连续的内存空间来紧凑地保存数据，并且为了节省内存的开销，listpack 节点会采用不同的编码方式保存不同大小的数据
+
+listpack 头包含两个属性，分别记录了 listpack 总字节数和元素数量，然后 listpack 末尾也有个结尾标识。图中的 listpack entry 就是 listpack 的节点了
+
+主要包含三个方面内容：
+
+- encoding：定义该元素的编码类型，会对不同长度的整数和字符串进行编码
+- data：实际存放的数据
+- len：encoding+data的总长度；
+
+![](/screenshot/backend/image-20261106115819377.png)
+
+
 #### QuickList
 
-是一个双端链表，只不过**链表中的每一个节点都是一个ZipList**
+是一个双端链表，只不过**链表中的每一个节点都是一个ZipList/ListPack**
 
 - 可以使用`list-max-ziplist-size`来限制QuickList中的每个ZipList中entry的数量
 - 可以使用`list-compress-depth`来控制对节点的ZipList做压缩

@@ -260,7 +260,7 @@ MySQL对进入到 young 区域条件增加了一个停留在 old 区域的时间
 
 #### MVCC
 
-**多版本并发控制**：Multi-Version Concurrency Control，维护一个数据的多个版本，使读写操作没有冲突
+**多版本并发控制**：Multi-Version Concurrency Control，维护一个数据的多个版本，**使读写操作没有冲突，提高数据库的并发性能**
 
 - 具体实现依赖于数据库记录中的**三个隐式字段、`undo log`版本链、`readView`**
 - 隐式字段：每一行数据都有
